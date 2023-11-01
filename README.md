@@ -35,7 +35,11 @@ ___
   * [ ] MODBUS variables shared (read-only) with internet service via MQTT.
   * [ ] Tests in real application (PLC in model).
   * [ ] Complement the API for the server (cross-platform).
+<<<<<<< HEAD
 * [ ] OTA Support
+=======
+* OTA Support
+>>>>>>> 72d2201e5ec70476efedeeb2aa971a205a03ff22
 
 ___
 
