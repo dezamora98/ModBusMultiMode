@@ -1,0 +1,7 @@
+build
+demo
+doc
+hex
+*.vscode
+ftest
+platform/compilation/fota/unix
