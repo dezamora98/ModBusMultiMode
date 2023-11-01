@@ -37,11 +37,6 @@ ___
   * [ ] Complement the API for the server (cross-platform).
 <<<<<<< HEAD
 * [ ] OTA Support
-=======
-* OTA Support
->>>>>>> 72d2201e5ec70476efedeeb2aa971a205a03ff22
-
-___
 
 ## ModBusMultiMode Firmware ESP32
 
