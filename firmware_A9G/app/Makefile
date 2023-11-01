@@ -11,10 +11,6 @@ LOCAL_API_DEPENDS := \
 LOCAL_ADD_INCLUDE := include\
                     include/std_inc \
                     include/api_inc \
-<<<<<<< HEAD
-=======
-                    app/Include/tiny-json \
->>>>>>> 72d2201e5ec70476efedeeb2aa971a205a03ff22
 
 # Set this to any non-null string to signal a module which 
 # generates a binary (must contain a "main" entry point). 
