@@ -35,7 +35,6 @@ ___
   * [ ] MODBUS variables shared (read-only) with internet service via MQTT.
   * [ ] Tests in real application (PLC in model).
   * [ ] Complement the API for the server (cross-platform).
-<<<<<<< HEAD
 * [ ] OTA Support
 
 ## ModBusMultiMode Firmware ESP32

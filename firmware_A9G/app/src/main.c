@@ -1,12 +1,3 @@
-/*
- * @File  main.c
- *
- * @Author: Daniel Enrique Zamora Sifredo
- * @Date: 2023-10-11 16:45:17
- * @Last Modified by: Daniel Enrique Zamora Sifredo
- * @Last Modified time: 2023-10-11 18:24:56
- */
-
 #include "stdint.h"
 #include "stdbool.h"
 #include "api_os.h"

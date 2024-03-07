@@ -1,10 +1,11 @@
 /*
  * @File  app_main.c
+ * @Brief An example of SDK's mini system
  *
- * @Author: Daniel Enrique Zamora Sifredo
- * @Date: 2023-10-11 16:45:17
- * @Last Modified by: Daniel Enrique Zamora Sifredo
- * @Last Modified time: 2023-10-11 18:24:56
+ * @Author: Neucrack
+ * @Date: 2017-11-11 16:45:17
+ * @Last Modified by: Neucrack
+ * @Last Modified time: 2017-11-11 18:24:56
  */
 #include "stdint.h"
 #include "stdbool.h"
