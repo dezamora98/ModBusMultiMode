@@ -2,6 +2,12 @@ build
 hex
 *.vscode
 ftest
-platform/compilation/fota/unix
+platform
+libs
 doc
 demo
+build.bat
+build.sh
+LICENSE
+Makefile
+module_list.mk

@@ -12,7 +12,7 @@ LOCAL_MODULE_DEPENDS += libs
 #LOCAL_MODULE_DEPENDS += demo/gpio please keep this
 ##################################################################################
 
-LOCAL_MODULE_DEPENDS += demo/gpio
+LOCAL_MODULE_DEPENDS += app
 
 
 
