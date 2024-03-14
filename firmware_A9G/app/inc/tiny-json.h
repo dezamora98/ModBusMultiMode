@@ -34,8 +34,8 @@
 extern "C" {
 #endif
 
-#include <stddef.h>
 #include <stdlib.h>
+#include <stddef.h>
 #include <stdbool.h>
 #include <stdint.h>
 
@@ -136,12 +136,16 @@ static inline bool json_getBoolean( json_t const* property ) {
     return *property->u.value == 't';
 }
 
+
+extern long strtol(const char * __restrict__ _Str,char ** __restrict__ _EndPtr,int _Radix);
 /** Get the value of a json integer property.
   * @param property A valid handler of a json object. Its type must be JSON_INTEGER.
   * @return The value stdint. */
-static inline int64_t json_getInteger( json_t const* property ) {
-  return strtoll( property->u.value,(char**)NULL, 10);
+static inline long json_getInteger( json_t const* property ) {
+  return strtol( property->u.value,(char**)NULL, 10);
 }
+
+extern double strtod(const char * __restrict__ _Str,char ** __restrict__ _EndPtr);
 
 /** Get the value of a json real property.
   * @param property A valid handler of a json object. Its type must be JSON_REAL.

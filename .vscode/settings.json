@@ -1,3 +1,12 @@
 {
-    "cmake.sourceDirectory": "D:/Documents/Proyectos/ModBusMultiMode/firmware_ESP32"
+    "cmake.sourceDirectory": "D:/Documents/Proyectos/ModBusMultiMode/firmware_ESP32",
+    "files.associations": {
+        "*.cpp": "cpp",
+        "chrono": "c",
+        "internet": "c",
+        "typeinfo": "c",
+        "stdlib.h": "c",
+        "tiny-json.h": "c",
+        "stddef.h": "c"
+    }
 }

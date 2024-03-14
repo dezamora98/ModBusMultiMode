@@ -11,6 +11,7 @@ LOCAL_API_DEPENDS := \
 LOCAL_ADD_INCLUDE := include\
                     include/std_inc \
                     include/api_inc \
+                    $(LOCAL_NAME)/inc \
 
 # Set this to any non-null string to signal a module which 
 # generates a binary (must contain a "main" entry point). 
@@ -20,12 +21,12 @@ IS_ENTRY_POINT := no
 ## ------------------------------------ ##
 ## 	Add your custom flags here          ##
 ## ------------------------------------ ##
-MYCFLAGS += 
+MYCFLAGS += -std=c99
 
 ## ------------------------------------- ##
 ##	List all your sources here           ##
 ## ------------------------------------- ##
-C_SRC := ${notdir ${wildcard src/*.c}}
+C_SRC := $(notdir $(wildcard src/*.c))\
 
 ## ------------------------------------- ##
 ##  Do Not touch below this line         ##
