@@ -154,7 +154,7 @@ void app_Main(void)
 
     while (1)
     {
-        if (OS_WaitEvent(mainTaskHandle, (PVOID)(&event), OS_TIME_OUT_WAIT_FOREVER))
+        if (OS_WaitEvent(mainTaskHandle, (void*)(&event), OS_TIME_OUT_WAIT_FOREVER))
         {
             EventDispatch(event);
             OS_Free(event->pParam1);
