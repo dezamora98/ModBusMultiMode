@@ -15,6 +15,8 @@
         "api_os.h": "c",
         "stdint.h": "c",
         "api_hal_gpio.h": "c",
-        "api_inc_gpio.h": "c"
+        "api_inc_gpio.h": "c",
+        "sdk_init.h": "c",
+        "mbconfig.h": "c"
     }
 }
