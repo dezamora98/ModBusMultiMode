@@ -17,6 +17,9 @@
         "api_hal_gpio.h": "c",
         "api_inc_gpio.h": "c",
         "sdk_init.h": "c",
-        "mbconfig.h": "c"
+        "mbconfig.h": "c",
+        "mbport.h": "c",
+        "port.h": "c",
+        "mbfunc.h": "c"
     }
 }
