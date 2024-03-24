@@ -369,7 +369,7 @@ typedef struct T_INTERFACE_VTBL_TAG
 
 } T_INTERFACE_VTBL_TAG;
 extern T_INTERFACE_VTBL_TAG *g_InterfaceVtbl;
-#define CSDK_FUNC(name) (g_InterfaceVtbl->name)
+#define     CSDK_FUNC(name) (g_InterfaceVtbl->name)
 
 
 #endif

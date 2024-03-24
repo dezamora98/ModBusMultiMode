@@ -1,6 +1,5 @@
 build
 hex
-*.vscode
 ftest
 platform
 libs
