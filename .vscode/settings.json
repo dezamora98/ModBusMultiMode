@@ -19,6 +19,7 @@
         "mbconfig.h": "c",
         "mbport.h": "c",
         "port.h": "c",
-        "mbfunc.h": "c"
+        "mbfunc.h": "c",
+        "api_event.h": "c"
     }
 }
