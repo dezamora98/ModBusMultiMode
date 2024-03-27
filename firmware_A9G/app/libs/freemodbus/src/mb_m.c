@@ -89,17 +89,12 @@ static pvMBFrameClose pvMBMasterFrameCloseCur;
  * or transmission of a character.
  * Using for Modbus Master,Add by Armink 20130813
  */
-BOOL (*pxMBMasterFrameCBByteReceived)
-(void);
-BOOL (*pxMBMasterFrameCBTransmitterEmpty)
-(void);
-BOOL (*pxMBMasterPortCBTimerExpired)
-(void);
+BOOL(*pxMBMasterFrameCBByteReceived) (void);
+BOOL(*pxMBMasterFrameCBTransmitterEmpty) (void);
+BOOL(*pxMBMasterPortCBTimerExpired) (void);
 
-BOOL (*pxMBMasterFrameCBReceiveFSMCur)
-(void);
-BOOL (*pxMBMasterFrameCBTransmitFSMCur)
-(void);
+BOOL(*pxMBMasterFrameCBReceiveFSMCur) (void);
+BOOL(*pxMBMasterFrameCBTransmitFSMCur) (void);
 
 /* An array of Modbus functions handlers which associates Modbus function
  * codes with implementing functions.
