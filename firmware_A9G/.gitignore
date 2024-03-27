@@ -1,12 +1,4 @@
 build
 hex
-ftest
-platform
-libs
 doc
 demo
-build.bat
-build.sh
-LICENSE
-Makefile
-module_list.mk
