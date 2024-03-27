@@ -1,1 +1,13 @@
 .vscode
+firmware_A9G/build
+firmware_A9G/hex
+firmware_A9G/ftest
+firmware_A9G/platform
+firmware_A9G/libs
+firmware_A9G/doc
+firmware_A9G/demo
+firmware_A9G/build.bat
+firmware_A9G/build.sh
+firmware_A9G/LICENSE
+firmware_A9G/Makefile
+firmware_A9G/module_list.mk
