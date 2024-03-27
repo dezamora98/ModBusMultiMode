@@ -1,0 +1,322 @@
+Build host is WINDOWS
+
+MAKE              init
+CC                sdk_init.c
+AR                libinit_debug.a
+
+MAKE              libs
+
+MAKE              libs/gps
+
+MAKE              libs/gps/minmea
+CC                minmea.c
+AR                libminmea_debug.a
+
+CC                gps.c
+CC                gps_parse.c
+PREPARING         libgps_debug.a
+
+MAKE              libs/utils
+CC                assert.c
+CC                buffer.c
+CC                time.c
+CC                api_debug.c
+AR                libutils_debug.a
+
+PREPARING         liblibs_debug.a
+
+MAKE              app
+
+MAKE              app/libs/tiny-json
+CC                tiny-json.c
+AR                libtiny-json_debug.a
+
+MAKE              app/libs/freemodbus
+CC                mb.c
+CC                portevent.c
+CC                portserial.c
+CC                mbrtu.c
+CC                porttimer.c
+In file included from D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:25,
+                 from src/mb.c:36:
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbconfig.h:48:22: error: rtconfig.h: No such file or directory
+In file included from src/mb.c:36:
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:26:18: error: rthw.h: No such file or directory
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:27:22: error: rtthread.h: No such file or directory
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:30:22: error: inttypes.h: No such file or directory
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:32:1: warning: "INLINE" redefined
+In file included from D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/include/std_inc/stdlib.h:8,
+                 from src/mb.c:32:
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/include/std_inc/cs_types.h:136:1: warning: this is the location of the previous definition
+In file included from src/mb.c:36:
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:39: error: redefinition of typedef 'BOOL'
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/include/std_inc/cs_types.h:88: note: previous declaration of 'BOOL' was here
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:42: error: redefinition of typedef 'CHAR'
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/include/std_inc/cs_types.h:90: note: previous declaration of 'CHAR' was here
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:45: error: redefinition of typedef 'SHORT'
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/include/std_inc/cs_types.h:124: note: previous declaration of 'SHORT' was here
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:48: error: conflicting types for 'LONG'
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/include/std_inc/cs_types.h:125: note: previous declaration of 'LONG' was here
+In file included from D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:25,
+                 from D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mb.h:34,
+                 from src/portevent.c:23:
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbconfig.h:48:22: error: rtconfig.h: No such file or directory
+In file included from D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mb.h:34,
+                 from src/portevent.c:23:
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:26:18: error: rthw.h: No such file or directory
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:27:22: error: rtthread.h: No such file or directory
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:30:22: error: inttypes.h: No such file or directory
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:32:1: warning: "INLINE" redefined
+In file included from D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/include/std_inc/stddef.h:4,
+                 from D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/include/std_inc/string.h:7,
+                 from D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/include/sdk_init.h:4,
+                 from D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/include/std_inc/assert.h:5,
+                 from D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:29,
+                 from D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mb.h:34,
+                 from src/portevent.c:23:
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/include/std_inc/cs_types.h:136:1: warning: this is the location of the previous definition
+In file included from D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mb.h:34,
+                 from src/portevent.c:23:
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:39: error: redefinition of typedef 'BOOL'
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/include/std_inc/cs_types.h:88: note: previous declaration of 'BOOL' was here
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:42: error: redefinition of typedef 'CHAR'
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/include/std_inc/cs_types.h:90: note: previous declaration of 'CHAR' was here
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:45: error: redefinition of typedef 'SHORT'
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/include/std_inc/cs_types.h:124: note: previous declaration of 'SHORT' was here
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:48: error: conflicting types for 'LONG'
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/include/std_inc/cs_types.h:125: note: previous declaration of 'LONG' was here
+src/portevent.c: In function 'xMBPortEventInit':
+src/portevent.c:32: warning: implicit declaration of function 'rt_event_init'
+src/portevent.c:32: error: 'RT_IPC_FLAG_PRIO' undeclared (first use in this function)
+In file included from D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:25,
+                 from src/portserial.c:22:
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbconfig.h:48:22: error: rtconfig.h: No such file or directory
+In file included from src/portserial.c:22:
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:26:18: error: rthw.h: No such file or directory
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:27:22: error: rtthread.h: No such file or directory
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:30:22: error: inttypes.h: No such file or directory
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:32:1: warning: "INLINE" redefined
+In file included from D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/include/std_inc/stddef.h:4,
+                 from D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/include/std_inc/string.h:7,
+                 from D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/include/sdk_init.h:4,
+                 from D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/include/std_inc/assert.h:5,
+                 from D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:29,
+                 from src/portserial.c:22:
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/include/std_inc/cs_types.h:136:1: warning: this is the location of the previous definition
+In file included from src/portserial.c:22:
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:39: error: redefinition of typedef 'BOOL'
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/platform/compilation/cust_rules.mk:958: recipe for target 'D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/libs/freemodbus/obj/debug/mb.o' failed
+make[4]: *** [D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/libs/freemodbus/obj/debug/mb.o] Error 1
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/include/std_inc/cs_types.h:88: note: previous declaration of 'BOOL' was here
+make[4]: *** Waiting for unfinished jobs....
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:42: error: redefinition of typedef 'CHAR'
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/include/std_inc/cs_types.h:90: note: previous declaration of 'CHAR' was here
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:45: error: redefinition of typedef 'SHORT'
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/include/std_inc/cs_types.h:124: note: previous declaration of 'SHORT' was here
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:48: error: conflicting types for 'LONG'
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/include/std_inc/cs_types.h:125: note: previous declaration of 'LONG' was here
+src/portevent.c:32: error: (Each undeclared identifier is reported only once
+src/portevent.c:32: error: for each function it appears in.)
+src/portevent.c: In function 'xMBPortEventPost':
+src/portevent.c:39: warning: implicit declaration of function 'rt_event_send'
+src/portevent.c: In function 'xMBPortEventGet':
+src/portevent.c:46: error: 'rt_uint32_t' undeclared (first use in this function)
+src/portevent.c:46: error: expected ';' before 'recvedEvent'
+src/portevent.c:48: warning: implicit declaration of function 'rt_event_recv'
+src/portevent.c:50: error: 'RT_EVENT_FLAG_OR' undeclared (first use in this function)
+src/portevent.c:50: error: 'RT_EVENT_FLAG_CLEAR' undeclared (first use in this function)
+src/portevent.c:50: error: 'RT_WAITING_FOREVER' undeclared (first use in this function)
+src/portevent.c:51: error: 'recvedEvent' undeclared (first use in this function)
+src/portserial.c:27:22: error: rtdevice.h: No such file or directory
+src/portserial.c:28:19: error: board.h: No such file or directory
+src/portserial.c:35:20: error: macro "ALIGN" requires 2 arguments, but only 1 given
+src/portserial.c:37: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'static'
+CC                mbutils.c
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/platform/compilation/cust_rules.mk:958: recipe for target 'D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/libs/freemodbus/obj/debug/portevent.o' failed
+CC                mbfuncholding_m.c
+In file included from D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:25,
+                 from src/mbrtu.c:36:
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbconfig.h:48:22: error: rtconfig.h: No such file or directory
+In file included from src/mbrtu.c:36:
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:26:18: error: rthw.h: No such file or directory
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:27:22: error: rtthread.h: No such file or directory
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:30:22: error: inttypes.h: No such file or directory
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:32:1: warning: "INLINE" redefined
+In file included from D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/include/std_inc/stdlib.h:8,
+                 from src/mbrtu.c:32:
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/include/std_inc/cs_types.h:136:1: warning: this is the location of the previous definition
+In file included from src/mbrtu.c:36:
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:39: error: redefinition of typedef 'BOOL'
+In file included from D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:25,
+                 from src/porttimer.c:23:
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbconfig.h:48:22: error: rtconfig.h: No such file or directory
+In file included from src/porttimer.c:23:
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:26:18: error: rthw.h: No such file or directory
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:27:22: error: rtthread.h: No such file or directory
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:30:22: error: inttypes.h: No such file or directory
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:32:1: warning: "INLINE" redefined
+In file included from D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/include/std_inc/stddef.h:4,
+                 from D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/include/std_inc/string.h:7,
+                 from D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/include/sdk_init.h:4,
+                 from D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/include/std_inc/assert.h:5,
+                 from D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:29,
+                 from src/porttimer.c:23:
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/include/std_inc/cs_types.h:136:1: warning: this is the location of the previous definition
+In file included from src/porttimer.c:23:
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:39: error: redefinition of typedef 'BOOL'
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/include/std_inc/cs_types.h:88: note: previous declaration of 'BOOL' was here
+src/portserial.c:52: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'serial_rx_ind'
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:42: error: redefinition of typedef 'CHAR'
+make[4]: *** [D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/libs/freemodbus/obj/debug/portevent.o] Error 1
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/include/std_inc/cs_types.h:90: note: previous declaration of 'CHAR' was here
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/include/std_inc/cs_types.h:88: note: previous declaration of 'BOOL' was here
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:45: error: redefinition of typedef 'SHORT'
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:42: error: redefinition of typedef 'CHAR'
+src/portserial.c: In function 'xMBPortSerialInit':
+In file included from D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:25,
+                 from src/mbfuncholding_m.c:36:
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbconfig.h:48:22: error: rtconfig.h: No such file or directory
+In file included from src/mbfuncholding_m.c:36:
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:26:18: error: rthw.h: No such file or directory
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:27:22: error: rtthread.h: No such file or directory
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:30:22: error: inttypes.h: No such file or directory
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:32:1: warning: "INLINE" redefined
+In file included from D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/include/std_inc/stdlib.h:8,
+                 from src/mbfuncholding_m.c:32:
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/include/std_inc/cs_types.h:136:1: warning: this is the location of the previous definition
+In file included from src/mbfuncholding_m.c:36:
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:39: error: redefinition of typedef 'BOOL'
+In file included from D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:25,
+                 from src/mbutils.c:36:
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbconfig.h:48:22: error: rtconfig.h: No such file or directory
+In file included from src/mbutils.c:36:
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:26:18: error: rthw.h: No such file or directory
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:27:22: error: rtthread.h: No such file or directory
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:30:22: error: inttypes.h: No such file or directory
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:32:1: warning: "INLINE" redefined
+In file included from D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/include/std_inc/stdlib.h:8,
+                 from src/mbutils.c:32:
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/include/std_inc/cs_types.h:136:1: warning: this is the location of the previous definition
+In file included from src/mbutils.c:36:
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:39: error: redefinition of typedef 'BOOL'
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/include/std_inc/cs_types.h:90: note: previous declaration of 'CHAR' was here
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/include/std_inc/cs_types.h:124: note: previous declaration of 'SHORT' was here
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/include/std_inc/cs_types.h:88: note: previous declaration of 'BOOL' was here
+src/portserial.c:59: error: 'rt_device_t' undeclared (first use in this function)
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/include/std_inc/cs_types.h:88: note: previous declaration of 'BOOL' was here
+src/portserial.c:59: error: (Each undeclared identifier is reported only once
+src/portserial.c:59: error: for each function it appears in.)
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:42: error: redefinition of typedef 'CHAR'
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:42: error: redefinition of typedef 'CHAR'
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:45: error: redefinition of typedef 'SHORT'
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/include/std_inc/cs_types.h:90: note: previous declaration of 'CHAR' was here
+src/portserial.c:59: error: expected ';' before 'dev'
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/include/std_inc/cs_types.h:90: note: previous declaration of 'CHAR' was here
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/include/std_inc/cs_types.h:124: note: previous declaration of 'SHORT' was here
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:48: error: conflicting types for 'LONG'
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:45: error: redefinition of typedef 'SHORT'
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:45: error: redefinition of typedef 'SHORT'
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/include/std_inc/cs_types.h:125: note: previous declaration of 'LONG' was here
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/include/std_inc/cs_types.h:124: note: previous declaration of 'SHORT' was here
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:48: error: conflicting types for 'LONG'
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:48: error: conflicting types for 'LONG'
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/include/std_inc/cs_types.h:125: note: previous declaration of 'LONG' was here
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/include/std_inc/cs_types.h:124: note: previous declaration of 'SHORT' was here
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/include/std_inc/cs_types.h:125: note: previous declaration of 'LONG' was here
+src/portserial.c:69: warning: implicit declaration of function 'rt_snprintf'
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/port.h:48: error: conflicting types for 'LONG'
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/include/std_inc/cs_types.h:125: note: previous declaration of 'LONG' was here
+src/portserial.c:71: error: 'dev' undeclared (first use in this function)
+src/portserial.c:71: warning: implicit declaration of function 'rt_device_find'
+src/portserial.c:72: error: 'RT_NULL' undeclared (first use in this function)
+src/portserial.c:83: error: dereferencing pointer to incomplete type
+src/portserial.c:84: error: dereferencing pointer to incomplete type
+src/portserial.c:84: error: 'STOP_BITS_1' undeclared (first use in this function)
+src/portserial.c:87: error: dereferencing pointer to incomplete type
+src/portserial.c:87: error: 'DATA_BITS_8' undeclared (first use in this function)
+src/portserial.c:88: error: dereferencing pointer to incomplete type
+src/portserial.c:88: error: 'PARITY_NONE' undeclared (first use in this function)
+src/portserial.c:92: error: dereferencing pointer to incomplete type
+src/portserial.c:92: error: 'DATA_BITS_9' undeclared (first use in this function)
+src/portserial.c:93: error: dereferencing pointer to incomplete type
+src/portserial.c:93: error: 'PARITY_ODD' undeclared (first use in this function)
+src/portserial.c:97: error: dereferencing pointer to incomplete type
+src/portserial.c:98: error: dereferencing pointer to incomplete type
+src/portserial.c:98: error: 'PARITY_EVEN' undeclared (first use in this function)
+src/portserial.c:103: error: dereferencing pointer to incomplete type
+src/portserial.c:103: error: dereferencing pointer to incomplete type
+src/portserial.c:106: warning: implicit declaration of function 'rt_device_open'
+src/portserial.c:106: error: dereferencing pointer to incomplete type
+src/portserial.c:106: error: 'RT_DEVICE_OFLAG_RDWR' undeclared (first use in this function)
+src/portserial.c:106: error: 'RT_DEVICE_FLAG_INT_RX' undeclared (first use in this function)
+src/portserial.c:107: warning: implicit declaration of function 'rt_device_set_rx_indicate'
+src/portserial.c:107: error: dereferencing pointer to incomplete type
+src/portserial.c:107: error: 'serial_rx_ind' undeclared (first use in this function)
+src/portserial.c:113: warning: implicit declaration of function 'rt_event_init'
+src/portserial.c:113: error: 'RT_IPC_FLAG_PRIO' undeclared (first use in this function)
+src/portserial.c:114: warning: implicit declaration of function 'rt_thread_init'
+src/porttimer.c: In function 'xMBPortTimersInit':
+src/mbutils.c: In function 'xMBUtilSetBits':
+src/mbrtu.c: In function 'eMBRTUReceive':
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/platform/compilation/cust_rules.mk:958: recipe for target 'D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/libs/freemodbus/obj/debug/mbfuncholding_m.o' failed
+src/porttimer.c:37: warning: implicit declaration of function 'rt_timer_init'
+src/mbrtu.c:154: warning: implicit declaration of function 'RT_ASSERT'
+make[4]: *** [D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/libs/freemodbus/obj/debug/mbfuncholding_m.o] Error 1
+src/mbutils.c:56: warning: implicit declaration of function 'RT_ASSERT'
+src/portserial.c:118: error: 'serial_soft_trans_irq_stack' undeclared (first use in this function)
+src/portserial.c:121: warning: implicit declaration of function 'rt_thread_startup'
+src/porttimer.c:39: error: 'RT_NULL' undeclared (first use in this function)
+src/porttimer.c:39: error: (Each undeclared identifier is reported only once
+src/porttimer.c:39: error: for each function it appears in.)
+src/porttimer.c:40: error: 'RT_TICK_PER_SECOND' undeclared (first use in this function)
+src/porttimer.c:41: error: 'RT_TIMER_FLAG_ONE_SHOT' undeclared (first use in this function)
+src/portserial.c: In function 'vMBPortSerialEnable':
+src/portserial.c:128: error: 'rt_uint32_t' undeclared (first use in this function)
+src/portserial.c:128: error: expected ';' before 'recved_event'
+src/portserial.c:132: error: dereferencing pointer to incomplete type
+src/portserial.c:132: error: 'RT_DEVICE_CTRL_SET_INT' undeclared (first use in this function)
+src/portserial.c:132: error: 'RT_DEVICE_FLAG_INT_RX' undeclared (first use in this function)
+src/porttimer.c: In function 'vMBPortTimersEnable':
+src/porttimer.c:47: warning: implicit declaration of function 'rt_timer_start'
+src/portserial.c:145: error: dereferencing pointer to incomplete type
+src/portserial.c:145: error: 'RT_DEVICE_CTRL_CLR_INT' undeclared (first use in this function)
+src/porttimer.c: In function 'vMBPortTimersDisable':
+src/portserial.c:150: warning: implicit declaration of function 'rt_event_send'
+src/porttimer.c:52: warning: implicit declaration of function 'rt_timer_stop'
+src/portserial.c:155: warning: implicit declaration of function 'rt_event_recv'
+src/portserial.c:156: error: 'RT_EVENT_FLAG_OR' undeclared (first use in this function)
+src/portserial.c:156: error: 'RT_EVENT_FLAG_CLEAR' undeclared (first use in this function)
+src/portserial.c:157: error: 'recved_event' undeclared (first use in this function)
+src/portserial.c: In function 'vMBPortClose':
+src/portserial.c:163: error: dereferencing pointer to incomplete type
+src/portserial.c:163: error: dereferencing pointer to incomplete type
+src/portserial.c: In function 'xMBPortSerialPutByte':
+src/portserial.c:168: error: dereferencing pointer to incomplete type
+src/portserial.c:168: error: dereferencing pointer to incomplete type
+src/portserial.c: In function 'xMBPortSerialGetByte':
+src/portserial.c:174: error: dereferencing pointer to incomplete type
+src/portserial.c:174: error: dereferencing pointer to incomplete type
+src/portserial.c: In function 'serial_soft_trans_irq':
+src/portserial.c:207: error: 'rt_uint32_t' undeclared (first use in this function)
+src/portserial.c:207: error: expected ';' before 'recved_event'
+src/portserial.c:211: error: 'RT_EVENT_FLAG_OR' undeclared (first use in this function)
+src/portserial.c:212: error: 'RT_WAITING_FOREVER' undeclared (first use in this function)
+src/portserial.c:212: error: 'recved_event' undeclared (first use in this function)
+src/portserial.c: At top level:
+src/portserial.c:226: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'serial_rx_ind'
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/platform/compilation/cust_rules.mk:958: recipe for target 'D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/libs/freemodbus/obj/debug/porttimer.o' failed
+make[4]: *** [D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/libs/freemodbus/obj/debug/porttimer.o] Error 1
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/platform/compilation/cust_rules.mk:958: recipe for target 'D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/libs/freemodbus/obj/debug/portserial.o' failed
+make[4]: *** [D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/libs/freemodbus/obj/debug/portserial.o] Error 1
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/platform/compilation/cust_rules.mk:958: recipe for target 'D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/libs/freemodbus/obj/debug/mbrtu.o' failed
+make[4]: *** [D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/libs/freemodbus/obj/debug/mbrtu.o] Error 1
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/platform/compilation/cust_rules.mk:958: recipe for target 'D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/libs/freemodbus/obj/debug/mbutils.o' failed
+make[4]: *** [D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/libs/freemodbus/obj/debug/mbutils.o] Error 1
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/platform/compilation/cust_rules.mk:975: recipe for target 'dependencies' failed
+make[3]: *** [dependencies] Error 2
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/platform/compilation/cust_rules.mk:975: recipe for target 'dependencies' failed
+make[2]: *** [dependencies] Error 2
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/platform/compilation/cust_rules.mk:718: recipe for target 'D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app//app.srec' failed
+make[1]: *** [D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app//app.srec] Error 2
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/platform/compilation/cust_rules.mk:371: recipe for target 'lod' failed
+make: *** [lod] Error 2
