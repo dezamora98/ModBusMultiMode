@@ -347,7 +347,7 @@ eMBMasterPoll(void)
                         }
                         vMBMasterSetCBRunInMasterMode(FALSE);
                         break;
-                    }
+                    }    
                 }
             }
             /* If master has exception ,Master will send error process.Otherwise the Master is idle.*/

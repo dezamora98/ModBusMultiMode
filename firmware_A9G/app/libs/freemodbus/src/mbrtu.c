@@ -31,6 +31,7 @@
 /* ----------------------- System includes ----------------------------------*/
 #include "stdlib.h"
 #include "string.h"
+#include "assert.h"
 
 /* ----------------------- Platform includes --------------------------------*/
 #include "port.h"
