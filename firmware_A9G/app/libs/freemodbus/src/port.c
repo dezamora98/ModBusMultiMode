@@ -26,28 +26,16 @@
 #include "api_sys.h"
 #include "api_debug.h"
 /* ----------------------- Variables ----------------------------------------*/
-static HANDLE lock;
-static int is_inited = 0;
 static uint32_t sectionStatus;
 /* ----------------------- Start implementation -----------------------------*/
 void EnterCriticalSection(void)
 {
     sectionStatus = SYS_EnterCriticalSection();
     Trace(1, "init critical section");
-
-    // esta sección hay que analizarla mejor, creo que es un semáfoto para detener otros eventos, pero no me queda claro como funciona
-    if (!is_inited)
-    {
-        lock = OS_CreateSemaphore(OS_WAIT_FOREVER);
-        is_inited = 1;
-    }
-    OS_WaitForSemaphore(lock, OS_WAIT_FOREVER);
-    //---------------------------------------------
 }
 
 void ExitCriticalSection(void)
 {
     SYS_ExitCriticalSection(sectionStatus);
     Trace(1, "exit critical section");
-    // rt_sem_release(&lock);
 }
