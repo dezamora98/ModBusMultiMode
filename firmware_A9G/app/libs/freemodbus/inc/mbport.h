@@ -69,10 +69,6 @@ typedef enum
     EV_ERROR_EXECUTE_FUNCTION,        /*!< Execute function error. */
 } eMBMasterErrorEventType;
 
-typedef struct {
-    eMBMasterEventType id;
-}MMB_Event_t;
-
 /*! \ingroup modbus
  * \brief Parity used for characters in serial mode.
  *

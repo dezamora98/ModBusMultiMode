@@ -32,7 +32,6 @@
 
 #if MB_MASTER_RTU_ENABLED > 0 || MB_MASTER_ASCII_ENABLED > 0
 /* ----------------------- Static variables ---------------------------------*/
-static uint8_t serial_soft_trans_irq_stack[512];
 /* software simulation serial transmit IRQ handler thread */
 static HANDLE thread_serial_soft_trans_irq;
 /* serial event */
@@ -79,70 +78,15 @@ BOOL xMBMasterPortSerialInit(UART_Port_t ucPORT, UART_Baud_Rate_t ulBaudRate, UA
 
     UART_Close(MB_UART);
 
-    //    /* set serial name */
-    //    rt_snprintf(uart_name,sizeof(uart_name), "uart%d", ucPORT);
-    //
-    //    dev = rt_device_find(uart_name);
-    //    if(dev == RT_NULL)
-    //    {
-    //        /* can not find uart */
-    //        return FALSE;
-    //    }
-    //    else
-    //    {
-    //        serial = (struct rt_serial_device*)dev;
-    //    }
-
-    //    /* set serial configure parameter */
-    //    serial->config.baud_rate = ulBaudRate;
-    //    serial->config.stop_bits = STOP_BITS_1;
-    //    switch(eParity){
-    //    case MB_PAR_NONE: {
-    //        serial->config.data_bits = DATA_BITS_8;
-    //        serial->config.parity = PARITY_NONE;
-    //        break;
-    //    }
-    //    case MB_PAR_ODD: {
-    //        serial->config.data_bits = DATA_BITS_9;
-    //        serial->config.parity = PARITY_ODD;
-    //        break;
-    //    }
-    //    case MB_PAR_EVEN: {
-    //        serial->config.data_bits = DATA_BITS_9;
-    //        serial->config.parity = PARITY_EVEN;
-    //        break;
-    //    }
-    //    }
-    //    /* set serial configure */
-    //    serial->ops->configure(serial, &(serial->config));
-    //
-    //    /* open serial device */
-    //    if (!rt_device_open(&serial->parent, RT_DEVICE_OFLAG_RDWR | RT_DEVICE_FLAG_INT_RX)) {
-    //        rt_device_set_rx_indicate(&serial->parent, serial_rx_ind);
-    //    } else {
-    //        return FALSE;
-    //    }
-    //
-
-    //    /* software initialize */
-    //    rt_event_init(&event_serial, "master event", RT_IPC_FLAG_PRIO);
-    //    rt_thread_init(&thread_serial_soft_trans_irq,
-    //                   "master trans",
-    //                   serial_soft_trans_irq,
-    //                   RT_NULL,
-    //                   serial_soft_trans_irq_stack,
-    //                   sizeof(serial_soft_trans_irq_stack),
-    //                   10, 5);
-    //    rt_thread_startup(&thread_serial_soft_trans_irq);
-
-    thread_serial_soft_trans_irq = OS_CreateTask(&serial_soft_trans_irq, NULL, &serial_soft_trans_irq_stack, 512, OS_EVENT_PRI_URGENT, 0, 0, "MB-TX");
+    thread_serial_soft_trans_irq = OS_CreateTask(serial_soft_trans_irq, NULL, NULL, 512, OS_EVENT_PRI_URGENT, 0, 0, "MMB-TX");
     OS_StartTask(thread_serial_soft_trans_irq, NULL);
     return TRUE;
 }
 
 void vMBMasterPortSerialEnable(BOOL xRxEnable, BOOL xTxEnable)
 {
-    uint32_t recved_event;
+    eMBMasterEventType *event = NULL;
+
     if (xRxEnable)
     {
         /* enable RX interrupt */
@@ -161,19 +105,27 @@ void vMBMasterPortSerialEnable(BOOL xRxEnable, BOOL xTxEnable)
 #endif
         /* disable RX interrupt */
         CONFIG_UART.useEvent = false;
-        // serial->ops->control(serial, RT_DEVICE_CTRL_CLR_INT, (void *)RT_DEVICE_FLAG_INT_RX);
+        UART_Init(MB_UART, CONFIG_UART);
+
     }
     if (xTxEnable)
     {
         /* start serial transmit */
         // rt_event_send(&event_serial, EVENT_SERIAL_TRANS_START);
+        event = (eMBMasterEventType *)malloc(sizeof(eMBMasterEventType));
+        if (!event)
+        {
+            Trace(1, "MMB no memory");
+            return;
+        }
+        *event = EVENT_SERIAL_TRANS_START;
+        OS_SendEvent(thread_serial_soft_trans_irq, event, OS_TIME_OUT_WAIT_FOREVER, OS_EVENT_PRI_URGENT);
     }
     else
     {
         /* stop serial transmit */
-        // rt_event_recv(&event_serial, EVENT_SERIAL_TRANS_START,
-        //               RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, 0,
-        //               &recved_event);
+        OS_WaitEvent(thread_serial_soft_trans_irq, (void **)&event, OS_WAIT_FOREVER);
+        free(event);
     }
 }
 
@@ -228,28 +180,21 @@ void prvvUARTRxISR(void)
  */
 static void serial_soft_trans_irq(void *parameter)
 {
-    uint32_t recved_event;
+    uint32_t *recved_event = NULL;
     while (1)
     {
-        /* waiting for serial transmit start */
-        // rt_event_recv(&event_serial, EVENT_SERIAL_TRANS_START, RT_EVENT_FLAG_OR,
-        //               RT_WAITING_FOREVER, &recved_event);
-        /* execute modbus callback */
-
         while (1)
         {
-            if (OS_WaitEvent(thread_serial_soft_trans_irq, &recved_event, OS_WAIT_FOREVER))
+            /* waiting for serial transmit start */
+            if (OS_WaitEvent(thread_serial_soft_trans_irq, (void **)&recved_event, OS_WAIT_FOREVER))
             {
-                EventDispatch(event);
-                OS_Free(event->pParam1);
-                OS_Free(event->pParam2);
-                OS_Free(event);
+                /* execute modbus callback */
+                if (recved_event == EVENT_SERIAL_TRANS_START)
+                {
+                    prvvUARTTxReadyISR();
+                }
+                OS_Free(recved_event);
             }
-        }
-        if (recved_event == EVENT_SERIAL_TRANS_START)
-        {
-
-            prvvUARTTxReadyISR();
         }
     }
 }
@@ -265,7 +210,6 @@ static void serial_soft_trans_irq(void *parameter)
 static void serial_rx_ind(UART_Callback_Param_t param)
 {
     prvvUARTRxISR();
-    return 1;
 }
 
 #endif

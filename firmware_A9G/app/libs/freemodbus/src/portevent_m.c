@@ -45,9 +45,9 @@ static void vMBMastertPortEventManager(void *parameter)
         // if (OS_WaitEvent(xMasterRunRes, (void *)(&xMasterOsEvent), OS_TIME_OUT_WAIT_FOREVER))
         // {
         //     /// llamar al EventDispatch
-        //     OS_Free(xMasterOsEvent->pParam1);
-        //     OS_Free(xMasterOsEvent->pParam2);
-        //     OS_Free(xMasterOsEvent);
+        //     free(xMasterOsEvent->pParam1);
+        //     free(xMasterOsEvent->pParam2);
+        //     free(xMasterOsEvent);
         // }
     }
 }
@@ -55,7 +55,7 @@ static void vMBMastertPortEventManager(void *parameter)
 /* ----------------------- Start implementation -----------------------------*/
 BOOL xMBMasterPortEventInit(void)
 {
-    xMBEventManager_H = OS_CreateTask(vMBMastertPortEventManager, NULL, NULL, 2048, OS_EVENT_PRI_URGENT, 0, 0, "MB_EventManager");
+    xMBEventManager_H = OS_CreateTask(vMBMastertPortEventManager, NULL, NULL, 512, OS_EVENT_PRI_URGENT, 0, 0, "MB_EventManager");
     return TRUE;
 }
 
@@ -67,24 +67,24 @@ BOOL xMBMasterPortEventInit(void)
  */
 BOOL xMBMasterPortEventPost(eMBMasterEventType eEvent)
 {
-    MMB_Event_t *event = (MMB_Event_t *)malloc(sizeof(MMB_Event_t));
+    eMBMasterEventType *event = (eMBMasterEventType *)malloc(sizeof(eMBMasterEventType));
     if (!event)
     {
         Trace(1, "MMB no memory");
         return;
     }
-    event->id = eEvent;
+    *event = eEvent;
     return OS_SendEvent(xMBEventManager_H, event, OS_TIME_OUT_WAIT_FOREVER, OS_EVENT_PRI_URGENT);
 }
 
 BOOL xMBMasterPortEventGet(eMBMasterEventType *eEvent)
 {
-    MMB_Event_t *recvedEvent = NULL;
+    eMBMasterEventType *recvedEvent = NULL;
 
     OS_WaitEvent(xMBEventManager_H, (void **)&recvedEvent, OS_WAIT_FOREVER);
 
     /* the enum type couldn't convert to int type */
-    switch (recvedEvent->id)
+    switch (*recvedEvent)
     {
     case EV_MASTER_READY:
         *eEvent = EV_MASTER_READY;
@@ -106,7 +106,7 @@ BOOL xMBMasterPortEventGet(eMBMasterEventType *eEvent)
         break;
     }
 
-    OS_Free(recvedEvent);
+    free(recvedEvent);
     return TRUE;
 }
 
@@ -242,12 +242,12 @@ void vMBMasterCBRequestScuuess(void)
 eMBMasterReqErrCode eMBMasterWaitRequestFinish(void)
 {
     eMBMasterReqErrCode eErrStatus = MB_MRE_NO_ERR;
-    MMB_Event_t *recvedEvent = NULL;
+    eMBMasterEventType *recvedEvent = NULL;
 
     OS_WaitEvent(xMBEventManager_H, (void **)&recvedEvent, OS_WAIT_FOREVER);
 
     /* the enum type couldn't convert to int type */
-    switch (recvedEvent->id)
+    switch (*recvedEvent)
     {
     case EV_MASTER_PROCESS_SUCESS:
         break;
@@ -268,7 +268,7 @@ eMBMasterReqErrCode eMBMasterWaitRequestFinish(void)
     }
     }
 
-    OS_Free(recvedEvent);
+    free(recvedEvent);
     return eErrStatus;
 }
 
