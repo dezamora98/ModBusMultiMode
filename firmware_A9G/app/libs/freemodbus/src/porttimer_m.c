@@ -29,79 +29,57 @@
 
 #if MB_MASTER_RTU_ENABLED > 0 || MB_MASTER_ASCII_ENABLED > 0
 /* ----------------------- Variables ----------------------------------------*/
-static USHORT usT35TimeOut50us;
-static struct rt_timer timer;
+extern HANDLE mainTaskHandle;
+static uint32_t usT35TimeOut50us;
 static void prvvTIMERExpiredISR(void);
-static void timer_timeout_ind(void* parameter);
+static void timer_timeout_ind(void *parameter);
 
 /* ----------------------- static functions ---------------------------------*/
 static void prvvTIMERExpiredISR(void);
-
 /* ----------------------- Start implementation -----------------------------*/
 BOOL xMBMasterPortTimersInit(USHORT usTimeOut50us)
 {
     /* backup T35 ticks */
-    usT35TimeOut50us = usTimeOut50us;
-
-    //rt_timer_init(&timer, "master timer",
-    //               timer_timeout_ind, /* bind timeout callback function */
-    //               RT_NULL,
-    //               (50 * usT35TimeOut50us) / (1000 * 1000 / RT_TICK_PER_SECOND) + 1,
-    //               RT_TIMER_FLAG_ONE_SHOT); /* one shot */
-
+    usT35TimeOut50us = (uint32_t)(usTimeOut50us);
     return TRUE;
 }
 
 void vMBMasterPortTimersT35Enable()
 {
-    rt_tick_t timer_tick = (50 * usT35TimeOut50us)
-            / (1000 * 1000 / RT_TICK_PER_SECOND) + 1;
+    uint32_t timer_tick = (uint32_t)((50 * usT35TimeOut50us)/1000); // aproximación a 1 ms.
 
     /* Set current timer mode, don't change it.*/
     vMBMasterSetCurTimerMode(MB_TMODE_T35);
 
-    rt_timer_control(&timer, RT_TIMER_CTRL_SET_TIME, &timer_tick);
-
-    rt_timer_start(&timer);
+    OS_StartCallbackTimer(mainTaskHandle, timer_tick, timer_timeout_ind, NULL);
 }
 
 void vMBMasterPortTimersConvertDelayEnable()
 {
-    rt_tick_t timer_tick = MB_MASTER_DELAY_MS_CONVERT * RT_TICK_PER_SECOND / 1000;
-
     /* Set current timer mode, don't change it.*/
     vMBMasterSetCurTimerMode(MB_TMODE_CONVERT_DELAY);
-
-    rt_timer_control(&timer, RT_TIMER_CTRL_SET_TIME, &timer_tick);
-
-    rt_timer_start(&timer);
+    OS_StartCallbackTimer(mainTaskHandle, MB_MASTER_DELAY_MS_CONVERT, timer_timeout_ind, NULL);
 }
 
 void vMBMasterPortTimersRespondTimeoutEnable()
 {
-    rt_tick_t timer_tick = MB_MASTER_TIMEOUT_MS_RESPOND * RT_TICK_PER_SECOND / 1000;
-
     /* Set current timer mode, don't change it.*/
     vMBMasterSetCurTimerMode(MB_TMODE_RESPOND_TIMEOUT);
-
-    rt_timer_control(&timer, RT_TIMER_CTRL_SET_TIME, &timer_tick);
-
-    rt_timer_start(&timer);
+    OS_StartCallbackTimer(mainTaskHandle, MB_MASTER_TIMEOUT_MS_RESPOND, timer_timeout_ind, NULL);
 }
 
 void vMBMasterPortTimersDisable()
 {
-    rt_timer_stop(&timer);
+    OS_StopCallbackTimer(mainTaskHandle, timer_timeout_ind, NULL);
 }
 
 void prvvTIMERExpiredISR(void)
 {
-    (void) pxMBMasterPortCBTimerExpired();
+    (void)pxMBMasterPortCBTimerExpired();
 }
 
-static void timer_timeout_ind(void* parameter)
+static void timer_timeout_ind(void *parameter)
 {
-    OS_SleepUs(usT35TimeOut50us*50);
     prvvTIMERExpiredISR();
 }
 
