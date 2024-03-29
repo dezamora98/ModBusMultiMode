@@ -20,7 +20,9 @@
  */
 
 /* ----------------------- Modbus includes ----------------------------------*/
+#include "stdlib.h"
 #include "api_inc_os.h"
+#include "api_debug.h"
 #include "api_os.h"
 #include "api_event.h"
 #include "mb.h"
@@ -29,39 +31,60 @@
 #include "port.h"
 
 #if MB_MASTER_RTU_ENABLED > 0 || MB_MASTER_ASCII_ENABLED > 0
+#define M_MODBUS API_EVENT_ID_MAX + 1
 /* ----------------------- Defines ------------------------------------------*/
 /* ----------------------- Variables ----------------------------------------*/
+static HANDLE xMBEventManager_H;
 static HANDLE xMasterRunRes;
-static API_Event_t xMasterOsEvent;
+/* ---------------------------local implementation---------------------------*/
+static void vMBMastertPortEventManager(void *parameter)
+{
+    while (TRUE)
+    {
+        OS_Sleep(OS_WAIT_FOREVER);
+        // if (OS_WaitEvent(xMasterRunRes, (void *)(&xMasterOsEvent), OS_TIME_OUT_WAIT_FOREVER))
+        // {
+        //     /// llamar al EventDispatch
+        //     OS_Free(xMasterOsEvent->pParam1);
+        //     OS_Free(xMasterOsEvent->pParam2);
+        //     OS_Free(xMasterOsEvent);
+        // }
+    }
+}
+
 /* ----------------------- Start implementation -----------------------------*/
 BOOL xMBMasterPortEventInit(void)
 {
-    
-    (&xMasterOsEvent, "master event", RT_IPC_FLAG_PRIO);
+    xMBEventManager_H = OS_CreateTask(vMBMastertPortEventManager, NULL, NULL, 2048, OS_EVENT_PRI_URGENT, 0, 0, "MB_EventManager");
     return TRUE;
 }
 
+/**
+ * @brief Función para enviar eventos (por ahora se coloca como urgente, pero puede que no sea necesario)
+ *
+ * @param eEvent
+ * @return BOOL
+ */
 BOOL xMBMasterPortEventPost(eMBMasterEventType eEvent)
 {
-    rt_event_send(&xMasterOsEvent, eEvent);
-    return TRUE;
+    MMB_Event_t *event = (MMB_Event_t *)malloc(sizeof(MMB_Event_t));
+    if (!event)
+    {
+        Trace(1, "MMB no memory");
+        return;
+    }
+    event->id = eEvent;
+    return OS_SendEvent(xMBEventManager_H, event, OS_TIME_OUT_WAIT_FOREVER, OS_EVENT_PRI_URGENT);
 }
 
 BOOL xMBMasterPortEventGet(eMBMasterEventType *eEvent)
 {
-    uint32 recvedEvent;
+    MMB_Event_t *recvedEvent = NULL;
 
-    /* waiting forever OS event */
-    //rt_event_recv(&xMasterOsEvent,
-    //              EV_MASTER_READY | EV_MASTER_FRAME_RECEIVED | EV_MASTER_EXECUTE |
-    //                  EV_MASTER_FRAME_SENT | EV_MASTER_ERROR_PROCESS,
-    //              RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER,
-    //              &recvedEvent);
-
-    OS_WaitEvent(xMasterOsEvent, &recvedEvent, OS_WAIT_FOREVER);
+    OS_WaitEvent(xMBEventManager_H, (void **)&recvedEvent, OS_WAIT_FOREVER);
 
     /* the enum type couldn't convert to int type */
-    switch (recvedEvent)
+    switch (recvedEvent->id)
     {
     case EV_MASTER_READY:
         *eEvent = EV_MASTER_READY;
@@ -84,9 +107,9 @@ BOOL xMBMasterPortEventGet(eMBMasterEventType *eEvent)
     }
 
     OS_Free(recvedEvent);
-
     return TRUE;
 }
+
 /**
  * This function is initialize the OS resource for modbus master.
  * Note:The resource is define by OS.If you not use OS this function can be empty.
@@ -94,7 +117,7 @@ BOOL xMBMasterPortEventGet(eMBMasterEventType *eEvent)
  */
 void vMBMasterOsResInit(void)
 {
-    rt_sem_init(&xMasterRunRes, "master res", 0x01, RT_IPC_FLAG_PRIO);
+    xMasterRunRes = OS_CreateSemaphore(1);
 }
 
 /**
@@ -108,7 +131,7 @@ void vMBMasterOsResInit(void)
 BOOL xMBMasterRunResTake(LONG lTimeOut)
 {
     /*If waiting time is -1 .It will wait forever */
-    return rt_sem_take(&xMasterRunRes, lTimeOut) ? FALSE : TRUE;
+    return OS_WaitForSemaphore(xMasterRunRes, (uint32_t)lTimeOut) ? FALSE : TRUE;
 }
 
 /**
@@ -119,7 +142,7 @@ BOOL xMBMasterRunResTake(LONG lTimeOut)
 void vMBMasterRunResRelease(void)
 {
     /* release resource */
-    rt_sem_release(&xMasterRunRes);
+    OS_ReleaseSemaphore(xMasterRunRes);
 }
 
 /**
@@ -130,7 +153,7 @@ void vMBMasterRunResRelease(void)
  * @param ucDestAddress destination salve address
  * @param pucPDUData PDU buffer data
  * @param ucPDULength PDU buffer length
- *
+ *x
  */
 void vMBMasterErrorCBRespondTimeout(UCHAR ucDestAddress, const UCHAR *pucPDUData,
                                     USHORT ucPDULength)
@@ -139,9 +162,11 @@ void vMBMasterErrorCBRespondTimeout(UCHAR ucDestAddress, const UCHAR *pucPDUData
      * @note This code is use OS's event mechanism for modbus master protocol stack.
      * If you don't use OS, you can change it.
      */
-    rt_event_send(&xMasterOsEvent, EV_MASTER_ERROR_RESPOND_TIMEOUT);
+
+    xMBMasterPortEventPost(EV_MASTER_ERROR_RESPOND_TIMEOUT);
 
     /* You can add your code under here. */
+    Trace(1, "MB_MASTER -> EV_MASTER_ERROR_RESPOND_TIMEOUT:\n");
 }
 
 /**
@@ -161,9 +186,9 @@ void vMBMasterErrorCBReceiveData(UCHAR ucDestAddress, const UCHAR *pucPDUData,
      * @note This code is use OS's event mechanism for modbus master protocol stack.
      * If you don't use OS, you can change it.
      */
-    rt_event_send(&xMasterOsEvent, EV_MASTER_ERROR_RECEIVE_DATA);
-
+    MBMasterPortEventPost(EV_MASTER_ERROR_RECEIVE_DATA);
     /* You can add your code under here. */
+    Trace(1, "MB_MASTER -> EV_MASTER_ERROR_RECEIVE_DATA:\n");
 }
 
 /**
@@ -183,9 +208,9 @@ void vMBMasterErrorCBExecuteFunction(UCHAR ucDestAddress, const UCHAR *pucPDUDat
      * @note This code is use OS's event mechanism for modbus master protocol stack.
      * If you don't use OS, you can change it.
      */
-    rt_event_send(&xMasterOsEvent, EV_MASTER_ERROR_EXECUTE_FUNCTION);
-
+    xMBMasterPortEventPost(EV_MASTER_ERROR_EXECUTE_FUNCTION);
     /* You can add your code under here. */
+    Trace(1, "MB_MASTER -> EV_MASTER_ERROR_EXECUTE_FUNCTION:\n");
 }
 
 /**
@@ -200,9 +225,9 @@ void vMBMasterCBRequestScuuess(void)
      * @note This code is use OS's event mechanism for modbus master protocol stack.
      * If you don't use OS, you can change it.
      */
-    rt_event_send(&xMasterOsEvent, EV_MASTER_PROCESS_SUCESS);
-
+    xMBMasterPortEventPost(EV_MASTER_PROCESS_SUCESS);
     /* You can add your code under here. */
+    Trace(1, "MB_MASTER -> EV_MASTER_PROCESS_SUCESS:\n");
 }
 
 /**
@@ -217,13 +242,12 @@ void vMBMasterCBRequestScuuess(void)
 eMBMasterReqErrCode eMBMasterWaitRequestFinish(void)
 {
     eMBMasterReqErrCode eErrStatus = MB_MRE_NO_ERR;
-    rt_uint32_t recvedEvent;
-    /* waiting for OS event */
-    rt_event_recv(&xMasterOsEvent,
-                  EV_MASTER_PROCESS_SUCESS | EV_MASTER_ERROR_RESPOND_TIMEOUT | EV_MASTER_ERROR_RECEIVE_DATA | EV_MASTER_ERROR_EXECUTE_FUNCTION,
-                  RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER,
-                  &recvedEvent);
-    switch (recvedEvent)
+    MMB_Event_t *recvedEvent = NULL;
+
+    OS_WaitEvent(xMBEventManager_H, (void **)&recvedEvent, OS_WAIT_FOREVER);
+
+    /* the enum type couldn't convert to int type */
+    switch (recvedEvent->id)
     {
     case EV_MASTER_PROCESS_SUCESS:
         break;
@@ -243,6 +267,8 @@ eMBMasterReqErrCode eMBMasterWaitRequestFinish(void)
         break;
     }
     }
+
+    OS_Free(recvedEvent);
     return eErrStatus;
 }
 

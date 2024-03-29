@@ -73,9 +73,9 @@ BOOL xMBMasterPortSerialInit(UART_Port_t ucPORT, UART_Baud_Rate_t ulBaudRate, UA
     CONFIG_UART.dataBits = ucDataBits;
     CONFIG_UART.parity = eParity;
     CONFIG_UART.stopBits = UART_STOP_BITS_1;
-    CONFIG_UART.errorCallback = NULL; // ver cual es.
-    CONFIG_UART.rxCallback = serial_rx_ind;    // ver cual es.
-    CONFIG_UART.useEvent = false;     // ver eso.
+    CONFIG_UART.errorCallback = NULL;       // ver cual es.
+    CONFIG_UART.rxCallback = serial_rx_ind; // ver cual es.
+    CONFIG_UART.useEvent = false;           // ver eso.
 
     UART_Close(MB_UART);
 
@@ -235,10 +235,22 @@ static void serial_soft_trans_irq(void *parameter)
         // rt_event_recv(&event_serial, EVENT_SERIAL_TRANS_START, RT_EVENT_FLAG_OR,
         //               RT_WAITING_FOREVER, &recved_event);
         /* execute modbus callback */
-        
-        OS_WaitEvent(thread_serial_soft_trans_irq,&recved_event,OS_WAIT_FOREVER);
-        if(recved_event == EVENT_SERIAL_TRANS_START)
+
+        while (1)
+        {
+            if (OS_WaitEvent(thread_serial_soft_trans_irq, &recved_event, OS_WAIT_FOREVER))
+            {
+                EventDispatch(event);
+                OS_Free(event->pParam1);
+                OS_Free(event->pParam2);
+                OS_Free(event);
+            }
+        }
+        if (recved_event == EVENT_SERIAL_TRANS_START)
+        {
+
             prvvUARTTxReadyISR();
+        }
     }
 }
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
