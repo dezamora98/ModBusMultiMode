@@ -50,7 +50,6 @@ void vMBMasterPortTimersT35Enable()
 
     /* Set current timer mode, don't change it.*/
     vMBMasterSetCurTimerMode(MB_TMODE_T35);
-
     OS_StartCallbackTimer(mainTaskHandle, timer_tick, timer_timeout_ind, NULL);
 }
 
