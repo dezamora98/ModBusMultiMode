@@ -7,43 +7,43 @@
 #include "mbframe.h"
 #include "mbutils.h"
 
-#if false
+#if true
 
 /* -----------------------Slave Defines -------------------------------------*/
-#define S_DISCRETE_INPUT_START                    RT_S_DISCRETE_INPUT_START
-#define S_DISCRETE_INPUT_NDISCRETES               RT_S_DISCRETE_INPUT_NDISCRETES
-#define S_COIL_START                              RT_S_COIL_START
-#define S_COIL_NCOILS                             RT_S_COIL_NCOILS
-#define S_REG_INPUT_START                         RT_S_REG_INPUT_START
-#define S_REG_INPUT_NREGS                         RT_S_REG_INPUT_NREGS
-#define S_REG_HOLDING_START                       RT_S_REG_HOLDING_START
-#define S_REG_HOLDING_NREGS                       RT_S_REG_HOLDING_NREGS
+#define S_DISCRETE_INPUT_START                    0
+#define S_DISCRETE_INPUT_NDISCRETES               2
+#define S_COIL_START                              0
+#define S_COIL_NCOILS                             2
+#define S_REG_INPUT_START                         0
+#define S_REG_INPUT_NREGS                         2
+#define S_REG_HOLDING_START                       0
+#define S_REG_HOLDING_NREGS                       2
 /* salve mode: holding register's all address */
-#define          S_HD_RESERVE                     RT_S_HD_RESERVE
+#define          S_HD_RESERVE                     0
 /* salve mode: input register's all address */
-#define          S_IN_RESERVE                     RT_S_IN_RESERVE
+#define          S_IN_RESERVE                     0
 /* salve mode: coil's all address */
-#define          S_CO_RESERVE                     RT_S_CO_RESERVE
+#define          S_CO_RESERVE                     0
 /* salve mode: discrete's all address */
-#define          S_DI_RESERVE                     RT_S_DI_RESERVE
+#define          S_DI_RESERVE                     0
 
 /* -----------------------Master Defines -------------------------------------*/
-#define M_DISCRETE_INPUT_START                    RT_M_DISCRETE_INPUT_START
-#define M_DISCRETE_INPUT_NDISCRETES               RT_M_DISCRETE_INPUT_NDISCRETES
-#define M_COIL_START                              RT_M_COIL_START
-#define M_COIL_NCOILS                             RT_M_COIL_NCOILS
-#define M_REG_INPUT_START                         RT_M_REG_INPUT_START
-#define M_REG_INPUT_NREGS                         RT_M_REG_INPUT_NREGS
-#define M_REG_HOLDING_START                       RT_M_REG_HOLDING_START
-#define M_REG_HOLDING_NREGS                       RT_M_REG_HOLDING_NREGS
+#define M_DISCRETE_INPUT_START                    0
+#define M_DISCRETE_INPUT_NDISCRETES               2
+#define M_COIL_START                              0
+#define M_COIL_NCOILS                             2
+#define M_REG_INPUT_START                         0
+#define M_REG_INPUT_NREGS                         2
+#define M_REG_HOLDING_START                       0
+#define M_REG_HOLDING_NREGS                       2
 /* master mode: holding register's all address */
-#define          M_HD_RESERVE                     RT_M_HD_RESERVE
+#define          M_HD_RESERVE                     1
 /* master mode: input register's all address */
-#define          M_IN_RESERVE                     RT_M_IN_RESERVE
+#define          M_IN_RESERVE                     1
 /* master mode: coil's all address */
-#define          M_CO_RESERVE                     RT_M_CO_RESERVE
+#define          M_CO_RESERVE                     1
 /* master mode: discrete's all address */
-#define          M_DI_RESERVE                     RT_M_DI_RESERVE
+#define          M_DI_RESERVE                     1
 
 
 #endif

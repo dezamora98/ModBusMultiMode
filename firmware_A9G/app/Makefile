@@ -17,6 +17,7 @@ LOCAL_ADD_INCLUDE := include\
                     include/api_inc \
                     $(LOCAL_NAME)/inc \
                     $(LOCAL_NAME)/libs/tiny-json/inc \
+                    $(LOCAL_NAME)/libs/freemodbus/inc \ 
 
 IS_TOP_LEVEL := yes
 

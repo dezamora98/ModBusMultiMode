@@ -24,7 +24,10 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <sdk_init.h>
+#include <api_inc_os.h>
+#include <api_os.h>
+#include <api_event.h>
+
 #include "mb.h"
 #include "mb_m.h"
 #include "mbport.h"

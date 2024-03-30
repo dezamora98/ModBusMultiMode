@@ -23,7 +23,7 @@
 
 /* ----------------------- Modbus includes ----------------------------------*/
 #include "port.h"
-#include <sdk_init.h>
+#include <api_sys.h>
 #include <stdio.h>
 /* ----------------------- Variables ----------------------------------------*/
 static uint32_t sectionStatus;
