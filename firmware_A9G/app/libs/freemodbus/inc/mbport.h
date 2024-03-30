@@ -116,10 +116,6 @@ void xMBPortSerialClose(void);
 
 void vMBPortSerialEnable(bool xRxEnable, bool xTxEnable);
 
-static inline bool xMBPortSerialGetByte(char *pucByte);
-
-static inline bool xMBPortSerialPutByte(char ucByte);
-
 bool xMBMasterPortSerialInit(uint8_t ucPort, uint32_t ulBaudRate,
                              uint8_t ucDataBits, eMBParity eParity);
 
@@ -129,30 +125,30 @@ void xMBMasterPortSerialClose(void);
 
 void vMBMasterPortSerialEnable(bool xRxEnable, bool xTxEnable);
 
-static inline bool xMBMasterPortSerialGetByte(char *pucByte);
+bool xMBMasterPortSerialGetByte(char *pucByte);
 
-static inline bool xMBMasterPortSerialPutByte(char ucByte);
+bool xMBMasterPortSerialPutByte(char ucByte);
 
 /* ----------------------- Timers functions ---------------------------------*/
 bool xMBPortTimersInit(uint16_t usTimeOut50us);
 
 void xMBPortTimersClose(void);
 
-static inline void vMBPortTimersEnable(void);
+void vMBPortTimersEnable(void);
 
-static inline void vMBPortTimersDisable(void);
+void vMBPortTimersDisable(void);
 
 bool xMBMasterPortTimersInit(uint16_t usTimeOut50us);
 
 void xMBMasterPortTimersClose(void);
 
-static inline void vMBMasterPortTimersT35Enable(void);
+void vMBMasterPortTimersT35Enable(void);
 
-static inline void vMBMasterPortTimersConvertDelayEnable(void);
+void vMBMasterPortTimersConvertDelayEnable(void);
 
-static inline void vMBMasterPortTimersRespondTimeoutEnable(void);
+void vMBMasterPortTimersRespondTimeoutEnable(void);
 
-static inline void vMBMasterPortTimersDisable(void);
+void vMBMasterPortTimersDisable(void);
 
 /* ----------------- Callback for the master error process ------------------*/
 void vMBMasterErrorCBRespondTimeout(uint8_t ucDestAddress, const uint8_t *pucPDUData,

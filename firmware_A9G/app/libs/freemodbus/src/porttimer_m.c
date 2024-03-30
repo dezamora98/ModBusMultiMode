@@ -71,7 +71,7 @@ void vMBMasterPortTimersRespondTimeoutEnable()
     OS_StartCallbackTimer(mainTaskHandle, MB_MASTER_TIMEOUT_MS_RESPOND, timer_timeout_ind, NULL);
 }
 
-void vMBMasterPortTimersDisable()
+void vMBMasterPortTimersDisable(void)
 {
     OS_StopCallbackTimer(mainTaskHandle, timer_timeout_ind, NULL);
 }

@@ -1,7 +1,9 @@
 #include <stdlib.h>
-#include <stdint.h>
+#include <cs_types.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include <api_inc_os.h>
+#include <api_os.h>
 #include "tiny-json.h"
 #include "mb.h"
 #include "mb_m.h"
@@ -24,7 +26,7 @@ static void send_thread_entry(void *parameter);
 static void mb_master_poll(void *parameter);
 static bool mb_master_sample(void);
 
-void MainTask(VOID *pData)
+void MainTask(void *pData)
 {
     while (1)
     {
