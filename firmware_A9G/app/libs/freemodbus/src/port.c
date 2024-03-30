@@ -24,18 +24,18 @@
 /* ----------------------- Modbus includes ----------------------------------*/
 #include "port.h"
 #include "api_sys.h"
-#include "api_debug.h"
+#include <stdio.h>
 /* ----------------------- Variables ----------------------------------------*/
 static uint32_t sectionStatus;
 /* ----------------------- Start implementation -----------------------------*/
 void EnterCriticalSection(void)
 {
     sectionStatus = SYS_EnterCriticalSection();
-    Trace(1, "init critical section");
+    printf("init critical section");
 }
 
 void ExitCriticalSection(void)
 {
     SYS_ExitCriticalSection(sectionStatus);
-    Trace(1, "exit critical section");
+    printf("exit critical section");
 }

@@ -1,0 +1,324 @@
+Archive member included because of file (symbol)
+
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/init/lib\libinit_debug.a(sdk_init.o)
+                              (user_Main)
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/lib/libapp_debug.al(app_main.o)
+                              D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/init/lib\libinit_debug.a(sdk_init.o) (app_Main)
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/libs/tiny-json/lib/libtiny-json_debug.a(tiny-json.o)
+                              D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/lib/libapp_debug.al(app_main.o) (json_getProperty)
+
+Allocating common symbols
+Common symbol       size              file
+
+temp000___          0x4               D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/init/lib\libinit_debug.a(sdk_init.o)
+
+Discarded input sections
+
+ .text          0x0000000000000000        0x0 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/init/lib\libinit_debug.a(sdk_init.o)
+ .data          0x0000000000000000        0x0 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/init/lib\libinit_debug.a(sdk_init.o)
+ .bss           0x0000000000000000        0x0 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/init/lib\libinit_debug.a(sdk_init.o)
+ .pdr           0x0000000000000000       0x40 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/init/lib\libinit_debug.a(sdk_init.o)
+ .text          0x0000000000000000        0x0 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/lib/libapp_debug.al(app_main.o)
+ .data          0x0000000000000000        0x0 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/lib/libapp_debug.al(app_main.o)
+ .bss           0x0000000000000000        0x0 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/lib/libapp_debug.al(app_main.o)
+ .reginfo       0x0000000000000000       0x18 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/lib/libapp_debug.al(app_main.o)
+ .pdr           0x0000000000000000       0x80 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/lib/libapp_debug.al(app_main.o)
+ .text          0x0000000000000000        0x0 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/libs/tiny-json/lib/libtiny-json_debug.a(tiny-json.o)
+ .data          0x0000000000000000        0x0 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/libs/tiny-json/lib/libtiny-json_debug.a(tiny-json.o)
+ .bss           0x0000000000000000        0x0 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/libs/tiny-json/lib/libtiny-json_debug.a(tiny-json.o)
+ .reginfo       0x0000000000000000       0x18 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/libs/tiny-json/lib/libtiny-json_debug.a(tiny-json.o)
+ .pdr           0x0000000000000000      0x1a0 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/libs/tiny-json/lib/libtiny-json_debug.a(tiny-json.o)
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+*default*        0x0000000000000000 0xffffffffffffffff
+
+Linker script and memory map
+
+LOAD D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/platform/chip/rom/8955/lib/mem_bridge_rom_CHIP.elf
+                0xffffffff88240000                . = 0xffffffff88240000
+                0xffffffff88240000                __rom_start = .
+
+.section_init   0xffffffff88240000       0x10
+ *(.section_init)
+ .section_init  0xffffffff88240000        0x8 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/init/lib\libinit_debug.a(sdk_init.o)
+                0xffffffff88240010                . = ALIGN (0x10)
+ *fill*         0xffffffff88240008        0x8 00
+
+.cust_rotext    0xffffffff88240010      0x710
+ *(.text)
+ *(.text.*)
+ .text.user_Main
+                0xffffffff88240010       0x1c D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/init/lib\libinit_debug.a(sdk_init.o)
+                0xffffffff88240011                user_Main
+ .text.user_Init
+                0xffffffff8824002c       0x48 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/init/lib\libinit_debug.a(sdk_init.o)
+                0xffffffff8824002d                user_Init
+ .text.GPIO_SYS_blink
+                0xffffffff88240074       0x8c D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/lib/libapp_debug.al(app_main.o)
+                0xffffffff88240075                GPIO_SYS_blink
+ .text.EventDispatch
+                0xffffffff88240100       0x78 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/lib/libapp_debug.al(app_main.o)
+                0xffffffff88240101                EventDispatch
+ .text.app_Main
+                0xffffffff88240178       0x7c D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/lib/libapp_debug.al(app_main.o)
+                0xffffffff88240179                app_Main
+ .text.MainTask
+                0xffffffff882401f4       0x94 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/lib/libapp_debug.al(app_main.o)
+                0xffffffff882401f5                MainTask
+ .text.parseString
+                0xffffffff88240288       0x84 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/libs/tiny-json/lib/libtiny-json_debug.a(tiny-json.o)
+ .text.poolInit
+                0xffffffff8824030c        0xc D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/libs/tiny-json/lib/libtiny-json_debug.a(tiny-json.o)
+ .text.poolAlloc
+                0xffffffff88240318       0x20 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/libs/tiny-json/lib/libtiny-json_debug.a(tiny-json.o)
+ .text.isOneOfThem
+                0xffffffff88240338       0x14 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/libs/tiny-json/lib/libtiny-json_debug.a(tiny-json.o)
+ .text.goNum    0xffffffff8824034c       0x24 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/libs/tiny-json/lib/libtiny-json_debug.a(tiny-json.o)
+ .text.setToNull
+                0xffffffff88240370       0x24 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/libs/tiny-json/lib/libtiny-json_debug.a(tiny-json.o)
+ .text.isEndOfPrimitive
+                0xffffffff88240394       0x38 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/libs/tiny-json/lib/libtiny-json_debug.a(tiny-json.o)
+ .text.primitiveValue
+                0xffffffff882403cc       0x44 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/libs/tiny-json/lib/libtiny-json_debug.a(tiny-json.o)
+ .text.json_getProperty
+                0xffffffff88240410       0x2c D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/libs/tiny-json/lib/libtiny-json_debug.a(tiny-json.o)
+                0xffffffff88240411                json_getProperty
+ .text.json_getPropertyValue
+                0xffffffff8824043c       0x20 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/libs/tiny-json/lib/libtiny-json_debug.a(tiny-json.o)
+                0xffffffff8824043d                json_getPropertyValue
+ .text.goBlank  0xffffffff8824045c       0x2c D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/libs/tiny-json/lib/libtiny-json_debug.a(tiny-json.o)
+ .text.json_createWithPool
+                0xffffffff88240488      0x268 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/libs/tiny-json/lib/libtiny-json_debug.a(tiny-json.o)
+                0xffffffff88240489                json_createWithPool
+ .text.json_create
+                0xffffffff882406f0       0x24 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/libs/tiny-json/lib/libtiny-json_debug.a(tiny-json.o)
+                0xffffffff882406f1                json_create
+ *(.stub .gnu.linkonce.t.*)
+                0xffffffff88240720                . = ALIGN (0x20)
+ *fill*         0xffffffff88240714        0xc 00
+
+.cust_rodata    0xffffffff88240720      0x140
+ *(.rdata)
+ *(.rodata)
+ *(.rodata.*)
+ .rodata.str1.4
+                0xffffffff88240720       0xc6 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/lib/libapp_debug.al(app_main.o)
+                                         0xc8 (size before relaxing)
+ *fill*         0xffffffff882407e6        0x2 00
+ .rodata.str1.4
+                0xffffffff882407e8       0x24 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/libs/tiny-json/lib/libtiny-json_debug.a(tiny-json.o)
+ .rodata.pair.3365
+                0xffffffff8824080c       0x10 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/libs/tiny-json/lib/libtiny-json_debug.a(tiny-json.o)
+ .rodata.max.3532
+                0xffffffff8824081c       0x14 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/libs/tiny-json/lib/libtiny-json_debug.a(tiny-json.o)
+ .rodata.min.3531
+                0xffffffff88240830       0x18 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/libs/tiny-json/lib/libtiny-json_debug.a(tiny-json.o)
+ *(.rodata.*_png)
+ *(.gnu.linkonce.r.*)
+ *(.rodata1)
+ *(.roresdata)
+ *(.robsdata)
+                0xffffffff88240860                . = ALIGN (0x20)
+ *fill*         0xffffffff88240848       0x18 00
+                0xffffffff88240860                __user_rw_lma = .
+                0x0000000000000860                __rom_size = (__user_rw_lma - __rom_start)
+                0xffffffff82300000                . = 0xffffffff82300000
+
+.cust_data      0xffffffff82300000        0x0 load address 0xffffffff88240860
+                0xffffffff82300000                __user_rw_start = .
+ *(.data)
+ *(.data.*)
+ *(.gnu.linkonce.d.*)
+ *(.sdata .sdata.* .gnu.linkonce.s.*)
+ *(.sdata2 .sdata2.* .gnu.linkonce.s2.*)
+                0xffffffff82300000                . = ALIGN (0x10)
+                0xffffffff82300000                __user_rw_end = .
+                0x0000000000000000                __user_rw_size = (__user_rw_end - __user_rw_start)
+                0xffffffff82300000                __user_bss_start = .
+
+.cust_bss       0xffffffff82300000       0x10
+ *(.sbss .sbss.* .gnu.linkonce.sb.*)
+ *(.sbss2 .sbss2.* .gnu.linkonce.sb2.*)
+ *(.scommon)
+ .scommon       0xffffffff82300000        0x4 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/init/lib\libinit_debug.a(sdk_init.o)
+                0xffffffff82300000                temp000___
+ *(.dynbss)
+ *(.bss .bss.* .gnu.linkonce.b.*)
+ .bss.g_InterfaceVtbl
+                0xffffffff82300004        0x4 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/init/lib\libinit_debug.a(sdk_init.o)
+                0xffffffff82300004                g_InterfaceVtbl
+ .bss.mainTaskHandle
+                0xffffffff82300008        0x4 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/lib/libapp_debug.al(app_main.o)
+                0xffffffff82300008                mainTaskHandle
+ *(COMMON)
+ *(.rambss)
+                0xffffffff82300010                . = ALIGN (0x10)
+ *fill*         0xffffffff8230000c        0x4 00
+                0xffffffff82300010                __user_bss_end = .
+                0x0000000000000010                __user_bss_size = (__user_bss_end - __user_bss_start)
+
+.stab
+ *(.stab)
+
+.stabstr
+ *(.stabstr)
+
+.stab.excl
+ *(.stab.excl)
+
+.stab.exclstr
+ *(.stab.exclstr)
+
+.stab.index
+ *(.stab.index)
+
+.stab.indexstr
+ *(.stab.indexstr)
+
+.reginfo        0x0000000000000000       0x18
+ .reginfo       0x0000000000000000       0x18 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/init/lib\libinit_debug.a(sdk_init.o)
+
+.mdebug.abi32   0x0000000000000000        0x0
+ .mdebug.abi32  0x0000000000000000        0x0 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/init/lib\libinit_debug.a(sdk_init.o)
+ .mdebug.abi32  0x0000000000000000        0x0 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/lib/libapp_debug.al(app_main.o)
+ .mdebug.abi32  0x0000000000000000        0x0 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/libs/tiny-json/lib/libtiny-json_debug.a(tiny-json.o)
+
+.gnu.attributes
+                0x0000000000000000       0x10
+ .gnu.attributes
+                0x0000000000000000       0x10 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/init/lib\libinit_debug.a(sdk_init.o)
+ .gnu.attributes
+                0x0000000000000010       0x10 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/lib/libapp_debug.al(app_main.o)
+ .gnu.attributes
+                0x0000000000000020       0x10 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/libs/tiny-json/lib/libtiny-json_debug.a(tiny-json.o)
+
+.comment        0x0000000000000000       0x25
+ *(.comment)
+ .comment       0x0000000000000000       0x25 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/init/lib\libinit_debug.a(sdk_init.o)
+                                         0x26 (size before relaxing)
+ .comment       0x0000000000000000       0x26 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/lib/libapp_debug.al(app_main.o)
+ .comment       0x0000000000000000       0x26 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/libs/tiny-json/lib/libtiny-json_debug.a(tiny-json.o)
+
+.debug
+ *(.debug)
+
+.line
+ *(.line)
+
+.debug_srcinfo
+ *(.debug_srcinfo)
+
+.debug_sfnames
+ *(.debug_sfnames)
+
+.debug_aranges  0x0000000000000000       0xe0
+ *(.debug_aranges)
+ .debug_aranges
+                0x0000000000000000       0x28 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/init/lib\libinit_debug.a(sdk_init.o)
+ .debug_aranges
+                0x0000000000000028       0x38 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/lib/libapp_debug.al(app_main.o)
+ .debug_aranges
+                0x0000000000000060       0x80 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/libs/tiny-json/lib/libtiny-json_debug.a(tiny-json.o)
+
+.debug_pubnames
+                0x0000000000000000      0x11e
+ *(.debug_pubnames)
+ .debug_pubnames
+                0x0000000000000000       0x51 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/init/lib\libinit_debug.a(sdk_init.o)
+ .debug_pubnames
+                0x0000000000000051       0x64 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/lib/libapp_debug.al(app_main.o)
+ .debug_pubnames
+                0x00000000000000b5       0x69 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/libs/tiny-json/lib/libtiny-json_debug.a(tiny-json.o)
+
+.debug_info     0x0000000000000000     0x9841
+ *(.debug_info .gnu.linkonce.wi.*)
+ .debug_info    0x0000000000000000     0x44d6 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/init/lib\libinit_debug.a(sdk_init.o)
+ .debug_info    0x00000000000044d6     0x4792 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/lib/libapp_debug.al(app_main.o)
+ .debug_info    0x0000000000008c68      0xbd9 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/libs/tiny-json/lib/libtiny-json_debug.a(tiny-json.o)
+
+.debug_abbrev   0x0000000000000000      0x7bc
+ *(.debug_abbrev)
+ .debug_abbrev  0x0000000000000000      0x200 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/init/lib\libinit_debug.a(sdk_init.o)
+ .debug_abbrev  0x0000000000000200      0x25f D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/lib/libapp_debug.al(app_main.o)
+ .debug_abbrev  0x000000000000045f      0x35d D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/libs/tiny-json/lib/libtiny-json_debug.a(tiny-json.o)
+
+.debug_line     0x0000000000000000      0x8f1
+ *(.debug_line)
+ .debug_line    0x0000000000000000      0x2bc D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/init/lib\libinit_debug.a(sdk_init.o)
+ .debug_line    0x00000000000002bc      0x38a D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/lib/libapp_debug.al(app_main.o)
+ .debug_line    0x0000000000000646      0x2ab D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/libs/tiny-json/lib/libtiny-json_debug.a(tiny-json.o)
+
+.debug_frame    0x0000000000000000      0x20c
+ *(.debug_frame)
+ .debug_frame   0x0000000000000000       0x44 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/init/lib\libinit_debug.a(sdk_init.o)
+ .debug_frame   0x0000000000000044       0x84 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/lib/libapp_debug.al(app_main.o)
+ .debug_frame   0x00000000000000c8      0x144 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/libs/tiny-json/lib/libtiny-json_debug.a(tiny-json.o)
+
+.debug_str      0x0000000000000000     0x4003
+ *(.debug_str)
+ .debug_str     0x0000000000000000     0x3737 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/init/lib\libinit_debug.a(sdk_init.o)
+                                       0x3916 (size before relaxing)
+ .debug_str     0x0000000000003737      0x65b D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/lib/libapp_debug.al(app_main.o)
+                                       0x3e9c (size before relaxing)
+ .debug_str     0x0000000000003d92      0x271 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/libs/tiny-json/lib/libtiny-json_debug.a(tiny-json.o)
+                                        0x3ca (size before relaxing)
+
+.debug_loc      0x0000000000000000      0xa51
+ *(.debug_loc)
+ .debug_loc     0x0000000000000000       0x5c D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/init/lib\libinit_debug.a(sdk_init.o)
+ .debug_loc     0x000000000000005c      0x117 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/lib/libapp_debug.al(app_main.o)
+ .debug_loc     0x0000000000000173      0x8de D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/libs/tiny-json/lib/libtiny-json_debug.a(tiny-json.o)
+
+.debug_macinfo
+ *(.debug_macinfo)
+
+.debug_weaknames
+ *(.debug_weaknames)
+
+.debug_funcnames
+ *(.debug_funcnames)
+
+.debug_typenames
+ *(.debug_typenames)
+
+.debug_varnames
+ *(.debug_varnames)
+
+.gptab.sdata
+ *(.gptab.data)
+ *(.gptab.sdata)
+
+.gptab.sbss
+ *(.gptab.bss)
+ *(.gptab.sbss)
+
+/DISCARD/
+ *(.rel.dyn)
+ *(.note.GNU-stack)
+ *(.eh_frame)
+START GROUP
+LOAD D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/init/lib\libinit_debug.a
+LOAD D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/libs/lib\liblibs_debug.a
+LOAD D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/libs/gps/minmea/lib/libminmea_debug.a
+LOAD D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/libs/gps/lib/libgps_debug.al
+LOAD D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/libs/utils/lib/libutils_debug.a
+LOAD D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/libs/gps/minmea/lib/libminmea_debug.a
+LOAD D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/libs/gps/lib/libgps_debug.al
+LOAD D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/libs/utils/lib/libutils_debug.a
+LOAD D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/lib\libapp_debug.a
+LOAD D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/libs/tiny-json/lib/libtiny-json_debug.a
+LOAD D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/libs/freemodbus/lib/libfreemodbus_debug.a
+LOAD D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/lib/libapp_debug.al
+LOAD D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/libs/tiny-json/lib/libtiny-json_debug.a
+LOAD D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/libs/freemodbus/lib/libfreemodbus_debug.a
+LOAD D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/lib/libapp_debug.al
+END GROUP
+LOAD D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/platform/lib/gcc/mips-elf/4.4.2\libgcc.a
+OUTPUT(D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app//app.elf elf32-littlemips)
+
+.debug_ranges   0x0000000000000000      0x180
+ .debug_ranges  0x0000000000000000       0x20 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/init/lib\libinit_debug.a(sdk_init.o)
+ .debug_ranges  0x0000000000000020       0x30 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/lib/libapp_debug.al(app_main.o)
+ .debug_ranges  0x0000000000000050      0x130 D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/build/app/app/libs/tiny-json/lib/libtiny-json_debug.a(tiny-json.o)

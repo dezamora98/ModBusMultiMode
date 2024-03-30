@@ -31,6 +31,8 @@
 /* ----------------------- System includes ----------------------------------*/
 #include "stdlib.h"
 #include "string.h"
+#include <stdbool.h>
+#include <stdint.h>
 
 /* ----------------------- Platform includes --------------------------------*/
 #include "port.h"
@@ -63,8 +65,8 @@
 
 /* ----------------------- Static variables ---------------------------------*/
 
-static UCHAR ucMBMasterDestAddress;
-static BOOL xMBRunInMasterMode = FALSE;
+static uint8_t ucMBMasterDestAddress;
+static bool xMBRunInMasterMode = false;
 static eMBMasterErrorEventType eMBMasterCurErrorType;
 
 static enum {
@@ -89,12 +91,12 @@ static pvMBFrameClose pvMBMasterFrameCloseCur;
  * or transmission of a character.
  * Using for Modbus Master,Add by Armink 20130813
  */
-BOOL(*pxMBMasterFrameCBByteReceived) (void);
-BOOL(*pxMBMasterFrameCBTransmitterEmpty) (void);
-BOOL(*pxMBMasterPortCBTimerExpired) (void);
+bool(*pxMBMasterFrameCBByteReceived) (void);
+bool(*pxMBMasterFrameCBTransmitterEmpty) (void);
+bool(*pxMBMasterPortCBTimerExpired) (void);
 
-BOOL(*pxMBMasterFrameCBReceiveFSMCur) (void);
-BOOL(*pxMBMasterFrameCBTransmitFSMCur) (void);
+bool(*pxMBMasterFrameCBReceiveFSMCur) (void);
+bool(*pxMBMasterFrameCBTransmitFSMCur) (void);
 
 /* An array of Modbus functions handlers which associates Modbus function
  * codes with implementing functions.
@@ -135,7 +137,7 @@ static xMBFunctionHandler xMasterFuncHandlers[MB_FUNC_HANDLERS_MAX] = {
 
 /* ----------------------- Start implementation -----------------------------*/
 eMBErrorCode
-eMBMasterInit(eMBMode eMode, UCHAR ucPort, ULONG ulBaudRate, eMBParity eParity)
+eMBMasterInit(eMBMode eMode, uint8_t ucPort, uint32_t ulBaudRate, eMBParity eParity)
 {
     eMBErrorCode eStatus = MB_ENOERR;
 
@@ -253,25 +255,25 @@ eMBMasterDisable(void)
     return eStatus;
 }
 
-BOOL eMBMasterIsEstablished(void)
+bool eMBMasterIsEstablished(void)
 {
     if (eMBState == STATE_ESTABLISHED)
     {
-        return TRUE;
+        return true;
     }
     else
     {
-        return FALSE;
+        return false;
     }
 }
 
 eMBErrorCode
 eMBMasterPoll(void)
 {
-    static UCHAR *ucMBFrame;
-    static UCHAR ucRcvAddress;
-    static UCHAR ucFunctionCode;
-    static USHORT usLength;
+    static uint8_t *ucMBFrame;
+    static uint8_t ucRcvAddress;
+    static uint8_t ucFunctionCode;
+    static uint16_t usLength;
     static eMBException eException;
 
     int i, j;
@@ -287,7 +289,7 @@ eMBMasterPoll(void)
 
     /* Check if there is a event available. If not return control to caller.
      * Otherwise we will handle the event. */
-    if (xMBMasterPortEventGet(&eEvent) == TRUE)
+    if (xMBMasterPortEventGet(&eEvent) == true)
     {
         switch (eEvent)
         {
@@ -328,7 +330,7 @@ eMBMasterPoll(void)
                     }
                     else if (xMasterFuncHandlers[i].ucFunctionCode == ucFunctionCode)
                     {
-                        vMBMasterSetCBRunInMasterMode(TRUE);
+                        vMBMasterSetCBRunInMasterMode(true);
                         /* If master request is broadcast,
                          * the master need execute function for all slave.
                          */
@@ -345,7 +347,7 @@ eMBMasterPoll(void)
                         {
                             eException = xMasterFuncHandlers[i].pxHandler(ucMBFrame, &usLength);
                         }
-                        vMBMasterSetCBRunInMasterMode(FALSE);
+                        vMBMasterSetCBRunInMasterMode(false);
                         break;
                     }    
                 }
@@ -399,22 +401,22 @@ eMBMasterPoll(void)
 }
 
 /* Get whether the Modbus Master is run in master mode.*/
-BOOL xMBMasterGetCBRunInMasterMode(void)
+bool xMBMasterGetCBRunInMasterMode(void)
 {
     return xMBRunInMasterMode;
 }
 /* Set whether the Modbus Master is run in master mode.*/
-void vMBMasterSetCBRunInMasterMode(BOOL IsMasterMode)
+void vMBMasterSetCBRunInMasterMode(bool IsMasterMode)
 {
     xMBRunInMasterMode = IsMasterMode;
 }
 /* Get Modbus Master send destination address. */
-UCHAR ucMBMasterGetDestAddress(void)
+uint8_t ucMBMasterGetDestAddress(void)
 {
     return ucMBMasterDestAddress;
 }
 /* Set Modbus Master send destination address. */
-void vMBMasterSetDestAddress(UCHAR Address)
+void vMBMasterSetDestAddress(uint8_t Address)
 {
     ucMBMasterDestAddress = Address;
 }

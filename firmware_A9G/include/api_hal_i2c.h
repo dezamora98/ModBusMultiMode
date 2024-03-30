@@ -9,7 +9,7 @@
 /// \param  I2C_Bps_t Bpsx, the speed of I2C
 /// \return BOOL  
 ///         TRUE: init success
-///			FALSE: init failed
+///			false: init failed
 /// \note   when I2C1 is used, the i2c1 pin must be pulled up
 #define I2C_Init            CSDK_FUNC(I2C_Init)
 
@@ -32,7 +32,7 @@
 /// \param  I2C_Bus_ID_t i2c, ID of the I2C bus
 /// \return BOOL
 ///         TRUE: close success
-///			FALSE: close failed
+///			false: close failed
 #define I2C_Close            CSDK_FUNC(I2C_Close)
 
 

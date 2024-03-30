@@ -1,0 +1,279 @@
+Build host is WINDOWS
+
+MAKE              init
+CC                sdk_init.c
+AR                libinit_debug.a
+
+MAKE              libs
+
+MAKE              libs/gps
+
+MAKE              libs/gps/minmea
+CC                minmea.c
+AR                libminmea_debug.a
+
+CC                gps.c
+CC                gps_parse.c
+PREPARING         libgps_debug.a
+
+MAKE              libs/utils
+CC                assert.c
+CC                buffer.c
+CC                time.c
+CC                api_debug.c
+AR                libutils_debug.a
+
+PREPARING         liblibs_debug.a
+
+MAKE              app
+
+MAKE              app/libs/tiny-json
+CC                tiny-json.c
+AR                libtiny-json_debug.a
+
+MAKE              app/libs/freemodbus
+CC                mb.c
+CC                portevent.c
+CC                portserial.c
+CC                mbrtu.c
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:118: warning: 'xMBPortSerialGetByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:120: warning: 'xMBPortSerialPutByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:131: warning: 'xMBMasterPortSerialGetByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:133: warning: 'xMBMasterPortSerialPutByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:140: warning: 'vMBPortTimersEnable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:142: warning: 'vMBPortTimersDisable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:148: warning: 'vMBMasterPortTimersT35Enable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:150: warning: 'vMBMasterPortTimersConvertDelayEnable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:152: warning: 'vMBMasterPortTimersRespondTimeoutEnable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:154: warning: 'vMBMasterPortTimersDisable' declared 'static' but never defined
+CC                porttimer.c
+CC                mbutils.c
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:118: warning: 'xMBPortSerialGetByte' used but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:120: warning: 'xMBPortSerialPutByte' used but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:140: warning: 'vMBPortTimersEnable' used but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:142: warning: 'vMBPortTimersDisable' used but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:131: warning: 'xMBMasterPortSerialGetByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:133: warning: 'xMBMasterPortSerialPutByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:148: warning: 'vMBMasterPortTimersT35Enable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:150: warning: 'vMBMasterPortTimersConvertDelayEnable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:152: warning: 'vMBMasterPortTimersRespondTimeoutEnable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:154: warning: 'vMBMasterPortTimersDisable' declared 'static' but never defined
+CC                mbfuncholding_m.c
+CC                mbfunccoils_m.c
+CC                mbfunccoils.c
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:118: warning: 'xMBPortSerialGetByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:120: warning: 'xMBPortSerialPutByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:131: warning: 'xMBMasterPortSerialGetByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:133: warning: 'xMBMasterPortSerialPutByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:140: warning: 'vMBPortTimersEnable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:142: warning: 'vMBPortTimersDisable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:148: warning: 'vMBMasterPortTimersT35Enable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:150: warning: 'vMBMasterPortTimersConvertDelayEnable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:152: warning: 'vMBMasterPortTimersRespondTimeoutEnable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:154: warning: 'vMBMasterPortTimersDisable' declared 'static' but never defined
+CC                user_mb_app.c
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:118: warning: 'xMBPortSerialGetByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:120: warning: 'xMBPortSerialPutByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:131: warning: 'xMBMasterPortSerialGetByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:133: warning: 'xMBMasterPortSerialPutByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:140: warning: 'vMBPortTimersEnable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:142: warning: 'vMBPortTimersDisable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:148: warning: 'vMBMasterPortTimersT35Enable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:150: warning: 'vMBMasterPortTimersConvertDelayEnable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:152: warning: 'vMBMasterPortTimersRespondTimeoutEnable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:154: warning: 'vMBMasterPortTimersDisable' declared 'static' but never defined
+CC                mbcrc.c
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:118: warning: 'xMBPortSerialGetByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:120: warning: 'xMBPortSerialPutByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:131: warning: 'xMBMasterPortSerialGetByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:133: warning: 'xMBMasterPortSerialPutByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:140: warning: 'vMBPortTimersEnable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:142: warning: 'vMBPortTimersDisable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:148: warning: 'vMBMasterPortTimersT35Enable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:150: warning: 'vMBMasterPortTimersConvertDelayEnable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:152: warning: 'vMBMasterPortTimersRespondTimeoutEnable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:154: warning: 'vMBMasterPortTimersDisable' declared 'static' but never defined
+CC                mbfuncdisc_m.c
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:118: warning: 'xMBPortSerialGetByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:120: warning: 'xMBPortSerialPutByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:131: warning: 'xMBMasterPortSerialGetByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:133: warning: 'xMBMasterPortSerialPutByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:140: warning: 'vMBPortTimersEnable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:142: warning: 'vMBPortTimersDisable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:148: warning: 'vMBMasterPortTimersT35Enable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:150: warning: 'vMBMasterPortTimersConvertDelayEnable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:152: warning: 'vMBMasterPortTimersRespondTimeoutEnable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:154: warning: 'vMBMasterPortTimersDisable' declared 'static' but never defined
+CC                mbfuncdiag.c
+CC                mbfuncother.c
+CC                portserial_m.c
+CC                mbfuncdisc.c
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:118: warning: 'xMBPortSerialGetByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:120: warning: 'xMBPortSerialPutByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:131: warning: 'xMBMasterPortSerialGetByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:133: warning: 'xMBMasterPortSerialPutByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:140: warning: 'vMBPortTimersEnable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:142: warning: 'vMBPortTimersDisable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:148: warning: 'vMBMasterPortTimersT35Enable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:150: warning: 'vMBMasterPortTimersConvertDelayEnable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:152: warning: 'vMBMasterPortTimersRespondTimeoutEnable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:154: warning: 'vMBMasterPortTimersDisable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:118: warning: 'xMBPortSerialGetByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:120: warning: 'xMBPortSerialPutByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:131: warning: 'xMBMasterPortSerialGetByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:133: warning: 'xMBMasterPortSerialPutByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:140: warning: 'vMBPortTimersEnable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:142: warning: 'vMBPortTimersDisable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:148: warning: 'vMBMasterPortTimersT35Enable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:150: warning: 'vMBMasterPortTimersConvertDelayEnable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:152: warning: 'vMBMasterPortTimersRespondTimeoutEnable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:154: warning: 'vMBMasterPortTimersDisable' declared 'static' but never defined
+CC                mbfuncinput_m.c
+CC                mbtcp.c
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:118: warning: 'xMBPortSerialGetByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:120: warning: 'xMBPortSerialPutByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:140: warning: 'vMBPortTimersEnable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:142: warning: 'vMBPortTimersDisable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:148: warning: 'vMBMasterPortTimersT35Enable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:150: warning: 'vMBMasterPortTimersConvertDelayEnable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:152: warning: 'vMBMasterPortTimersRespondTimeoutEnable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:154: warning: 'vMBMasterPortTimersDisable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:118: warning: 'xMBPortSerialGetByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:120: warning: 'xMBPortSerialPutByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:131: warning: 'xMBMasterPortSerialGetByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:133: warning: 'xMBMasterPortSerialPutByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:140: warning: 'vMBPortTimersEnable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:142: warning: 'vMBPortTimersDisable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:148: warning: 'vMBMasterPortTimersT35Enable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:150: warning: 'vMBMasterPortTimersConvertDelayEnable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:152: warning: 'vMBMasterPortTimersRespondTimeoutEnable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:154: warning: 'vMBMasterPortTimersDisable' declared 'static' but never defined
+CC                port.c
+CC                user_mb_app_m.c
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:118: warning: 'xMBPortSerialGetByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:120: warning: 'xMBPortSerialPutByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:131: warning: 'xMBMasterPortSerialGetByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:133: warning: 'xMBMasterPortSerialPutByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:140: warning: 'vMBPortTimersEnable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:142: warning: 'vMBPortTimersDisable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:148: warning: 'vMBMasterPortTimersT35Enable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:150: warning: 'vMBMasterPortTimersConvertDelayEnable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:152: warning: 'vMBMasterPortTimersRespondTimeoutEnable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:154: warning: 'vMBMasterPortTimersDisable' declared 'static' but never defined
+CC                mbascii.c
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:118: warning: 'xMBPortSerialGetByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:120: warning: 'xMBPortSerialPutByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:131: warning: 'xMBMasterPortSerialGetByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:133: warning: 'xMBMasterPortSerialPutByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:140: warning: 'vMBPortTimersEnable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:142: warning: 'vMBPortTimersDisable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:148: warning: 'vMBMasterPortTimersT35Enable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:150: warning: 'vMBMasterPortTimersConvertDelayEnable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:152: warning: 'vMBMasterPortTimersRespondTimeoutEnable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:154: warning: 'vMBMasterPortTimersDisable' declared 'static' but never defined
+CC                portevent_m.c
+CC                porttimer_m.c
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:118: warning: 'xMBPortSerialGetByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:120: warning: 'xMBPortSerialPutByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:131: warning: 'xMBMasterPortSerialGetByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:133: warning: 'xMBMasterPortSerialPutByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:140: warning: 'vMBPortTimersEnable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:142: warning: 'vMBPortTimersDisable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:148: warning: 'vMBMasterPortTimersT35Enable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:150: warning: 'vMBMasterPortTimersConvertDelayEnable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:152: warning: 'vMBMasterPortTimersRespondTimeoutEnable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:154: warning: 'vMBMasterPortTimersDisable' declared 'static' but never defined
+CC                porttcp.c
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:118: warning: 'xMBPortSerialGetByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:120: warning: 'xMBPortSerialPutByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:131: warning: 'xMBMasterPortSerialGetByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:133: warning: 'xMBMasterPortSerialPutByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:140: warning: 'vMBPortTimersEnable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:142: warning: 'vMBPortTimersDisable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:148: warning: 'vMBMasterPortTimersT35Enable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:150: warning: 'vMBMasterPortTimersConvertDelayEnable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:152: warning: 'vMBMasterPortTimersRespondTimeoutEnable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:154: warning: 'vMBMasterPortTimersDisable' declared 'static' but never defined
+CC                mbfuncinput.c
+CC                mbfuncholding.c
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:118: warning: 'xMBPortSerialGetByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:120: warning: 'xMBPortSerialPutByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:131: warning: 'xMBMasterPortSerialGetByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:133: warning: 'xMBMasterPortSerialPutByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:140: warning: 'vMBPortTimersEnable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:142: warning: 'vMBPortTimersDisable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:118: warning: 'xMBPortSerialGetByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:120: warning: 'xMBPortSerialPutByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:131: warning: 'xMBMasterPortSerialGetByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:133: warning: 'xMBMasterPortSerialPutByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:140: warning: 'vMBPortTimersEnable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:142: warning: 'vMBPortTimersDisable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:148: warning: 'vMBMasterPortTimersT35Enable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:150: warning: 'vMBMasterPortTimersConvertDelayEnable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:152: warning: 'vMBMasterPortTimersRespondTimeoutEnable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:154: warning: 'vMBMasterPortTimersDisable' declared 'static' but never defined
+CC                mb_m.c
+CC                mbrtu_m.c
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:118: warning: 'xMBPortSerialGetByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:120: warning: 'xMBPortSerialPutByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:131: warning: 'xMBMasterPortSerialGetByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:133: warning: 'xMBMasterPortSerialPutByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:140: warning: 'vMBPortTimersEnable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:142: warning: 'vMBPortTimersDisable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:148: warning: 'vMBMasterPortTimersT35Enable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:150: warning: 'vMBMasterPortTimersConvertDelayEnable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:152: warning: 'vMBMasterPortTimersRespondTimeoutEnable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:154: warning: 'vMBMasterPortTimersDisable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:118: warning: 'xMBPortSerialGetByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:120: warning: 'xMBPortSerialPutByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:131: warning: 'xMBMasterPortSerialGetByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:133: warning: 'xMBMasterPortSerialPutByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:140: warning: 'vMBPortTimersEnable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:142: warning: 'vMBPortTimersDisable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:148: warning: 'vMBMasterPortTimersT35Enable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:150: warning: 'vMBMasterPortTimersConvertDelayEnable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:152: warning: 'vMBMasterPortTimersRespondTimeoutEnable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:154: warning: 'vMBMasterPortTimersDisable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:118: warning: 'xMBPortSerialGetByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:120: warning: 'xMBPortSerialPutByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:131: warning: 'xMBMasterPortSerialGetByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:133: warning: 'xMBMasterPortSerialPutByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:140: warning: 'vMBPortTimersEnable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:142: warning: 'vMBPortTimersDisable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:148: warning: 'vMBMasterPortTimersT35Enable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:150: warning: 'vMBMasterPortTimersConvertDelayEnable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:152: warning: 'vMBMasterPortTimersRespondTimeoutEnable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:154: warning: 'vMBMasterPortTimersDisable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:131: warning: 'xMBMasterPortSerialGetByte' used but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:133: warning: 'xMBMasterPortSerialPutByte' used but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:148: warning: 'vMBMasterPortTimersT35Enable' used but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:150: warning: 'vMBMasterPortTimersConvertDelayEnable' used but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:152: warning: 'vMBMasterPortTimersRespondTimeoutEnable' used but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:154: warning: 'vMBMasterPortTimersDisable' used but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:118: warning: 'xMBPortSerialGetByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:120: warning: 'xMBPortSerialPutByte' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:140: warning: 'vMBPortTimersEnable' declared 'static' but never defined
+D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/app/libs/freemodbus/inc/mbport.h:142: warning: 'vMBPortTimersDisable' declared 'static' but never defined
+AR                libfreemodbus_debug.a
+
+CC                main.c
+CC                app_main.c
+PREPARING         libapp_debug.a
+
+
+LDGEN  by csdk    cust.ld
+
+LD                app.elf
+ElfCombine        Elf binary & map file
+
+GEN               stripped (rm syms) elf file app.elf
+
+CP  		  AUDIO CFP FILE......
+AUDIO CFG         No audio cfp file
+SREC              app.srec for flash/romulator
+
+LODTOBIN  D:/Documents/Proyectos/ModBusMultiMode/firmware_A9G/hex/app/app_flash.lod
+LODTOBIN          Sucessful
+LODCOMBINE        Combine user lod with Platform lod
+LODCOMBINE        Combine sucessful
+

@@ -22,6 +22,8 @@
 
 
 #include "port.h"
+#include <stdbool.h>
+#include <stdint.h>
 
 /* ----------------------- Modbus includes ----------------------------------*/
 #include "mb.h"
@@ -55,7 +57,7 @@ static rt_err_t serial_rx_ind(rt_device_t dev, rt_size_t size);
 static void serial_soft_trans_irq(void* parameter);
 
 /* ----------------------- Start implementation -----------------------------*/
-BOOL xMBPortSerialInit(UCHAR ucPORT, ULONG ulBaudRate, UCHAR ucDataBits,
+bool xMBPortSerialInit(uint8_t ucPORT, uint32_t ulBaudRate, uint8_t ucDataBits,
         eMBParity eParity)
 {
     rt_device_t dev = RT_NULL;
@@ -74,7 +76,7 @@ BOOL xMBPortSerialInit(UCHAR ucPORT, ULONG ulBaudRate, UCHAR ucDataBits,
     if(dev == RT_NULL)
     {
         /* can not find uart */
-        return FALSE;
+        return false;
     }
     else
     {
@@ -108,7 +110,7 @@ BOOL xMBPortSerialInit(UCHAR ucPORT, ULONG ulBaudRate, UCHAR ucDataBits,
     if (!rt_device_open(&serial->parent, RT_DEVICE_OFLAG_RDWR | RT_DEVICE_FLAG_INT_RX)) {
         rt_device_set_rx_indicate(&serial->parent, serial_rx_ind);
     } else {
-        return FALSE;
+        return false;
     }
 
     /* software initialize */
@@ -122,10 +124,10 @@ BOOL xMBPortSerialInit(UCHAR ucPORT, ULONG ulBaudRate, UCHAR ucDataBits,
                    10, 5);
     rt_thread_startup(&thread_serial_soft_trans_irq);
 
-    return TRUE;
+    return true;
 }
 
-void vMBPortSerialEnable(BOOL xRxEnable, BOOL xTxEnable)
+void vMBPortSerialEnable(bool xRxEnable, bool xTxEnable)
 {
     rt_uint32_t recved_event;
     if (xRxEnable)
@@ -165,16 +167,16 @@ void vMBPortClose(void)
     serial->parent.close(&(serial->parent));
 }
 
-BOOL xMBPortSerialPutByte(CHAR ucByte)
+bool xMBPortSerialPutByte(char ucByte)
 {
     serial->parent.write(&(serial->parent), 0, &ucByte, 1);
-    return TRUE;
+    return true;
 }
 
-BOOL xMBPortSerialGetByte(CHAR * pucByte)
+bool xMBPortSerialGetByte(char * pucByte)
 {
     serial->parent.read(&(serial->parent), 0, pucByte, 1);
-    return TRUE;
+    return true;
 }
 
 /*

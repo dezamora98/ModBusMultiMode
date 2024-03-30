@@ -19,25 +19,25 @@
  * File: $Id: portserial_m.c,v 1.60 2013/08/13 15:07:05 Armink add Master Functions $
  */
 
-#include "port.h"
-#include "stdint.h"
-/* ----------------------- Modbus includes ----------------------------------*/
-#include "mb.h"
-#include "mbport.h"
+#include <stdlib.h>
+#include <stdbool.h>
+#include <stdint.h>
+#include <stdio.h>
 #include "api_hal_uart.h"
 #include "api_inc_uart.h"
 #include "api_inc_gpio.h"
 #include "api_hal_gpio.h"
 #include "api_event.h"
+/* ----------------------- Modbus includes ----------------------------------*/
+#include "port.h"
+#include "mb.h"
+#include "mbport.h"
+
 
 #if MB_MASTER_RTU_ENABLED > 0 || MB_MASTER_ASCII_ENABLED > 0
 /* ----------------------- Static variables ---------------------------------*/
 /* software simulation serial transmit IRQ handler thread */
 static HANDLE thread_serial_soft_trans_irq;
-/* serial event */
-static API_Event_t event_serial;
-/* modbus master serial device */
-static UART_Port_t serial;
 
 // #define MODBUS_MASTER_RT_CONTROL_PIN_INDEX GPIO_PIN10
 // #define RT_MODBUS_MASTER_USE_CONTROL_PIN
@@ -56,7 +56,7 @@ static UART_Config_t CONFIG_UART;
 static UART_Port_t MB_UART;
 
 /* ----------------------- Start implementation -----------------------------*/
-BOOL xMBMasterPortSerialInit(UART_Port_t ucPORT, UART_Baud_Rate_t ulBaudRate, UART_Data_Bits_t ucDataBits, UART_Parity_t eParity)
+bool xMBMasterPortSerialInit(uint8_t ucPort, uint32_t ulBaudRate, uint8_t ucDataBits, eMBParity eParity)
 {
 #if defined(RT_MODBUS_MASTER_USE_CONTROL_PIN)
     GPIO_config_t CONFIG_PIN_RTS;
@@ -67,23 +67,23 @@ BOOL xMBMasterPortSerialInit(UART_Port_t ucPORT, UART_Baud_Rate_t ulBaudRate, UA
     // rt_pin_mode(MODBUS_MASTER_RT_CONTROL_PIN_INDEX, PIN_MODE_OUTPUT);
 #endif
 
-    MB_UART = ucPORT;
-    CONFIG_UART.baudRate = ulBaudRate;
-    CONFIG_UART.dataBits = ucDataBits;
-    CONFIG_UART.parity = eParity;
-    CONFIG_UART.stopBits = UART_STOP_BITS_1;
+    MB_UART = (UART_Port_t)ucPort;
+    CONFIG_UART.baudRate = (UART_Baud_Rate_t)ulBaudRate;
+    CONFIG_UART.dataBits = (UART_Data_Bits_t)ucDataBits;
+    CONFIG_UART.parity = (UART_Parity_t)eParity;
+    CONFIG_UART.stopBits = (UART_Stop_Bits_t)UART_STOP_BITS_1;
     CONFIG_UART.errorCallback = NULL;       // ver cual es.
-    CONFIG_UART.rxCallback = serial_rx_ind; // ver cual es.
+    CONFIG_UART.rxCallback = (UART_Callback_t)serial_rx_ind; // ver cual es.
     CONFIG_UART.useEvent = false;           // ver eso.
 
     UART_Close(MB_UART);
 
     thread_serial_soft_trans_irq = OS_CreateTask(serial_soft_trans_irq, NULL, NULL, 512, OS_EVENT_PRI_URGENT, 0, 0, "MMB-TX");
     OS_StartTask(thread_serial_soft_trans_irq, NULL);
-    return TRUE;
+    return true;
 }
 
-void vMBMasterPortSerialEnable(BOOL xRxEnable, BOOL xTxEnable)
+void vMBMasterPortSerialEnable(bool xRxEnable, bool xTxEnable)
 {
     eMBMasterEventType *event = NULL;
 
@@ -106,7 +106,6 @@ void vMBMasterPortSerialEnable(BOOL xRxEnable, BOOL xTxEnable)
         /* disable RX interrupt */
         CONFIG_UART.useEvent = false;
         UART_Init(MB_UART, CONFIG_UART);
-
     }
     if (xTxEnable)
     {
@@ -115,7 +114,7 @@ void vMBMasterPortSerialEnable(BOOL xRxEnable, BOOL xTxEnable)
         event = (eMBMasterEventType *)malloc(sizeof(eMBMasterEventType));
         if (!event)
         {
-            Trace(1, "MMB no memory");
+            printf("MMB no memory");
             return;
         }
         *event = EVENT_SERIAL_TRANS_START;
@@ -135,18 +134,18 @@ void vMBMasterPortClose(void)
     UART_Close(MB_UART);
 }
 
-BOOL xMBMasterPortSerialPutByte(CHAR ucByte)
+bool xMBMasterPortSerialPutByte(char ucByte)
 {
     // serial->parent.write(&(serial->parent), 0, &ucByte, 1);
     UART_Write(MB_UART, &ucByte, 1);
-    return TRUE;
+    return true;
 }
 
-BOOL xMBMasterPortSerialGetByte(CHAR *pucByte)
+bool xMBMasterPortSerialGetByte(char *pucByte)
 {
     // serial->parent.read(&(serial->parent), 0, pucByte, 1);
     UART_Read(MB_UART, pucByte, 1, 1);
-    return TRUE;
+    return true;
 }
 
 /*
@@ -189,7 +188,7 @@ static void serial_soft_trans_irq(void *parameter)
             if (OS_WaitEvent(thread_serial_soft_trans_irq, (void **)&recved_event, OS_WAIT_FOREVER))
             {
                 /* execute modbus callback */
-                if (recved_event == EVENT_SERIAL_TRANS_START)
+                if (*recved_event == EVENT_SERIAL_TRANS_START)
                 {
                     prvvUARTTxReadyISR();
                 }

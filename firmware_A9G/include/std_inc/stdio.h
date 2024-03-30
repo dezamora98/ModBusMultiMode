@@ -9,9 +9,10 @@ extern "C" {
 #include "stddef.h"
 #include <stdarg.h>
 #include "sdk_init.h"
+#include "api_debug.h"
 
 
-
+#define  printf(format,...)   Trace(1,format,##__VA_ARGS__)        
 #define  sprintf       CSDK_FUNC(sprintf)
 #define  snprintf      CSDK_FUNC(snprintf)
 #define  sscanf        CSDK_FUNC(sscanf)

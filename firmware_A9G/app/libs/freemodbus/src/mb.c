@@ -31,7 +31,8 @@
 /* ----------------------- System includes ----------------------------------*/
 #include "stdlib.h"
 #include "string.h"
-
+#include <stdbool.h>
+#include <stdint.h>
 /* ----------------------- Platform includes --------------------------------*/
 #include "port.h"
 
@@ -60,7 +61,7 @@
 
 /* ----------------------- Static variables ---------------------------------*/
 
-static UCHAR    ucMBAddress;
+static uint8_t    ucMBAddress;
 static eMBMode  eMBCurrentMode;
 
 static enum
@@ -85,12 +86,12 @@ static pvMBFrameClose pvMBFrameCloseCur;
  * or transmission of a character.
  * Using for Modbus Slave
  */
-BOOL( *pxMBFrameCBByteReceived ) ( void );
-BOOL( *pxMBFrameCBTransmitterEmpty ) ( void );
-BOOL( *pxMBPortCBTimerExpired ) ( void );
+bool( *pxMBFrameCBByteReceived ) ( void );
+bool( *pxMBFrameCBTransmitterEmpty ) ( void );
+bool( *pxMBPortCBTimerExpired ) ( void );
 
-BOOL( *pxMBFrameCBReceiveFSMCur ) ( void );
-BOOL( *pxMBFrameCBTransmitFSMCur ) ( void );
+bool( *pxMBFrameCBReceiveFSMCur ) ( void );
+bool( *pxMBFrameCBTransmitFSMCur ) ( void );
 
 /* An array of Modbus functions handlers which associates Modbus function
  * codes with implementing functions.
@@ -130,7 +131,7 @@ static xMBFunctionHandler xFuncHandlers[MB_FUNC_HANDLERS_MAX] = {
 
 /* ----------------------- Start implementation -----------------------------*/
 eMBErrorCode
-eMBInit( eMBMode eMode, UCHAR ucSlaveAddress, UCHAR ucPort, ULONG ulBaudRate, eMBParity eParity )
+eMBInit( eMBMode eMode, uint8_t ucSlaveAddress, uint8_t ucPort, uint32_t ulBaudRate, eMBParity eParity )
 {
     eMBErrorCode    eStatus = MB_ENOERR;
 
@@ -198,7 +199,7 @@ eMBInit( eMBMode eMode, UCHAR ucSlaveAddress, UCHAR ucPort, ULONG ulBaudRate, eM
 
 #if MB_SLAVE_TCP_ENABLED > 0
 eMBErrorCode
-eMBTCPInit( USHORT ucTCPPort )
+eMBTCPInit( uint16_t ucTCPPort )
 {
     eMBErrorCode    eStatus = MB_ENOERR;
 
@@ -227,7 +228,7 @@ eMBTCPInit( USHORT ucTCPPort )
 #endif
 
 eMBErrorCode
-eMBRegisterCB( UCHAR ucFunctionCode, pxMBFunctionHandler pxHandler )
+eMBRegisterCB( uint8_t ucFunctionCode, pxMBFunctionHandler pxHandler )
 {
     int             i;
     eMBErrorCode    eStatus;
@@ -335,10 +336,10 @@ eMBDisable( void )
 
 eMBErrorCode eMBPoll( void )
 {
-    static UCHAR   *ucMBFrame;
-    static UCHAR    ucRcvAddress;
-    static UCHAR    ucFunctionCode;
-    static USHORT   usLength;
+    static uint8_t   *ucMBFrame;
+    static uint8_t    ucRcvAddress;
+    static uint8_t    ucFunctionCode;
+    static uint16_t   usLength;
     static eMBException eException;
 
     int             i;
@@ -353,7 +354,7 @@ eMBErrorCode eMBPoll( void )
 
     /* Check if there is a event available. If not return control to caller.
      * Otherwise we will handle the event. */
-    if( xMBPortEventGet( &eEvent ) == TRUE )
+    if( xMBPortEventGet( &eEvent ) == true )
     {
         switch ( eEvent )
         {
@@ -397,7 +398,7 @@ eMBErrorCode eMBPoll( void )
                 {
                     /* An exception occured. Build an error frame. */
                     usLength = 0;
-                    ucMBFrame[usLength++] = ( UCHAR )( ucFunctionCode | MB_FUNC_ERROR );
+                    ucMBFrame[usLength++] = ( uint8_t )( ucFunctionCode | MB_FUNC_ERROR );
                     ucMBFrame[usLength++] = eException;
                 }
                 eStatus = peMBFrameSendCur( ucMBAddress, ucMBFrame, usLength );

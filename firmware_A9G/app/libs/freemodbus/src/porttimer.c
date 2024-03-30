@@ -22,7 +22,8 @@
 /* ----------------------- Platform includes --------------------------------*/
 #ifdef SLAVE_MB
 #include "port.h"
-
+#include <stdbool.h>
+#include <stdint.h>
 /* ----------------------- Modbus includes ----------------------------------*/
 #include "mb.h"
 #include "mbport.h"
@@ -33,14 +34,14 @@ static void prvvTIMERExpiredISR(void);
 static void timer_timeout_ind(void* parameter);
 
 /* ----------------------- Start implementation -----------------------------*/
-BOOL xMBPortTimersInit(USHORT usTim1Timerout50us)
+bool xMBPortTimersInit(uint16_t usTim1Timerout50us)
 {
     rt_timer_init(&timer, "slave timer",
                    timer_timeout_ind, /* bind timeout callback function */
                    RT_NULL,
                    (50 * usTim1Timerout50us) / (1000 * 1000 / RT_TICK_PER_SECOND) + 1,
                    RT_TIMER_FLAG_ONE_SHOT); /* one shot */
-    return TRUE;
+    return true;
 }
 
 void vMBPortTimersEnable()

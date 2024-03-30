@@ -20,28 +20,30 @@
  */
 #include "user_mb_app.h"
 
+#if false
+
 /*-----------------------Master mode use these variables----------------------*/
 #if MB_MASTER_RTU_ENABLED > 0 || MB_MASTER_ASCII_ENABLED > 0
 //Master mode:DiscreteInputs variables
-USHORT   usMDiscInStart                             = M_DISCRETE_INPUT_START;
+uint16_t   usMDiscInStart                             = M_DISCRETE_INPUT_START;
 #if      M_DISCRETE_INPUT_NDISCRETES%8
-UCHAR    ucMDiscInBuf[MB_MASTER_TOTAL_SLAVE_NUM][M_DISCRETE_INPUT_NDISCRETES/8+1];
+uint8_t    ucMDiscInBuf[MB_MASTER_TOTAL_SLAVE_NUM][M_DISCRETE_INPUT_NDISCRETES/8+1];
 #else
-UCHAR    ucMDiscInBuf[MB_MASTER_TOTAL_SLAVE_NUM][M_DISCRETE_INPUT_NDISCRETES/8];
+uint8_t    ucMDiscInBuf[MB_MASTER_TOTAL_SLAVE_NUM][M_DISCRETE_INPUT_NDISCRETES/8];
 #endif
 //Master mode:Coils variables
-USHORT   usMCoilStart                               = M_COIL_START;
+uint16_t   usMCoilStart                               = M_COIL_START;
 #if      M_COIL_NCOILS%8
-UCHAR    ucMCoilBuf[MB_MASTER_TOTAL_SLAVE_NUM][M_COIL_NCOILS/8+1];
+uint8_t    ucMCoilBuf[MB_MASTER_TOTAL_SLAVE_NUM][M_COIL_NCOILS/8+1];
 #else
-UCHAR    ucMCoilBuf[MB_MASTER_TOTAL_SLAVE_NUM][M_COIL_NCOILS/8];
+uint8_t    ucMCoilBuf[MB_MASTER_TOTAL_SLAVE_NUM][M_COIL_NCOILS/8];
 #endif
 //Master mode:InputRegister variables
-USHORT   usMRegInStart                              = M_REG_INPUT_START;
-USHORT   usMRegInBuf[MB_MASTER_TOTAL_SLAVE_NUM][M_REG_INPUT_NREGS];
+uint16_t   usMRegInStart                              = M_REG_INPUT_START;
+uint16_t   usMRegInBuf[MB_MASTER_TOTAL_SLAVE_NUM][M_REG_INPUT_NREGS];
 //Master mode:HoldingRegister variables
-USHORT   usMRegHoldStart                            = M_REG_HOLDING_START;
-USHORT   usMRegHoldBuf[MB_MASTER_TOTAL_SLAVE_NUM][M_REG_HOLDING_NREGS];
+uint16_t   usMRegHoldStart                            = M_REG_HOLDING_START;
+uint16_t   usMRegHoldBuf[MB_MASTER_TOTAL_SLAVE_NUM][M_REG_HOLDING_NREGS];
 
 /**
  * Modbus master input register callback function.
@@ -52,14 +54,14 @@ USHORT   usMRegHoldBuf[MB_MASTER_TOTAL_SLAVE_NUM][M_REG_HOLDING_NREGS];
  *
  * @return result
  */
-eMBErrorCode eMBMasterRegInputCB( UCHAR * pucRegBuffer, USHORT usAddress, USHORT usNRegs )
+eMBErrorCode eMBMasterRegInputCB( uint8_t * pucRegBuffer, uint16_t usAddress, uint16_t usNRegs )
 {
     eMBErrorCode    eStatus = MB_ENOERR;
-    USHORT          iRegIndex;
-    USHORT *        pusRegInputBuf;
-    USHORT          REG_INPUT_START;
-    USHORT          REG_INPUT_NREGS;
-    USHORT          usRegInStart;
+    uint16_t          iRegIndex;
+    uint16_t *        pusRegInputBuf;
+    uint16_t          REG_INPUT_START;
+    uint16_t          REG_INPUT_NREGS;
+    uint16_t          usRegInStart;
 
     pusRegInputBuf = usMRegInBuf[ucMBMasterGetDestAddress() - 1];
     REG_INPUT_START = M_REG_INPUT_START;
@@ -99,15 +101,15 @@ eMBErrorCode eMBMasterRegInputCB( UCHAR * pucRegBuffer, USHORT usAddress, USHORT
  *
  * @return result
  */
-eMBErrorCode eMBMasterRegHoldingCB(UCHAR * pucRegBuffer, USHORT usAddress,
-        USHORT usNRegs, eMBRegisterMode eMode)
+eMBErrorCode eMBMasterRegHoldingCB(uint8_t * pucRegBuffer, uint16_t usAddress,
+        uint16_t usNRegs, eMBRegisterMode eMode)
 {
     eMBErrorCode    eStatus = MB_ENOERR;
-    USHORT          iRegIndex;
-    USHORT *        pusRegHoldingBuf;
-    USHORT          REG_HOLDING_START;
-    USHORT          REG_HOLDING_NREGS;
-    USHORT          usRegHoldStart;
+    uint16_t          iRegIndex;
+    uint16_t *        pusRegHoldingBuf;
+    uint16_t          REG_HOLDING_START;
+    uint16_t          REG_HOLDING_NREGS;
+    uint16_t          usRegHoldStart;
 
     pusRegHoldingBuf = usMRegHoldBuf[ucMBMasterGetDestAddress() - 1];
     REG_HOLDING_START = M_REG_HOLDING_START;
@@ -129,8 +131,8 @@ eMBErrorCode eMBMasterRegHoldingCB(UCHAR * pucRegBuffer, USHORT usAddress,
         case MB_REG_READ:
             while (usNRegs > 0)
             {
-                *pucRegBuffer++ = (UCHAR) (pusRegHoldingBuf[iRegIndex] >> 8);
-                *pucRegBuffer++ = (UCHAR) (pusRegHoldingBuf[iRegIndex] & 0xFF);
+                *pucRegBuffer++ = (uint8_t) (pusRegHoldingBuf[iRegIndex] >> 8);
+                *pucRegBuffer++ = (uint8_t) (pusRegHoldingBuf[iRegIndex] & 0xFF);
                 iRegIndex++;
                 usNRegs--;
             }
@@ -164,15 +166,15 @@ eMBErrorCode eMBMasterRegHoldingCB(UCHAR * pucRegBuffer, USHORT usAddress,
  *
  * @return result
  */
-eMBErrorCode eMBMasterRegCoilsCB(UCHAR * pucRegBuffer, USHORT usAddress,
-        USHORT usNCoils, eMBRegisterMode eMode)
+eMBErrorCode eMBMasterRegCoilsCB(uint8_t * pucRegBuffer, uint16_t usAddress,
+        uint16_t usNCoils, eMBRegisterMode eMode)
 {
     eMBErrorCode    eStatus = MB_ENOERR;
-    USHORT          iRegIndex , iRegBitIndex , iNReg;
-    UCHAR *         pucCoilBuf;
-    USHORT          COIL_START;
-    USHORT          COIL_NCOILS;
-    USHORT          usCoilStart;
+    uint16_t          iRegIndex , iRegBitIndex , iNReg;
+    uint8_t *         pucCoilBuf;
+    uint16_t          COIL_START;
+    uint16_t          COIL_NCOILS;
+    uint16_t          usCoilStart;
     iNReg =  usNCoils / 8 + 1;
 
     pucCoilBuf = ucMCoilBuf[ucMBMasterGetDestAddress() - 1];
@@ -189,8 +191,8 @@ eMBErrorCode eMBMasterRegCoilsCB(UCHAR * pucRegBuffer, USHORT usAddress,
     if ((usAddress >= COIL_START)
             && (usAddress + usNCoils <= COIL_START + COIL_NCOILS))
     {
-        iRegIndex = (USHORT) (usAddress - usCoilStart) / 8;
-        iRegBitIndex = (USHORT) (usAddress - usCoilStart) % 8;
+        iRegIndex = (uint16_t) (usAddress - usCoilStart) / 8;
+        iRegBitIndex = (uint16_t) (usAddress - usCoilStart) % 8;
         switch (eMode)
         {
          /* read current coil values from the protocol stack. */
@@ -244,14 +246,14 @@ eMBErrorCode eMBMasterRegCoilsCB(UCHAR * pucRegBuffer, USHORT usAddress,
  *
  * @return result
  */
-eMBErrorCode eMBMasterRegDiscreteCB( UCHAR * pucRegBuffer, USHORT usAddress, USHORT usNDiscrete )
+eMBErrorCode eMBMasterRegDiscreteCB( uint8_t * pucRegBuffer, uint16_t usAddress, uint16_t usNDiscrete )
 {
     eMBErrorCode    eStatus = MB_ENOERR;
-    USHORT          iRegIndex , iRegBitIndex , iNReg;
-    UCHAR *         pucDiscreteInputBuf;
-    USHORT          DISCRETE_INPUT_START;
-    USHORT          DISCRETE_INPUT_NDISCRETES;
-    USHORT          usDiscreteInputStart;
+    uint16_t          iRegIndex , iRegBitIndex , iNReg;
+    uint8_t *         pucDiscreteInputBuf;
+    uint16_t          DISCRETE_INPUT_START;
+    uint16_t          DISCRETE_INPUT_NDISCRETES;
+    uint16_t          usDiscreteInputStart;
     iNReg =  usNDiscrete / 8 + 1;
 
     pucDiscreteInputBuf = ucMDiscInBuf[ucMBMasterGetDestAddress() - 1];
@@ -265,8 +267,8 @@ eMBErrorCode eMBMasterRegDiscreteCB( UCHAR * pucRegBuffer, USHORT usAddress, USH
     if ((usAddress >= DISCRETE_INPUT_START)
             && (usAddress + usNDiscrete    <= DISCRETE_INPUT_START + DISCRETE_INPUT_NDISCRETES))
     {
-        iRegIndex = (USHORT) (usAddress - usDiscreteInputStart) / 8;
-        iRegBitIndex = (USHORT) (usAddress - usDiscreteInputStart) % 8;
+        iRegIndex = (uint16_t) (usAddress - usDiscreteInputStart) / 8;
+        iRegBitIndex = (uint16_t) (usAddress - usDiscreteInputStart) % 8;
 
         /* write current discrete values with new values from the protocol stack. */
         while (iNReg > 1)
@@ -291,4 +293,5 @@ eMBErrorCode eMBMasterRegDiscreteCB( UCHAR * pucRegBuffer, USHORT usAddress, USH
 
     return eStatus;
 }
+#endif
 #endif

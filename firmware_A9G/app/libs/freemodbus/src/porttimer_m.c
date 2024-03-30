@@ -21,6 +21,8 @@
 
 /* ----------------------- Platform includes --------------------------------*/
 #include "port.h"
+#include <stdbool.h>
+#include <stdint.h>
 
 /* ----------------------- Modbus includes ----------------------------------*/
 #include "mb.h"
@@ -37,11 +39,11 @@ static void timer_timeout_ind(void *parameter);
 /* ----------------------- static functions ---------------------------------*/
 static void prvvTIMERExpiredISR(void);
 /* ----------------------- Start implementation -----------------------------*/
-BOOL xMBMasterPortTimersInit(USHORT usTimeOut50us)
+bool xMBMasterPortTimersInit(uint16_t usTimeOut50us)
 {
     /* backup T35 ticks */
     usT35TimeOut50us = (uint32_t)(usTimeOut50us);
-    return TRUE;
+    return true;
 }
 
 void vMBMasterPortTimersT35Enable()

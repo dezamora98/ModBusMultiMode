@@ -33,8 +33,8 @@
 
 /* ----------------------- Static variables ---------------------------------*/
 static tcpclient_t mb_client;
-static UCHAR    prvvTCPBuf[MB_TCP_BUF_SIZE];
-static USHORT   prvvTCPLength;
+static uint8_t    prvvTCPBuf[MB_TCP_BUF_SIZE];
+static uint16_t   prvvTCPLength;
 
 static void tcpserver_event_notify(tcpclient_t client, rt_uint8_t event)
 {
@@ -81,8 +81,8 @@ static void tcpserver_event_notify(tcpclient_t client, rt_uint8_t event)
     }
 }
 
-BOOL
-xMBTCPPortInit(USHORT usTCPPort)
+bool
+xMBTCPPortInit(uint16_t usTCPPort)
 {
     struct tcpserver *serv;
 
@@ -93,7 +93,7 @@ xMBTCPPortInit(USHORT usTCPPort)
 
     tcpserver_set_notify_callback(serv, tcpserver_event_notify);
 
-    return TRUE;
+    return true;
 }
 
 void
@@ -108,26 +108,26 @@ vMBTCPPortDisable(void)
     tcpserver_close(mb_client);
 }
 
-BOOL
-xMBTCPPortGetRequest(UCHAR **ppucMBTCPFrame, USHORT *usTCPLength)
+bool
+xMBTCPPortGetRequest(uint8_t **ppucMBTCPFrame, uint16_t *usTCPLength)
 {
     *ppucMBTCPFrame = &prvvTCPBuf[0];
     *usTCPLength = prvvTCPLength;
 
-    return TRUE;
+    return true;
 }
 
-BOOL
-xMBTCPPortSendResponse(const UCHAR *pucMBTCPFrame, USHORT usTCPLength)
+bool
+xMBTCPPortSendResponse(const uint8_t *pucMBTCPFrame, uint16_t usTCPLength)
 {
     rt_int16_t ret;
-    BOOL bFrameSent = FALSE;
+    bool bFrameSent = false;
 
     if (mb_client)
     {
         ret = tcpserver_send(mb_client, (void *)pucMBTCPFrame, usTCPLength, 0);
         if (ret == usTCPLength)
-            bFrameSent = TRUE;
+            bFrameSent = true;
     }
     return bFrameSent;
 }

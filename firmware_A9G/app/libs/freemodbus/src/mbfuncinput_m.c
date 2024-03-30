@@ -70,13 +70,13 @@ eMBException    prveMBError2Exception( eMBErrorCode eErrorCode );
  * @return error code
  */
 eMBMasterReqErrCode
-eMBMasterReqReadInputRegister( UCHAR ucSndAddr, USHORT usRegAddr, USHORT usNRegs, LONG lTimeOut )
+eMBMasterReqReadInputRegister( uint8_t ucSndAddr, uint16_t usRegAddr, uint16_t usNRegs, long lTimeOut )
 {
-    UCHAR                 *ucMBFrame;
+    uint8_t                 *ucMBFrame;
     eMBMasterReqErrCode    eErrStatus = MB_MRE_NO_ERR;
 
     if ( ucSndAddr > MB_MASTER_TOTAL_SLAVE_NUM ) eErrStatus = MB_MRE_ILL_ARG;
-    else if ( xMBMasterRunResTake( lTimeOut ) == FALSE ) eErrStatus = MB_MRE_MASTER_BUSY;
+    else if ( xMBMasterRunResTake( lTimeOut ) == false ) eErrStatus = MB_MRE_MASTER_BUSY;
     else
     {
         vMBMasterGetPDUSndBuf(&ucMBFrame);
@@ -94,11 +94,11 @@ eMBMasterReqReadInputRegister( UCHAR ucSndAddr, USHORT usRegAddr, USHORT usNRegs
 }
 
 eMBException
-eMBMasterFuncReadInputRegister( UCHAR * pucFrame, USHORT * usLen )
+eMBMasterFuncReadInputRegister( uint8_t * pucFrame, uint16_t * usLen )
 {
-    UCHAR          *ucMBFrame;
-    USHORT          usRegAddress;
-    USHORT          usRegCount;
+    uint8_t          *ucMBFrame;
+    uint16_t          usRegAddress;
+    uint16_t          usRegCount;
 
     eMBException    eStatus = MB_EX_NONE;
     eMBErrorCode    eRegStatus;
@@ -111,12 +111,12 @@ eMBMasterFuncReadInputRegister( UCHAR * pucFrame, USHORT * usLen )
     else if( *usLen >= MB_PDU_SIZE_MIN + MB_PDU_FUNC_READ_SIZE_MIN )
     {
         vMBMasterGetPDUSndBuf(&ucMBFrame);
-        usRegAddress = ( USHORT )( ucMBFrame[MB_PDU_REQ_READ_ADDR_OFF] << 8 );
-        usRegAddress |= ( USHORT )( ucMBFrame[MB_PDU_REQ_READ_ADDR_OFF + 1] );
+        usRegAddress = ( uint16_t )( ucMBFrame[MB_PDU_REQ_READ_ADDR_OFF] << 8 );
+        usRegAddress |= ( uint16_t )( ucMBFrame[MB_PDU_REQ_READ_ADDR_OFF + 1] );
         usRegAddress++;
 
-        usRegCount = ( USHORT )( ucMBFrame[MB_PDU_REQ_READ_REGCNT_OFF] << 8 );
-        usRegCount |= ( USHORT )( ucMBFrame[MB_PDU_REQ_READ_REGCNT_OFF + 1] );
+        usRegCount = ( uint16_t )( ucMBFrame[MB_PDU_REQ_READ_REGCNT_OFF] << 8 );
+        usRegCount |= ( uint16_t )( ucMBFrame[MB_PDU_REQ_READ_REGCNT_OFF + 1] );
 
         /* Check if the number of registers to read is valid. If not
          * return Modbus illegal data value exception.

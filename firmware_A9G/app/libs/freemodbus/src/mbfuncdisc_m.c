@@ -70,13 +70,13 @@ eMBException    prveMBError2Exception( eMBErrorCode eErrorCode );
  * @return error code
  */
 eMBMasterReqErrCode
-eMBMasterReqReadDiscreteInputs( UCHAR ucSndAddr, USHORT usDiscreteAddr, USHORT usNDiscreteIn, LONG lTimeOut )
+eMBMasterReqReadDiscreteInputs( uint8_t ucSndAddr, uint16_t usDiscreteAddr, uint16_t usNDiscreteIn, long lTimeOut )
 {
-    UCHAR                 *ucMBFrame;
+    uint8_t                 *ucMBFrame;
     eMBMasterReqErrCode    eErrStatus = MB_MRE_NO_ERR;
 
     if ( ucSndAddr > MB_MASTER_TOTAL_SLAVE_NUM ) eErrStatus = MB_MRE_ILL_ARG;
-    else if ( xMBMasterRunResTake( lTimeOut ) == FALSE ) eErrStatus = MB_MRE_MASTER_BUSY;
+    else if ( xMBMasterRunResTake( lTimeOut ) == false ) eErrStatus = MB_MRE_MASTER_BUSY;
     else
     {
         vMBMasterGetPDUSndBuf(&ucMBFrame);
@@ -94,12 +94,12 @@ eMBMasterReqReadDiscreteInputs( UCHAR ucSndAddr, USHORT usDiscreteAddr, USHORT u
 }
 
 eMBException
-eMBMasterFuncReadDiscreteInputs( UCHAR * pucFrame, USHORT * usLen )
+eMBMasterFuncReadDiscreteInputs( uint8_t * pucFrame, uint16_t * usLen )
 {
-    USHORT          usRegAddress;
-    USHORT          usDiscreteCnt;
-    UCHAR           ucNBytes;
-    UCHAR          *ucMBFrame;
+    uint16_t          usRegAddress;
+    uint16_t          usDiscreteCnt;
+    uint8_t           ucNBytes;
+    uint8_t          *ucMBFrame;
 
     eMBException    eStatus = MB_EX_NONE;
     eMBErrorCode    eRegStatus;
@@ -112,22 +112,22 @@ eMBMasterFuncReadDiscreteInputs( UCHAR * pucFrame, USHORT * usLen )
     else if( *usLen >= MB_PDU_SIZE_MIN + MB_PDU_FUNC_READ_SIZE_MIN )
     {
         vMBMasterGetPDUSndBuf(&ucMBFrame);
-        usRegAddress = ( USHORT )( ucMBFrame[MB_PDU_REQ_READ_ADDR_OFF] << 8 );
-        usRegAddress |= ( USHORT )( ucMBFrame[MB_PDU_REQ_READ_ADDR_OFF + 1] );
+        usRegAddress = ( uint16_t )( ucMBFrame[MB_PDU_REQ_READ_ADDR_OFF] << 8 );
+        usRegAddress |= ( uint16_t )( ucMBFrame[MB_PDU_REQ_READ_ADDR_OFF + 1] );
         usRegAddress++;
 
-        usDiscreteCnt = ( USHORT )( ucMBFrame[MB_PDU_REQ_READ_DISCCNT_OFF] << 8 );
-        usDiscreteCnt |= ( USHORT )( ucMBFrame[MB_PDU_REQ_READ_DISCCNT_OFF + 1] );
+        usDiscreteCnt = ( uint16_t )( ucMBFrame[MB_PDU_REQ_READ_DISCCNT_OFF] << 8 );
+        usDiscreteCnt |= ( uint16_t )( ucMBFrame[MB_PDU_REQ_READ_DISCCNT_OFF + 1] );
 
         /* Test if the quantity of coils is a multiple of 8. If not last
          * byte is only partially field with unused coils set to zero. */
         if( ( usDiscreteCnt & 0x0007 ) != 0 )
         {
-            ucNBytes = ( UCHAR )( usDiscreteCnt / 8 + 1 );
+            ucNBytes = ( uint8_t )( usDiscreteCnt / 8 + 1 );
         }
         else
         {
-            ucNBytes = ( UCHAR )( usDiscreteCnt / 8 );
+            ucNBytes = ( uint8_t )( usDiscreteCnt / 8 );
         }
 
         /* Check if the number of registers to read is valid. If not

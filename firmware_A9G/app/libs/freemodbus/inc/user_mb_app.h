@@ -7,6 +7,8 @@
 #include "mbframe.h"
 #include "mbutils.h"
 
+#if false
+
 /* -----------------------Slave Defines -------------------------------------*/
 #define S_DISCRETE_INPUT_START                    RT_S_DISCRETE_INPUT_START
 #define S_DISCRETE_INPUT_NDISCRETES               RT_S_DISCRETE_INPUT_NDISCRETES
@@ -42,5 +44,8 @@
 #define          M_CO_RESERVE                     RT_M_CO_RESERVE
 /* master mode: discrete's all address */
 #define          M_DI_RESERVE                     RT_M_DI_RESERVE
+
+
+#endif
 
 #endif

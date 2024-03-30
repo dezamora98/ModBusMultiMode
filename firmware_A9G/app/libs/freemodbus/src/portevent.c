@@ -25,25 +25,27 @@
 
 #include "mb.h"
 #include "mbport.h"
+#include <stdbool.h>
+#include <stdint.h>
 
 /* ----------------------- Variables ----------------------------------------*/
 static struct rt_event     xSlaveOsEvent;
 /* ----------------------- Start implementation -----------------------------*/
-BOOL
+bool
 xMBPortEventInit( void )
 {
     rt_event_init(&xSlaveOsEvent,"slave event",RT_IPC_FLAG_PRIO);
-    return TRUE;
+    return true;
 }
 
-BOOL
+bool
 xMBPortEventPost( eMBEventType eEvent )
 {
     rt_event_send(&xSlaveOsEvent, eEvent);
-    return TRUE;
+    return true;
 }
 
-BOOL
+bool
 xMBPortEventGet( eMBEventType * eEvent )
 {
     rt_uint32_t recvedEvent;
@@ -67,7 +69,7 @@ xMBPortEventGet( eMBEventType * eEvent )
         *eEvent = EV_FRAME_SENT;
         break;
     }
-    return TRUE;
+    return true;
 }
 
 #endif //MB_SLAVE

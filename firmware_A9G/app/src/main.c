@@ -1,6 +1,7 @@
 #include "stdlib.h"
 #include "stdint.h"
 #include "stdbool.h"
+#include "stdio.h"
 #include "api_os.h"
 #include "api_event.h"
 #include "api_debug.h"
@@ -17,12 +18,12 @@ void MainTask(VOID *pData)
     {
         if (json == NULL)
         {
-            Trace(1, "Error de formato en JSON");
+            printf("Error de formato en JSON");
         }
         else
         {
-            Trace(1, json_getPropertyValue(json, "test"));
-            Trace(1, "num = %ld",json_getInteger(json_getProperty(json,"num")));
+            printf("%s",json_getPropertyValue(json, "test"));
+            printf("num = %ld",json_getInteger(json_getProperty(json,"num")));
         }
         OS_Sleep(1000);
     }
