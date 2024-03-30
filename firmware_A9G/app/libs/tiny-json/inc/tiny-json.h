@@ -30,14 +30,14 @@
 #ifndef _TINY_JSON_H_
 #define	_TINY_JSON_H_
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <stdlib.h>
 #include <stddef.h>
 #include <stdbool.h>
 #include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #define json_containerOf( ptr, type, member ) \
     ((type*)( (char*)ptr - offsetof( type, member ) ))

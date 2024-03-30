@@ -28,6 +28,8 @@
  * File: $Id: mbrtu.h,v 1.9  2006/12/07 22:10:34 wolti Exp $
  * File: $Id: mbrtu.h,v 1.60 2013/08/17 13:11:42 Armink Add Master Functions $
  */
+#include "mb.h"
+#include "port.h"
 #include "mbconfig.h"
 
 #ifndef _MB_RTU_H
@@ -39,6 +41,8 @@
 #ifdef __cplusplus
 PR_BEGIN_EXTERN_C
 #endif
+
+
 eMBErrorCode    eMBRTUInit( uint8_t slaveAddress, uint8_t ucPort, uint32_t ulBaudRate,
                             eMBParity eParity );
 void            eMBRTUStart( void );

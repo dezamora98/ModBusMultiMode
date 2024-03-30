@@ -37,6 +37,9 @@ PR_BEGIN_EXTERN_C
 
 #include <stdbool.h>
 #include <stdint.h>
+#include "mb.h"
+#include "mbport.h"
+#include "mbproto.h"
 
 /*! \defgroup modbus Modbus
  * \code #include "mb_m.h" \endcode
@@ -77,23 +80,23 @@ PR_BEGIN_EXTERN_C
  */
 typedef enum
 {
-    MB_MRE_NO_ERR,                  /*!< no error. */
-    MB_MRE_NO_REG,                  /*!< illegal register address. */
-    MB_MRE_ILL_ARG,                 /*!< illegal argument. */
-    MB_MRE_REV_DATA,                /*!< receive data error. */
-    MB_MRE_TIMEDOUT,                /*!< timeout error occurred. */
-    MB_MRE_MASTER_BUSY,             /*!< master is busy now. */
-    MB_MRE_EXE_FUN                  /*!< execute function error. */
+        MB_MRE_NO_ERR,      /*!< no error. */
+        MB_MRE_NO_REG,      /*!< illegal register address. */
+        MB_MRE_ILL_ARG,     /*!< illegal argument. */
+        MB_MRE_REV_DATA,    /*!< receive data error. */
+        MB_MRE_TIMEDOUT,    /*!< timeout error occurred. */
+        MB_MRE_MASTER_BUSY, /*!< master is busy now. */
+        MB_MRE_EXE_FUN      /*!< execute function error. */
 } eMBMasterReqErrCode;
 /*! \ingroup modbus
  *  \brief TimerMode is Master 3 kind of Timer modes.
  */
 typedef enum
 {
-    MB_TMODE_T35,                   /*!< Master receive frame T3.5 timeout. */
-    MB_TMODE_RESPOND_TIMEOUT,       /*!< Master wait respond for slave. */
-    MB_TMODE_CONVERT_DELAY          /*!< Master sent broadcast ,then delay sometime.*/
-}eMBMasterTimerMode;
+        MB_TMODE_T35,             /*!< Master receive frame T3.5 timeout. */
+        MB_TMODE_RESPOND_TIMEOUT, /*!< Master wait respond for slave. */
+        MB_TMODE_CONVERT_DELAY    /*!< Master sent broadcast ,then delay sometime.*/
+} eMBMasterTimerMode;
 
 /* ----------------------- Function prototypes ------------------------------*/
 /*! \ingroup modbus
@@ -117,8 +120,8 @@ typedef enum
  *   is returned:
  *    - eMBErrorCode::MB_EPORTERR IF the porting layer returned an error.
  */
-eMBErrorCode    eMBMasterInit( eMBMode eMode, uint8_t ucPort,
-                         uint32_t ulBaudRate, eMBParity eParity );
+eMBErrorCode eMBMasterInit(eMBMode eMode, uint8_t ucPort,
+                           uint32_t ulBaudRate, eMBParity eParity);
 
 /*! \ingroup modbus
  * \brief Initialize the Modbus Master protocol stack for Modbus TCP.
@@ -134,7 +137,7 @@ eMBErrorCode    eMBMasterInit( eMBMode eMode, uint8_t ucPort,
  *        slave addresses are in the range 1 - 247.
  *    - eMBErrorCode::MB_EPORTERR IF the porting layer returned an error.
  */
-eMBErrorCode    eMBMasterTCPInit( uint16_t usTCPPort );
+eMBErrorCode eMBMasterTCPInit(uint16_t usTCPPort);
 
 /*! \ingroup modbus
  * \brief Release resources used by the protocol stack.
@@ -150,7 +153,7 @@ eMBErrorCode    eMBMasterTCPInit( uint16_t usTCPPort );
  *   If the protocol stack is not in the disabled state it returns
  *   eMBErrorCode::MB_EILLSTATE.
  */
-eMBErrorCode    eMBMasterClose( void );
+eMBErrorCode eMBMasterClose(void);
 
 /*! \ingroup modbus
  * \brief Enable the Modbus Master protocol stack.
@@ -162,7 +165,7 @@ eMBErrorCode    eMBMasterClose( void );
  *   eMBErrorCode::MB_ENOERR. If it was not in the disabled state it
  *   return eMBErrorCode::MB_EILLSTATE.
  */
-eMBErrorCode    eMBMasterEnable( void );
+eMBErrorCode eMBMasterEnable(void);
 
 /*! \ingroup modbus
  * \brief Disable the Modbus Master protocol stack.
@@ -173,7 +176,7 @@ eMBErrorCode    eMBMasterEnable( void );
  *  eMBErrorCode::MB_ENOERR. If it was not in the enabled state it returns
  *  eMBErrorCode::MB_EILLSTATE.
  */
-eMBErrorCode    eMBMasterDisable( void );
+eMBErrorCode eMBMasterDisable(void);
 
 /*! \ingroup modbus
  * \brief Check the Modbus Master protocol stack has established or not.
@@ -185,7 +188,7 @@ eMBErrorCode    eMBMasterDisable( void );
  *  true.  the protocol stack has established
  *  false. the protocol stack hasn't established
  */
-bool            eMBMasterIsEstablished( void );
+bool eMBMasterIsEstablished(void);
 
 /*! \ingroup modbus
  * \brief The main pooling loop of the Modbus Master protocol stack.
@@ -199,7 +202,7 @@ bool            eMBMasterIsEstablished( void );
  *   returns eMBErrorCode::MB_EILLSTATE. Otherwise it returns
  *   eMBErrorCode::MB_ENOERR.
  */
-eMBErrorCode    eMBMasterPoll( void );
+eMBErrorCode eMBMasterPoll(void);
 
 /*! \ingroup modbus
  * \brief Registers a callback handler for a given function code.
@@ -221,8 +224,8 @@ eMBErrorCode    eMBMasterPoll( void );
  *   case the values in mbconfig.h should be adjusted. If the argument was not
  *   valid it returns eMBErrorCode::MB_EINVAL.
  */
-eMBErrorCode    eMBMasterRegisterCB( uint8_t ucFunctionCode,
-                               pxMBFunctionHandler pxHandler );
+eMBErrorCode eMBMasterRegisterCB(uint8_t ucFunctionCode,
+                                 pxMBFunctionHandler pxHandler);
 
 /* ----------------------- Callback -----------------------------------------*/
 
@@ -262,8 +265,8 @@ eMBErrorCode    eMBMasterRegisterCB( uint8_t ucFunctionCode,
  *       within the requested address range. In this case a
  *       <b>ILLEGAL DATA ADDRESS</b> is sent as a response.
  */
-eMBErrorCode eMBMasterRegInputCB( uint8_t * pucRegBuffer, uint16_t usAddress,
-        uint16_t usNRegs );
+eMBErrorCode eMBMasterRegInputCB(uint8_t *pucRegBuffer, uint16_t usAddress,
+                                 uint16_t usNRegs);
 
 /*! \ingroup modbus_registers
  * \brief Callback function used if a <em>Holding Register</em> value is
@@ -291,8 +294,8 @@ eMBErrorCode eMBMasterRegInputCB( uint8_t * pucRegBuffer, uint16_t usAddress,
  *       within the requested address range. In this case a
  *       <b>ILLEGAL DATA ADDRESS</b> is sent as a response.
  */
-eMBErrorCode eMBMasterRegHoldingCB( uint8_t * pucRegBuffer, uint16_t usAddress,
-        uint16_t usNRegs, eMBRegisterMode eMode );
+eMBErrorCode eMBMasterRegHoldingCB(uint8_t *pucRegBuffer, uint16_t usAddress,
+                                   uint16_t usNRegs, eMBRegisterMode eMode);
 
 /*! \ingroup modbus_registers
  * \brief Callback function used if a <em>Coil Register</em> value is
@@ -320,8 +323,8 @@ eMBErrorCode eMBMasterRegHoldingCB( uint8_t * pucRegBuffer, uint16_t usAddress,
  *       within the requested address range. In this case a
  *       <b>ILLEGAL DATA ADDRESS</b> is sent as a response.
  */
-eMBErrorCode eMBMasterRegCoilsCB( uint8_t * pucRegBuffer, uint16_t usAddress,
-        uint16_t usNCoils, eMBRegisterMode eMode );
+eMBErrorCode eMBMasterRegCoilsCB(uint8_t *pucRegBuffer, uint16_t usAddress,
+                                 uint16_t usNCoils, eMBRegisterMode eMode);
 
 /*! \ingroup modbus_registers
  * \brief Callback function used if a <em>Input Discrete Register</em> value is
@@ -343,71 +346,71 @@ eMBErrorCode eMBMasterRegCoilsCB( uint8_t * pucRegBuffer, uint16_t usAddress,
  *       within the requested address range. In this case a
  *       <b>ILLEGAL DATA ADDRESS</b> is sent as a response.
  */
-eMBErrorCode eMBMasterRegDiscreteCB( uint8_t * pucRegBuffer, uint16_t usAddress,
-        uint16_t usNDiscrete );
+eMBErrorCode eMBMasterRegDiscreteCB(uint8_t *pucRegBuffer, uint16_t usAddress,
+                                    uint16_t usNDiscrete);
 
 /*! \ingroup modbus
  *\brief These Modbus functions are called for user when Modbus run in Master Mode.
  */
 eMBMasterReqErrCode
-eMBMasterReqReadInputRegister( uint8_t ucSndAddr, uint16_t usRegAddr, uint16_t usNRegs, long lTimeOut );
+eMBMasterReqReadInputRegister(uint8_t ucSndAddr, uint16_t usRegAddr, uint16_t usNRegs, long lTimeOut);
 eMBMasterReqErrCode
-eMBMasterReqWriteHoldingRegister( uint8_t ucSndAddr, uint16_t usRegAddr, uint16_t usRegData, long lTimeOut );
+eMBMasterReqWriteHoldingRegister(uint8_t ucSndAddr, uint16_t usRegAddr, uint16_t usRegData, long lTimeOut);
 eMBMasterReqErrCode
-eMBMasterReqWriteMultipleHoldingRegister( uint8_t ucSndAddr, uint16_t usRegAddr,
-        uint16_t usNRegs, uint16_t * pusDataBuffer, long lTimeOut );
+eMBMasterReqWriteMultipleHoldingRegister(uint8_t ucSndAddr, uint16_t usRegAddr,
+                                         uint16_t usNRegs, uint16_t *pusDataBuffer, long lTimeOut);
 eMBMasterReqErrCode
-eMBMasterReqReadHoldingRegister( uint8_t ucSndAddr, uint16_t usRegAddr, uint16_t usNRegs, long lTimeOut );
+eMBMasterReqReadHoldingRegister(uint8_t ucSndAddr, uint16_t usRegAddr, uint16_t usNRegs, long lTimeOut);
 eMBMasterReqErrCode
-eMBMasterReqReadWriteMultipleHoldingRegister( uint8_t ucSndAddr,
-        uint16_t usReadRegAddr, uint16_t usNReadRegs, uint16_t * pusDataBuffer,
-        uint16_t usWriteRegAddr, uint16_t usNWriteRegs, long lTimeOut );
+eMBMasterReqReadWriteMultipleHoldingRegister(uint8_t ucSndAddr,
+                                             uint16_t usReadRegAddr, uint16_t usNReadRegs, uint16_t *pusDataBuffer,
+                                             uint16_t usWriteRegAddr, uint16_t usNWriteRegs, long lTimeOut);
 eMBMasterReqErrCode
-eMBMasterReqReadCoils( uint8_t ucSndAddr, uint16_t usCoilAddr, uint16_t usNCoils, long lTimeOut );
+eMBMasterReqReadCoils(uint8_t ucSndAddr, uint16_t usCoilAddr, uint16_t usNCoils, long lTimeOut);
 eMBMasterReqErrCode
-eMBMasterReqWriteCoil( uint8_t ucSndAddr, uint16_t usCoilAddr, uint16_t usCoilData, long lTimeOut );
+eMBMasterReqWriteCoil(uint8_t ucSndAddr, uint16_t usCoilAddr, uint16_t usCoilData, long lTimeOut);
 eMBMasterReqErrCode
-eMBMasterReqWriteMultipleCoils( uint8_t ucSndAddr,
-        uint16_t usCoilAddr, uint16_t usNCoils, uint8_t * pucDataBuffer, long lTimeOut );
+eMBMasterReqWriteMultipleCoils(uint8_t ucSndAddr,
+                               uint16_t usCoilAddr, uint16_t usNCoils, uint8_t *pucDataBuffer, long lTimeOut);
 eMBMasterReqErrCode
-eMBMasterReqReadDiscreteInputs( uint8_t ucSndAddr, uint16_t usDiscreteAddr, uint16_t usNDiscreteIn, long lTimeOut );
+eMBMasterReqReadDiscreteInputs(uint8_t ucSndAddr, uint16_t usDiscreteAddr, uint16_t usNDiscreteIn, long lTimeOut);
 
 eMBException
-eMBMasterFuncReportSlaveID( uint8_t * pucFrame, uint16_t * usLen );
+eMBMasterFuncReportSlaveID(uint8_t *pucFrame, uint16_t *usLen);
 eMBException
-eMBMasterFuncReadInputRegister( uint8_t * pucFrame, uint16_t * usLen );
+eMBMasterFuncReadInputRegister(uint8_t *pucFrame, uint16_t *usLen);
 eMBException
-eMBMasterFuncReadHoldingRegister( uint8_t * pucFrame, uint16_t * usLen );
+eMBMasterFuncReadHoldingRegister(uint8_t *pucFrame, uint16_t *usLen);
 eMBException
-eMBMasterFuncWriteHoldingRegister( uint8_t * pucFrame, uint16_t * usLen );
+eMBMasterFuncWriteHoldingRegister(uint8_t *pucFrame, uint16_t *usLen);
 eMBException
-eMBMasterFuncWriteMultipleHoldingRegister( uint8_t * pucFrame, uint16_t * usLen );
+eMBMasterFuncWriteMultipleHoldingRegister(uint8_t *pucFrame, uint16_t *usLen);
 eMBException
-eMBMasterFuncReadCoils( uint8_t * pucFrame, uint16_t * usLen );
+eMBMasterFuncReadCoils(uint8_t *pucFrame, uint16_t *usLen);
 eMBException
-eMBMasterFuncWriteCoil( uint8_t * pucFrame, uint16_t * usLen );
+eMBMasterFuncWriteCoil(uint8_t *pucFrame, uint16_t *usLen);
 eMBException
-eMBMasterFuncWriteMultipleCoils( uint8_t * pucFrame, uint16_t * usLen );
+eMBMasterFuncWriteMultipleCoils(uint8_t *pucFrame, uint16_t *usLen);
 eMBException
-eMBMasterFuncReadDiscreteInputs( uint8_t * pucFrame, uint16_t * usLen );
+eMBMasterFuncReadDiscreteInputs(uint8_t *pucFrame, uint16_t *usLen);
 eMBException
-eMBMasterFuncReadWriteMultipleHoldingRegister( uint8_t * pucFrame, uint16_t * usLen );
+eMBMasterFuncReadWriteMultipleHoldingRegister(uint8_t *pucFrame, uint16_t *usLen);
 
 /*\ingroup modbus
  *\brief These functions are interface for Modbus Master
  */
-void vMBMasterGetPDUSndBuf( uint8_t ** pucFrame );
-uint8_t ucMBMasterGetDestAddress( void );
-void vMBMasterSetDestAddress( uint8_t Address );
-bool xMBMasterGetCBRunInMasterMode( void );
-void vMBMasterSetCBRunInMasterMode( bool IsMasterMode );
-uint16_t usMBMasterGetPDUSndLength( void );
-void vMBMasterSetPDUSndLength( uint16_t SendPDULength );
-void vMBMasterSetCurTimerMode( eMBMasterTimerMode eMBTimerMode );
-bool xMBMasterRequestIsBroadcast( void );
-eMBMasterErrorEventType eMBMasterGetErrorType( void );
-void vMBMasterSetErrorType( eMBMasterErrorEventType errorType );
-eMBMasterReqErrCode eMBMasterWaitRequestFinish( void );
+void vMBMasterGetPDUSndBuf(uint8_t **pucFrame);
+uint8_t ucMBMasterGetDestAddress(void);
+void vMBMasterSetDestAddress(uint8_t Address);
+bool xMBMasterGetCBRunInMasterMode(void);
+void vMBMasterSetCBRunInMasterMode(bool IsMasterMode);
+uint16_t usMBMasterGetPDUSndLength(void);
+void vMBMasterSetPDUSndLength(uint16_t SendPDULength);
+void vMBMasterSetCurTimerMode(eMBMasterTimerMode eMBTimerMode);
+bool xMBMasterRequestIsBroadcast(void);
+eMBMasterErrorEventType eMBMasterGetErrorType(void);
+void vMBMasterSetErrorType(eMBMasterErrorEventType errorType);
+eMBMasterReqErrCode eMBMasterWaitRequestFinish(void);
 
 /* ----------------------- Callback -----------------------------------------*/
 

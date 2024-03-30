@@ -31,6 +31,11 @@
 #ifndef _MB_FUNC_H
 #define _MB_FUNC_H
 
+#include "mbproto.h"
+#include "port.h"
+#include <stdbool.h>
+#include <stdint.h>
+
 #ifdef __cplusplus
 PR_BEGIN_EXTERN_C
 #endif

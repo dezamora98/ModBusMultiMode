@@ -23,9 +23,7 @@
 #define _PORT_H
 
 #include "mbconfig.h"
-#include "api_os.h"
-#include "api_inc_os.h"
-#include "stdint.h"
+#include <stdint.h>
 
 #define PR_BEGIN_EXTERN_C           extern "C" {
 #define PR_END_EXTERN_C             }

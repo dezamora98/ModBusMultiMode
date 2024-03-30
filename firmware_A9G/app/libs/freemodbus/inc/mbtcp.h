@@ -27,6 +27,9 @@
  *
  * File: $Id: mbtcp.h,v 1.2 2006/12/07 22:10:34 wolti Exp $
  */
+#include "mb.h"
+#include "port.h"
+#include "mbconfig.h"
 
 #ifndef _MB_TCP_H
 #define _MB_TCP_H

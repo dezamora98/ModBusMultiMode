@@ -32,6 +32,10 @@
 #ifndef _MB_PORT_H
 #define _MB_PORT_H
 
+#include "port.h"
+#include <stdbool.h>
+#include <stdint.h>
+
 #ifdef __cplusplus
 PR_BEGIN_EXTERN_C
 #endif
@@ -39,9 +43,6 @@ PR_BEGIN_EXTERN_C
 /* ----------------------- Defines ------------------------------------------*/
 
 /* ----------------------- Type definitions ---------------------------------*/
-#include "port.h"
-#include <stdbool.h>
-#include <stdint.h>
 
 typedef enum
 {

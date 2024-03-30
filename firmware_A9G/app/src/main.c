@@ -1,10 +1,8 @@
-#include "stdlib.h"
-#include "stdint.h"
-#include "stdbool.h"
-#include "stdio.h"
-#include "api_os.h"
-#include "api_event.h"
-#include "api_debug.h"
+#include <stdlib.h>
+#include <stdint.h>
+#include <stdbool.h>
+#include <stdio.h>
+#include <sdk_init.h>
 #include "tiny-json.h"
 
 void MainTask(VOID *pData)

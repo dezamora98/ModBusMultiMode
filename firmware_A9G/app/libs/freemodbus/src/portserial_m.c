@@ -23,11 +23,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
-#include "api_hal_uart.h"
-#include "api_inc_uart.h"
-#include "api_inc_gpio.h"
-#include "api_hal_gpio.h"
-#include "api_event.h"
+#include <sdk_init.h>
 /* ----------------------- Modbus includes ----------------------------------*/
 #include "port.h"
 #include "mb.h"

@@ -23,6 +23,7 @@
 #include "port.h"
 #include <stdbool.h>
 #include <stdint.h>
+#include <sdk_init.h>
 
 /* ----------------------- Modbus includes ----------------------------------*/
 #include "mb.h"
