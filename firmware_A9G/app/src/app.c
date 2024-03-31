@@ -124,6 +124,7 @@ static bool mb_master_sample(void)
         return false;
     }
 
+    is_init++;
     return true;
 }
 

@@ -57,6 +57,7 @@ static UART_Port_t MB_UART;
 /* ----------------------- Start implementation -----------------------------*/
 bool xMBMasterPortSerialInit(uint8_t ucPort, uint32_t ulBaudRate, uint8_t ucDataBits, eMBParity eParity)
 {
+    printf("init serial");
 #if defined(RT_MODBUS_MASTER_USE_CONTROL_PIN)
     GPIO_config_t CONFIG_PIN_RTS;
     GPIO_GetConfig(MODBUS_MASTER_RT_CONTROL_PIN_INDEX, &CONFIG_PIN_RTS);
@@ -77,8 +78,10 @@ bool xMBMasterPortSerialInit(uint8_t ucPort, uint32_t ulBaudRate, uint8_t ucData
 
     UART_Close(MB_UART);
 
+    printf("end init serial");
+    printf("creando interrupción de transmición por software");
     thread_serial_soft_trans_irq = OS_CreateTask(serial_soft_trans_irq, NULL, NULL, 2048, 1, 0, 0, "MMB-TX");
-    OS_StartTask(thread_serial_soft_trans_irq, NULL);
+    printf("interrupción de transmición por software creada");
     return true;
 }
 
@@ -179,6 +182,8 @@ void prvvUARTRxISR(void)
 static void serial_soft_trans_irq(void *parameter)
 {
     uint32_t *recved_event = NULL;
+    printf("interrupción de transmición por software arrancada");
+    
     while (1)
     {
         while (1)
