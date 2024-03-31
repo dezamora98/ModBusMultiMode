@@ -44,6 +44,11 @@ static void send_thread_entry(void *parameter)
     uint16_t error_count = 0;
     uint16_t data[MB_SEND_REG_NUM] = {0};
 
+    OS_Sleep(1000);
+    printf("start->tarea send_thread_entry");
+    OS_Sleep(1000);
+
+
     while (1)
     {
         /* Test Modbus Master */
@@ -67,8 +72,21 @@ static void send_thread_entry(void *parameter)
 
 static void mb_master_poll(void *parameter)
 {
+    OS_Sleep(1000);
+    printf("start->tarea mb_master_poll");
+    OS_Sleep(1000);
+
     eMBMasterInit(MB_RTU, PORT_NUM, PORT_BAUDRATE, PORT_PARITY);
+
+    OS_Sleep(1000);
+    printf("start->tarea mb_master_poll --> eMBMasterInit(MB_RTU, PORT_NUM, PORT_BAUDRATE, PORT_PARITY);");
+    OS_Sleep(1000);
+
     eMBMasterEnable();
+
+    OS_Sleep(1000);
+    printf("start->tarea mb_master_poll --> eMBMasterEnable();");
+    OS_Sleep(1000);
 
     while (1)
     {
@@ -81,6 +99,10 @@ static bool mb_master_sample(void)
 {
     static uint8_t is_init = 0;
     HANDLE tid1 = NULL, tid2 = NULL;
+
+    OS_Sleep(1000);
+    printf("start->función mb_master_sample");
+    OS_Sleep(1000);
 
     if (is_init > 0)
     {
