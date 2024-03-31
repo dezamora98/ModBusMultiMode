@@ -1,7 +1,8 @@
 #ifndef __API_INC_GPIO_H__
 #define __API_INC_GPIO_H__
 
-#include <cs_types.h>
+#include "stdbool.h"
+#include "stdint.h"
 
 /*#################      gpio      #################################*/
 typedef enum{
@@ -52,7 +53,8 @@ typedef enum{
 
 typedef enum{
     GPIO_LEVEL_LOW  = 0,
-    GPIO_LEVEL_HIGH = 1
+    GPIO_LEVEL_HIGH = 1,
+    //GPIO_LEVEL_ERR
 }GPIO_LEVEL;
 
 typedef enum {

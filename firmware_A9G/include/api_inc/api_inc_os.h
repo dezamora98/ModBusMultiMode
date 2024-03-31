@@ -1,7 +1,13 @@
 #ifndef __API_INC_OS_H__
 #define __API_INC_OS_H__
 
-#include <cs_types.h>
+#include "stdbool.h"
+#include "stdint.h"
+
+#ifndef TYPE_HANDLE
+#define TYPE_HANDLE
+typedef uint32_t  HANDLE;
+#endif
 
 /*#################      OS       #################################*/
 
@@ -21,7 +27,16 @@ typedef struct{
     uint32_t totalSize;
 }OS_Heap_Status_t;
 
-typedef void (*PTASK_FUNC_T)(PVOID pParameter);
+
+typedef struct{
+    const char*    name;
+    uint8_t        priority;
+    uint16_t       stackSize; // unit: Word(4 Bytes), so stack size in byte is stackSize*4
+    uint32_t       stackTop;
+}OS_Task_Info_t;
+
+
+typedef void (*PTASK_FUNC_T)(void* pParameter);
 typedef void (*OS_CALLBACK_FUNC_T)(void* param);
 
 #endif

@@ -32,23 +32,23 @@ typedef enum
     AUDIO_TYPE_WAV_ALAW,            /* 14 */
     AUDIO_TYPE_WAV_ULAW,            /* 15 */
     AUDIO_TYPE_WAV_DVI_ADPCM,       /* 16 */
-    AUDIO_TYPE_SMF,                    /* 17 */
-    AUDIO_TYPE_IMELODY,                /* 18 */
-    AUDIO_TYPE_SMF_SND,             /* 19 */
-    AUDIO_TYPE_MMF,                /* 20 */
-    AUDIO_TYPE_AU,                 /*  21 */
-    AUDIO_TYPE_AIFF,                 /*  22 */
-    AUDIO_TYPE_M4A,                  /* 23  */
-    AUDIO_TYPE_3GP,                  /*  24 */
-    AUDIO_TYPE_MP4,                      /* 25 */
-    AUDIO_TYPE_JPG,                      /* 26 */
-    AUDIO_TYPE_GIF,                      /* 27 */
-    AUDIO_TYPE_MJPG,                     /* 28 */
-    AUDIO_TYPE_WMA,                  /* 29 */
-    AUDIO_TYPE_MIDI,                  /* 30 */
-    AUDIO_TYPE_RM,              /*31*/
-    AUDIO_TYPE_AVSTRM,         /*32*/
-    AUDIO_TYPE_SCO,                 /*33*/
+    // AUDIO_TYPE_SMF,                    /* 17 */
+    // AUDIO_TYPE_IMELODY,                /* 18 */
+    // AUDIO_TYPE_SMF_SND,             /* 19 */
+    // AUDIO_TYPE_MMF,                /* 20 */
+    // AUDIO_TYPE_AU,                 /*  21 */
+    // AUDIO_TYPE_AIFF,                 /*  22 */
+    // AUDIO_TYPE_M4A,                  /* 23  */
+    // AUDIO_TYPE_3GP,                  /*  24 */
+    // AUDIO_TYPE_MP4,                      /* 25 */
+    // AUDIO_TYPE_JPG,                      /* 26 */
+    // AUDIO_TYPE_GIF,                      /* 27 */
+    // AUDIO_TYPE_MJPG,                     /* 28 */
+    // AUDIO_TYPE_WMA,                  /* 29 */
+    // AUDIO_TYPE_MIDI,                  /* 30 */
+    // AUDIO_TYPE_RM,              /*31*/
+    // AUDIO_TYPE_AVSTRM,         /*32*/
+    // AUDIO_TYPE_SCO,                 /*33*/
 
     AUDIO_TYPE_MAX
 } AUDIO_Type_t;
@@ -114,6 +114,26 @@ typedef enum
 
     AUDIO_RECORD_MODE_QTY
 } AUDIO_Record_Mode_t;
+
+typedef enum{
+    AUDIO_VOLUME_MUTE = 0,
+    AUDIO_VOLUME_m36dB ,
+    AUDIO_VOLUME_m33dB ,
+    AUDIO_VOLUME_m30dB ,
+    AUDIO_VOLUME_m27dB ,
+    AUDIO_VOLUME_m24dB ,
+    AUDIO_VOLUME_m21dB ,
+    AUDIO_VOLUME_m18dB ,
+    AUDIO_VOLUME_m15dB ,
+    AUDIO_VOLUME_m12dB ,
+    AUDIO_VOLUME_m9dB  ,
+    AUDIO_VOLUME_m6dB  ,
+    AUDIO_VOLUME_m3dB  ,
+    AUDIO_VOLUME_0dB   ,
+    AUDIO_VOLUME_3dB   ,
+    AUDIO_VOLUME_6dB   ,
+    AUDIO_VOLUME_MAX
+}AUDIO_Volume_t;
 
 typedef void (*AUDIO_PLAY_CALLBACK_t)(AUDIO_Error_t);
 typedef void (*AUDIO_FILE_RECORD_CALLBACK_t)(AUDIO_Error_t result);

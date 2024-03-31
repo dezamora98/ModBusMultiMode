@@ -2,7 +2,10 @@
 #define SDK_INIT_H
 
 #include <string.h>
-#include <cs_types.h>
+// #include <cs_types.h>
+#include <stdbool.h>
+#include <stdint.h>
+#include <stddef.h>
 #include <sdk_init.h>
 #include <api_inc_fs.h>
 #include <api_inc_gpio.h>
@@ -26,6 +29,9 @@
 #include <stdarg.h>
 #include <api_inc_gizwits.h>
 #include <api_inc_audio.h>
+#include <setjmp_inc.h>
+#include <api_hal_gouda_inc.h>
+#include <api_inc_flash.h>
 
 
 
@@ -35,7 +41,7 @@ typedef struct T_INTERFACE_VTBL_TAG
 {
     //debug
     bool                (*Trace)(uint16_t nIndex,const char* fmt, ...) __attribute__((format(printf, 2, 3)));
-    void                (*MEMBLOCK_Trace)(UINT16 nIndex, UINT8 *buffer, UINT16 len, UINT8 radix);
+    void                (*MEMBLOCK_Trace)(uint16_t nIndex, uint8_t *buffer, uint16_t len, uint8_t radix);
     void                (*__assert)(const char* fmt);
 
     //power
@@ -49,22 +55,22 @@ typedef struct T_INTERFACE_VTBL_TAG
     /*api_os*/
     void                (*OS_SetUserMainHandle)(HANDLE* UserHandle);
     HANDLE              (*OS_GetUserMainHandle)();
-    HANDLE              (*OS_CreateTask)(PTASK_FUNC_T pTaskEntry,PVOID pParameter,PVOID pStackAddr,UINT16 nStackSize
-                                            ,UINT8 nPriority,UINT16 nCreationFlags,UINT16 nTimeSlice,PCSTR pTaskName);
-    void                (*OS_StartTask)(HANDLE hTask,PVOID pParameter);
+    HANDLE              (*OS_CreateTask)(PTASK_FUNC_T pTaskEntry,void* pParameter,void* pStackAddr,uint16_t nStackSize
+                                            ,uint8_t nPriority,uint16_t nCreationFlags,uint16_t nTimeSlice,const char* pTaskName);
+    void                (*OS_StartTask)(HANDLE hTask,void* pParameter);
     void                (*OS_StopTask)(HANDLE hTask);
     bool                (*OS_DeleteTask)(HANDLE hTask);
     bool                (*OS_SuspendTask)(HANDLE hTask);
     bool                (*OS_ResumeTask)(HANDLE hTask);
     bool                (*OS_Sleep)(uint32_t nMillisecondes);
     void                (*OS_SleepUs)(uint32_t us);
-    bool                (*OS_WaitEvent)(HANDLE hTask,PVOID *pEvent,uint32_t nTimeOut);
-    bool                (*OS_SendEvent)(HANDLE hTask,PVOID pEvent,uint32_t nTimeOut,UINT16 nOption);
+    bool                (*OS_WaitEvent)(HANDLE hTask,void** pEvent,uint32_t nTimeOut);
+    bool                (*OS_SendEvent)(HANDLE hTask,void* pEvent,uint32_t nTimeOut,uint16_t nOption);
     bool                (*OS_ResetEventQueue)(HANDLE hTask);
     bool                (*OS_IsEventAvailable)(HANDLE hTask);
-    PVOID               (*OS_Malloc)(uint32_t nSize);
-    PVOID               (*OS_Realloc)(void* ptr,uint32_t nSize);
-    bool                (*OS_Free)(PVOID pMemBlock);
+    void*               (*OS_Malloc)(uint32_t nSize);
+    void*               (*OS_Realloc)(void* ptr,uint32_t nSize);
+    bool                (*OS_Free)(void* pMemBlock);
     bool                (*OS_GetHeapUsageStatus)(OS_Heap_Status_t *pOsHeapStatus);
     HANDLE              (*OS_CreateSemaphore)(uint32_t nInitCount);
     bool                (*OS_DeleteSemaphore)(HANDLE hSem);
@@ -77,6 +83,7 @@ typedef struct T_INTERFACE_VTBL_TAG
     bool                (*OS_StartCallbackTimer)(HANDLE hTask, uint32_t ms, OS_CALLBACK_FUNC_T callback, void* param);
     bool                (*OS_StopCallbackTimer)(HANDLE hTask, OS_CALLBACK_FUNC_T callback, void *param);
     uint32_t            (*OS_QueryCallbackTimer)(HANDLE hTask, OS_CALLBACK_FUNC_T callback, void *param);
+    bool                (*OS_GetTaskInfo)(HANDLE pHTask, OS_Task_Info_t* taskInfo);
 
 
     /*api_hal_gpio*/
@@ -86,6 +93,7 @@ typedef struct T_INTERFACE_VTBL_TAG
     bool                (*GPIO_Set)(GPIO_PIN pin, GPIO_LEVEL  level);
     bool                (*GPIO_GetLevel)(GPIO_config_t gpioConf, GPIO_LEVEL* level);
     bool                (*GPIO_Get)(GPIO_PIN pin, GPIO_LEVEL* level);
+    bool                (*GPIO_ChangeMode)(GPIO_PIN pin, GPIO_MODE mode);
     bool                (*GPIO_Close)(GPIO_PIN pin);
 
     /*api_hal_uart*/
@@ -110,6 +118,17 @@ typedef struct T_INTERFACE_VTBL_TAG
     bool                (*Network_GetAttachStatus)(uint8_t* status);
     bool                (*Network_GetActiveStatus)(uint8_t* status);
     bool                (*Network_GetSignalQuality)(Network_Signal_Quality_t* sq);
+    bool                (*Network_GetStatusInfo)(Network_Status_Info_t* status);
+    bool                (*Network_SetFlightMode)(bool enable);
+    bool                (*Network_GetFlightMode)(bool* enable);
+    bool                (*Network_Register)(uint8_t* operatorID, Network_Register_Mode_t mode);
+    bool                (*Network_DeRegister)();
+    bool                (*Network_SetFrequencyBand)(uint8_t freqBand);
+    bool                (*Network_GetCurrentOperator)(uint8_t operatorId[6], Network_Register_Mode_t* mode );
+    bool                (*Network_GetOperatorInfo)(uint8_t index, uint8_t** operatorId, uint8_t** operatorName);
+    bool                (*Network_GetOperatorNameById)(uint8_t* operatorId, uint8_t** operatorName);
+    bool                (*Network_GetOperatorIdByName)(uint8_t* operatorName,uint8_t** operatorId);
+    bool                (*Network_GetAvailableOperatorReq)();
     
     /*api_socket*/
     int                 (*Socket_TcpipConnect)(TCP_UDP_t tcpOrUdp, const char* ip,uint16_t port);
@@ -148,8 +167,8 @@ typedef struct T_INTERFACE_VTBL_TAG
     char*               (*ip4addr_ntoa)(const ip4_addr_t *addr);
     int                 (*ip6addr_aton)(const char *cp, ip6_addr_t *addr);
     int                 (*ip4addr_aton)(const char *cp, ip4_addr_t *addr);
-    u16_t               (*lwip_htons)(u16_t x);
-    u32_t               (*lwip_htonl)(u32_t x);
+    uint16_t            (*lwip_htons)(uint16_t x);
+    uint32_t            (*lwip_htonl)(uint32_t x);
     const char*         (*lwip_strerr)(err_t err);
     int                 (*err_to_errno)(err_t err);
     int                 (*Socket_GetLastError)(void);
@@ -161,9 +180,9 @@ typedef struct T_INTERFACE_VTBL_TAG
     void                (*TIME_SetIsAutoUpdateRtcTime)(bool isAutoUpdate);
     bool                (*TIME_IsAutoUpdateRtcTime)();
     bool                (*TIME_SetRtcTime)(RTC_Time_t*);
-    bool                (*TIME_GetRtcTIme)(RTC_Time_t*);
+    bool                (*TIME_GetRtcTime)(RTC_Time_t*);
     long                (*clock)(void);
-    uint32_t            (*TIME_GetIime)();
+    uint32_t            (*TIME_GetTime)();
     bool                (*TIME_GetSystemTime)(TIME_System_t* sysTime);
     bool                (*TIME_SetSystemTime)(TIME_System_t* sysTime);
     int8_t              (*TIME_GetTimeZone)();
@@ -201,24 +220,24 @@ typedef struct T_INTERFACE_VTBL_TAG
 
     /*fs*/
     void                (*API_FS_SetUseOldVersion)(bool useOldVersion);
-    int32_t             (*API_FS_Open)(PCSTR    fileName,uint32_t operationFlag,uint32_t mode);
+    int32_t             (*API_FS_Open)(const char*    fileName,uint32_t operationFlag,uint32_t mode);
     int32_t             (*API_FS_Close)(int32_t fd);
     int32_t             (*API_FS_Read)(int32_t  fd,uint8_t* pBuffer,uint32_t length);
     int32_t             (*API_FS_Write)(int32_t  fd,uint8_t* pBuffer,uint32_t length);
     uint32_t            (*API_FS_Flush)(int32_t fd);
-    int32_t             (*API_FS_Create)(PCSTR fileName,uint32_t mode);
-    int32_t             (*API_FS_Delete)(PCSTR fileName);
+    int32_t             (*API_FS_Create)(const char* fileName,uint32_t mode);
+    int32_t             (*API_FS_Delete)(const char* fileName);
     int64_t             (*API_FS_Seek)( int32_t  fd, int64_t  offset, uint8_t  origin);
     int32_t             (*API_FS_IsEndOfFile)(int32_t fd);
-    int32_t             (*API_FS_Rename)(PCSTR oldName,PCSTR newName);
+    int32_t             (*API_FS_Rename)(const char* oldName,const char* newName);
     int32_t             (*API_FS_GetFileName)(int32_t  fd, int32_t  nameBufferLen, uint8_t* fileName);
     int64_t             (*API_FS_GetFileSize)(int32_t fd);
-    int64_t             (*API_FS_GetDirSize)(PCSTR fileName, uint64_t* size);
-    int32_t             (*API_FS_GetCurDir)(uint32_t size,PSTR pCurDir);
-    int32_t             (*API_FS_ChangeDir)(PCSTR pDirName);
-    int32_t             (*API_FS_Mkdir)(PCSTR fileName,uint32_t mode);
-    int32_t             (*API_FS_Rmdir)(PCSTR fileName);
-    int32_t             (*API_FS_GetFSInfo)(PCSTR pDevName, API_FS_INFO* pFsInfo);
+    int64_t             (*API_FS_GetDirSize)(const char* fileName, uint64_t* size);
+    int32_t             (*API_FS_GetCurDir)(uint32_t size, char* pCurDir);
+    int32_t             (*API_FS_ChangeDir)(const char* pDirName);
+    int32_t             (*API_FS_Mkdir)(const char* fileName,uint32_t mode);
+    int32_t             (*API_FS_Rmdir)(const char* fileName);
+    int32_t             (*API_FS_GetFSInfo)(const char* pDevName, API_FS_INFO* pFsInfo);
     Dir_t*              (*API_FS_OpenDir)(const char* name);
     Dirent_t*           (*API_FS_ReadDir)(Dir_t* pDir);
     int                 (*API_FS_ReadDir_r)(Dir_t *pDir, Dirent_t *entry, Dirent_t **outDirent);
@@ -306,13 +325,52 @@ typedef struct T_INTERFACE_VTBL_TAG
     char*               (*gcvt)(double value, int ndigit, char *buf);
     int                 (*rand) (void);
     void                (*srand)(unsigned int seed);
+    double              (*acos)(double);
+    double              (*asin)(double);
+    double              (*atan)(double);
     double              (*atan2)(double, double);
+    double              (*cos)(double);
+    double              (*sin)(double);
+    double              (*tan)(double);
+    double              (*cosh)(double);
+    double              (*sinh)(double);
+    double              (*tanh)(double);
+    double              (*exp)(double);
+    double              (*frexp)(double, int *);
+    double              (*ldexp)(double, int);
+    double              (*log)(double);
+    double              (*log10)(double);
+    double              (*modf)(double, double *);
+    double              (*pow)(double, double);
+    double              (*sqrt)(double);
+    double              (*ceil)(double);
+    double              (*fabs)(double);
+    double              (*floor)(double);
     double              (*fmod)(double, double);
+    double              (*erf)(double);
+    double              (*erfc)(double);
+    double              (*gamma)(double);
+    double              (*hypot)(double, double);
+    int                 (*finite)(double);
+    double              (*lgamma)(double);
+    double              (*acosh)(double);
+    double              (*asinh)(double);
+    double              (*atanh)(double);
+    double              (*cbrt)(double);
+    double              (*logb)(double);
+    double              (*nextafter)(double, double);
+    double              (*remainder)(double, double);
+    double              (*significand)(double);
+    double              (*copysign)(double, double);
+    int                 (*ilogb)(double);
     double              (*rint)(double);
-    double              (*log) (double);
-    double              (*log10) (double);
-    double              (*remainder) (double, double);
+    double              (*scalbn)(double, int);
+    double              (*expm1)(double);
+    double              (*log1p)(double);
 
+    //setjmp
+    volatile void       (*longjmp)(jmp_buf env,  int value);
+    int                 (*setjmp)(jmp_buf env);
 
     //ssl
     SSL_Error_t         (*SSL_Init)(SSL_Config_t* sslConfig);
@@ -367,9 +425,56 @@ typedef struct T_INTERFACE_VTBL_TAG
     void                (*WatchDog_KeepAlive)(void);
     void                (*WatchDog_Close)(void);
 
+    //gouda hal driver
+    void                (*hal_GoudaSerialOpen)(HAL_GOUDA_SPI_LINE_T spiLineType, uint32_t spiFreq, const HAL_GOUDA_LCD_CONFIG_T* config, uint32_t ebcCsAddr);
+    void                (*hal_GoudaClose)(void);
+    HAL_ERR_T           (*hal_GoudaWriteCmd)(uint16_t addr);
+    HAL_ERR_T           (*hal_GoudaWriteData)(uint16_t data);
+    HAL_ERR_T           (*hal_GoudaWriteReg)(uint16_t addr, uint16_t data);
+    HAL_ERR_T           (*hal_GoudaReadData)(uint16_t addr, uint8_t *pData, uint32_t len);
+    HAL_ERR_T           (*hal_GoudaReadReg)(uint16_t addr, uint16_t *pData);
+    HAL_ERR_T           (*hal_GoudaBlitRoi)(const HAL_GOUDA_WINDOW_T* pRoi, const uint32_t nbCmd, const HAL_GOUDA_LCD_CMD_T* pCmds, HAL_GOUDA_IRQ_HANDLER_T handler);
+    HAL_ERR_T           (*hal_GoudaBlitRoi2Ram)(uint32_t* pBuffer, const uint16_t width, const HAL_GOUDA_WINDOW_T* pRoi, HAL_GOUDA_IRQ_HANDLER_T handler);
+    bool                (*hal_GoudaIsActive)(void);
+    void                (*hal_GoudaSetBgColor)(uint16_t color);
+    uint16_t            (*hal_GoudaGetBgColor)(void);
+    HAL_ERR_T           (*hal_GoudaOvlLayerOpen)(HAL_GOUDA_OVL_LAYER_ID_T id, HAL_GOUDA_OVL_LAYER_DEF_T* def);
+    void                (*hal_GoudaOvlLayerClose)(HAL_GOUDA_OVL_LAYER_ID_T id);
+    void                (*hal_GoudaSetBlock)(uint32_t block);
+
+    //spi flash hal
+    void                (*hal_SpiFlashLock)(void);
+    void                (*hal_SpiFlashUnlock)(void);
+    void                (*hal_SpiFlashOpen)(void);
+    void                (*hal_SpiFlashClose)();
+    uint32_t            (*hal_SpiFlashGetID)(void);
+    void                (*hal_SpiFlashSetLockCallback)(HAL_FLASH_CALLBACK_FUNCTION_T lock, void *param);
+    void                (*hal_SpiFlashSetUnlockCallback)(HAL_FLASH_CALLBACK_FUNCTION_T unlock, void *param);
+    void                (*hal_SpiFlashSetCheckIrq)(bool checkirq);
+    void*               (*hal_SpiFlashMapUncacheAddress)(uint32_t flashAddress);
+    uint32_t            (*hal_SpiFlashOffset)(void *address);
+    bool                (*hal_SpiFlashWrite)(uint32_t flashAddress, const void *data, unsigned size);
+    bool                (*hal_SpiFlashErase)(uint32_t flashAddress, unsigned size);
+    void                (*hal_SpiFlashChipErase)(void);
+    void                (*hal_SpiFlashSleep)(void);
+    void                (*hal_SpiFlashWakeup)(void);
+    void                (*hal_SpiFlashReset)(void);
+    unsigned            (*hal_SpiFlashGetPageSize)(void);
+    unsigned            (*hal_SpiFlashGetSectorSize)(void);
+    unsigned            (*hal_SpiFlashGetBlockSize)(void);
+    unsigned            (*hal_SpiFlashGetSize)(void);
+    uint16_t            (*hal_SpiFlashReadStatusRegister)(void);
+    void                (*hal_SpiFlashWriteStatusRegister)(uint16_t val, uint16_t mask);
+    uint8_t             (*hal_SpiFlashReadStatusRegisterEx)(uint8_t n);
+    void                (*hal_SpiFlashWriteStatusRegisterEx)(uint8_t n, uint8_t val);
+    void                (*hal_SpiFlashWriteVolatileStatusRegisterEx)(uint8_t n, uint8_t val);
+    void                (*hal_SpiFlashSecurityErase)(uint32_t address);
+    void                (*hal_SpiFlashSecurityWrite)(uint32_t address, const void *data, unsigned size);
+    void                (*hal_SpiFlashSecurityRead)(uint32_t address, void *data, unsigned size);
+
 } T_INTERFACE_VTBL_TAG;
 extern T_INTERFACE_VTBL_TAG *g_InterfaceVtbl;
-#define     CSDK_FUNC(name) (g_InterfaceVtbl->name)
+#define CSDK_FUNC(name) (g_InterfaceVtbl->name)
 
 
 #endif

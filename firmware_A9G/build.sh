@@ -47,6 +47,7 @@ elf_file=$(ls $CSDK_LIB_PATH|grep '.elf')
 lib_file=$(ls $CSDK_LIB_PATH|grep '.lod')
 
 if [[ "${memdef_file}aa" = "aa" || "${elf_file}aa" = "aa" || "${lib_file}aa" = "aa" ]]; then
+    echo -ne "\033[1;31m" #red
     echo "!!!!!!!!!!!!!!"
     echo "NO LIB FILES"
     echo "!!!!!!!!!!!!!!"
@@ -56,29 +57,28 @@ if [[ "${memdef_file}aa" = "aa" || "${elf_file}aa" = "aa" || "${lib_file}aa" = "
     echo ""
     echo "      https://github.com/Ai-Thinker-Open/GPRS_C_SDK/releases"
     echo ""
+    echo -ne "\033[0m" #normal
     exit 1
 fi
 #####################################
 
 start_time=`date +%s`
-#where the cygwin install in unix path,example if windows path is G:\CSDTK\cygwin,cygwin path may be /cygdrive/g/CSDTK/cygwin
-# CYGWIN_HOME= 
-# if [[ ! -d $CYGWIN_HOME ]]; then
-#     echo  PATH $CYGWIN_HOME is not exist
-#     exit
-# fi
 
-#set the path
-# export PATH=$CYGWIN_HOME/bin:$CYGWIN_HOME/crosscompiler/bin:$CYGWIN_HOME/cooltools:/bin:/usr/bin;
-export PATH=/bin:/crosscompiler/bin:/cooltools:/bin:/usr/bin:$PATH;
-# echo path:$PATH
+export SOFT_WORKDIR=`pwd -P`
 
-export SOFT_WORKDIR=`pwd`
-
-echo "param number:$paramNum"
-echo "compileMode:$compileMode"
+echo ""
+echo "===================Start build====================="
+echo "-- Param   number : $paramNum"
+echo "-- Compile mode   : $compileMode"
 
 if [[ $paramNum -eq 1  ]]; then
+    if [[ "$1xx" == "cleanxx" ]]; then
+        echo "Clean all..."
+        rm -rf $SOFT_WORKDIR/build
+        rm -rf $SOFT_WORKDIR/hex
+        echo "====================Clean End======================"
+        exit 0
+    fi
     export IS_PROJECT_DIR=$SOFT_WORKDIR/$1
     if [[ ! -d $IS_PROJECT_DIR ]]; then
         echo "project $1 error path:$IS_PROJECT_DIR";
@@ -90,7 +90,7 @@ if [[ $paramNum -eq 1  ]]; then
         sed -i "15i\#" Makefile
     else
         sed -i '15d' Makefile
-        sed -i "15i\LOCAL_MODULE_DEPENDS += $1" Makefile
+        sed -i "15i\PROJECT_PATH += $1" Makefile
     fi
     export PROJ_NAME=$1
 elif [[ $paramNum -eq 2  ]]; then
@@ -98,6 +98,8 @@ elif [[ $paramNum -eq 2  ]]; then
         if [[ "$2x" == "allx" ]]; then
             rm -rf $SOFT_WORKDIR/build
             rm -rf $SOFT_WORKDIR/hex
+        elif [[ "$2x" == "aliyunx" ]]; then
+            make -C libs/aliyun/iotkit-embedded distclean
         else
             rm -rf $SOFT_WORKDIR/build/$2_$compileMode
             rm -rf $SOFT_WORKDIR/hex/$2_$compileMode
@@ -118,7 +120,7 @@ elif [[ $paramNum -eq 2  ]]; then
         # sed -i '5d' Makefile
         # sed -i "5i\LOCAL_LIBS += platform/lib/libinit.a" Makefile
         sed -i '15d' Makefile
-        sed -i "15i\LOCAL_MODULE_DEPENDS += demo/$2" Makefile
+        sed -i "15i\PROJECT_PATH += demo/$2" Makefile
     elif [[ "$1x" == "projectx" ]]; then
         export IS_PROJECT_DIR=$SOFT_WORKDIR/project/$2
         if [[ ! -d $IS_PROJECT_DIR ]]; then
@@ -130,15 +132,21 @@ elif [[ $paramNum -eq 2  ]]; then
         # sed -i '5d' Makefile
         # sed -i "5i\LOCAL_LIBS += platform/lib/libinit.a" Makefile
         sed -i '15d' Makefile
-        sed -i "15i\LOCAL_MODULE_DEPENDS += project/$2" Makefile
+        sed -i "15i\PROJECT_PATH += project/$2" Makefile
     fi
 elif [[ $paramNum -eq 4  ]]; then
     if [[ "$1x" == "fotax" ]]; then
         if [ -f "$2" ]; then
             if [ -f "$3" ]; then
-                echo "waiting for making fota pack..."
-                echo "this will take a few minutes"
-                platform/compilation/fota/fotacreate.exe 4194304 65536 $2 $3 $4
+                echo "[OTA] waiting for making fota pack..."
+                echo "      this will take a few minutes..."
+                mkdir -p hex/tmp
+                old_ota_path=hex/tmp/old_ota_lod.lod
+                new_ota_path=hex/tmp/new_ota_lod.lod
+                python platform/compilation/lodtool.py gen_ota --lod $2 --out $old_ota_path
+                python platform/compilation/lodtool.py gen_ota --lod $3 --out $new_ota_path
+                platform/compilation/fota/linux/fotacreate 4194304 65536  $old_ota_path  $new_ota_path $4
+                rm -rf hex/tmp
                 exit 0
             fi
         fi
@@ -150,10 +158,6 @@ else
     exit 0
 fi
 
-# if [[ ! -d target/$PROJ_NAME ]]; then
-#     cp -rf target/init target/$PROJ_NAME
-#     echo "user default for init-target";
-# fi
 
 #build path and log
 LOG_FILE_PATH=$SOFT_WORKDIR/build
@@ -162,12 +166,13 @@ if [ ! -d ${LOG_FILE_PATH} ]; then
 fi
 LOG_FILE=${LOG_FILE_PATH}/${PROJ_NAME}_build.log
 
-echo "compile project $PROJ_NAME";
-echo "compile path $IS_PROJECT_DIR";
-
 MAKE_J_NUMBER=`cat /proc/cpuinfo | grep vendor_id | wc -l`
-echo "core number:$MAKE_J_NUMBER"
-# rm -rf $SOFT_WORKDIR/hex/$PROJ_NAME
+echo "-- Core    number : $MAKE_J_NUMBER"
+echo "-- Compile project: $PROJ_NAME";
+echo "-- Project path   : "
+echo "  |"
+echo "   --$IS_PROJECT_DIR";
+echo "---------------------------------------------------"
 
 cd $SOFT_WORKDIR
 if [ ${MAKE_J_NUMBER} -gt 1 ]; then
@@ -176,20 +181,12 @@ else
     make CT_RELEASE=$compileMode 2>&1 | tee ${LOG_FILE}
 fi
 
-# rm -f $SOFT_WORKDIR/hex/${PROJ_NAME}_${compileMode}/*
-# rm -rf $SOFT_WORKDIR/hex/${PROJ_NAME}_${compileMode}
-# mkdir $SOFT_WORKDIR/hex/${PROJ_NAME}_${compileMode}
-# cp -f $SOFT_WORKDIR/hex/$PROJ_NAME/* $SOFT_WORKDIR/hex/${PROJ_NAME}_${compileMode}
-# rm -rf $SOFT_WORKDIR/hex/$PROJ_NAME
-# if [[ "$1x" == "initx" ]]; then
-#     cp build/init/init/lib/libinit_*.a platform/lib/libinit.a
-# fi
-
 end_time=`date +%s`
 time_distance=`expr ${end_time} - ${start_time}`
 date_time_now=$(date +%F\ \ %H:%M:%S)
-echo === Build Time: ${time_distance}s  at  ${date_time_now} === | tee -a ${LOG_FILE}
-
+echo -ne "\033[1;32m" #green
+echo ====== Build Time: ${time_distance}s  complete at  ${date_time_now} ======= | tee -a ${LOG_FILE}
+echo -ne "\033[0m"
 
 # print RAM and ROM info
 
@@ -208,11 +205,15 @@ MEMD_DEF_PATH=./platform/csdk/memd.def
 
 map_file=$(ls ./build/$mapPathName|grep '.map')
 
+result=`cat ${LOG_FILE}|grep "Error"`
 
-if [[ "${map_file}aa" = "aa" ]]; then
+if [[ "${result}aa" != "aa" || "${map_file}aa" = "aa" ]]; then
+    echo -ne "\033[1;31m"
     echo "!!!!!!!!!!!!!!!!!!!!"
     echo "   BUILD FAILED"
     echo "!!!!!!!!!!!!!!!!!!!!"
+    echo -ne "\033[0m"
+    echo "============================================================="
     exit 1
 fi
 
@@ -228,14 +229,17 @@ ram_end=$(grep  -n  "__user_bss_end = ." $MAP_FILE_PATH | awk  '{print $2}')
 
 # echo $ram_start $ram_end
 ram_used=$(($ram_end-$ram_start))
-ram_used_percent=$(awk 'BEGIN{printf "%.2f%\n",('$ram_used'/'$ram_total')*100}')
+ram_used_percent=$(awk 'BEGIN{printf "%.2f%%\n",('$ram_used'/'$((${ram_total}))')*100}')
 
 rw_data_size=$(($ram_rw_data_end-$ram_start))
 rom_used=$(($rom_rw_start-$rom_start+$rw_data_size))
-rom_used_percent=$(awk 'BEGIN{printf "%.2f%\n",('$rom_used'/'$rom_total')*100}')
+rom_used_percent=$(awk 'BEGIN{printf "%.2f%%\n",('$rom_used'/'$(($rom_total))')*100}')
 
 
 echo ROM total: ${rom_total}\($((${rom_total}))\) Bytes, used: $rom_used Bytes \($rom_used_percent\)
 echo RAM total: ${ram_total}\($((${ram_total}))\) Bytes, used: $ram_used Bytes \($ram_used_percent\)
+echo -ne "\033[1;32m" #green
+echo "============================================================="
+echo -ne "\033[0m" #normal
 
 exit

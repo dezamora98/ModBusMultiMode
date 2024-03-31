@@ -3,20 +3,28 @@
 
 #include <sdk_init.h>
 
+#define TIME_2000_1970_S    946684800UL
+
 #define gettimeofday                  CSDK_FUNC(gettimeofday)
+/**
+  * Sync time from GSM/GPRS network when attach success
+  * 
+  * @attention  Some base station may not publish time, so the NTP is the best time sync way
+  * 
+  */
 #define TIME_SetIsAutoUpdateRtcTime   CSDK_FUNC(TIME_SetIsAutoUpdateRtcTime)
 #define TIME_IsAutoUpdateRtcTime      CSDK_FUNC(TIME_IsAutoUpdateRtcTime)
 #define TIME_SetRtcTime               CSDK_FUNC(TIME_SetRtcTime)
-#define TIME_GetRtcTIme               CSDK_FUNC(TIME_GetRtcTIme)
+#define TIME_GetRtcTime               CSDK_FUNC(TIME_GetRtcTime)
 #define clock                         CSDK_FUNC(clock)
 
-//return time unit:s
-// uint32_t TIME_GetIime();  
-#define TIME_GetIime                              CSDK_FUNC(TIME_GetIime)
-//the same as TIME_GetRtcTIme but no timezone
+//return time from 2000-1-1 00:00:00(UTC) unit:s
+// uint32_t TIME_GetTime();  
+#define TIME_GetTime                              CSDK_FUNC(TIME_GetTime)
+//the same as TIME_GetRtcTime but no timezone
 // bool TIME_GetSystemTime(TIME_System_t* sysTime);
 #define TIME_GetSystemTime                        CSDK_FUNC(TIME_GetSystemTime)
-//the same as TIME_GetRtcTIme but no timezone
+//the same as TIME_GetRtcTime but no timezone
 // bool TIME_SetSystemTime(TIME_System_t* sysTime);
 #define TIME_SetSystemTime                        CSDK_FUNC(TIME_SetSystemTime)
 //get time zone, unit:15minutes,e.g. if value is 2, means +30minutes
@@ -33,14 +41,20 @@
 #define TIME_SetLocalTime                         CSDK_FUNC(TIME_SetLocalTime)
 
 // uint32_t TIME_SystemTime2TimeStamp(TIME_System_t* sysTime);
+//return time from 2000-1-1 00:00:00(UTC) unit:s
 #define TIME_SystemTime2TimeStamp                 CSDK_FUNC(TIME_SystemTime2TimeStamp)
+
 // bool     TIME_TimeStamp2SystemTime(uint32_t stamp, TIME_System_t* sysTime);
+//param stamp: time from 2000-1-1 00:00:00(UTC) unit:s, if unix timestamp, should - TIME_2000_1970_S
 #define TIME_TimeStamp2SystemTime                 CSDK_FUNC(TIME_TimeStamp2SystemTime)
 
-///////standard///
+
+///////////////////////////standard/////////////////////////////////
+//unix time
+
 // time_t time(time_t* timer);
-#define TIME_GetTime           CSDK_FUNC(time)
-#define time(x)                TIME_GetTime(x)
+#define TIME_GetTime2           CSDK_FUNC(time)
+#define time(x)                TIME_GetTime2(x)
 
 // time_t timelocal(struct tm* tm);
 #define timelocal              CSDK_FUNC(timelocal)
@@ -49,5 +63,10 @@
 
 #define timegm(x) mktime(x)
 
+/**
+  * 
+  * @attention not safe for multi thread!! 
+  */  
+char *ctime(const time_t *time);
 
 #endif
