@@ -42,6 +42,7 @@
 PR_BEGIN_EXTERN_C
 #endif
 
+#ifdef SLAVE_MB
 
 eMBErrorCode    eMBRTUInit( uint8_t slaveAddress, uint8_t ucPort, uint32_t ulBaudRate,
                             eMBParity eParity );
@@ -53,6 +54,8 @@ bool            xMBRTUReceiveFSM( void );
 bool            xMBRTUTransmitFSM( void );
 bool            xMBRTUTimerT15Expired( void );
 bool            xMBRTUTimerT35Expired( void );
+
+#endif
 
 #if MB_MASTER_RTU_ENABLED > 0
 eMBErrorCode    eMBMasterRTUInit( uint8_t ucPort, uint32_t ulBaudRate,eMBParity eParity );

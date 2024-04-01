@@ -31,11 +31,11 @@ static uint32_t sectionStatus;
 void EnterCriticalSection(void)
 {
     sectionStatus = SYS_EnterCriticalSection();
-    printf("init critical section");
+    //printf("init critical section");
 }
 
 void ExitCriticalSection(void)
 {
     SYS_ExitCriticalSection(sectionStatus);
-    printf("exit critical section");
+    //printf("exit critical section");
 }

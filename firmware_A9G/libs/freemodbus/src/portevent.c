@@ -21,13 +21,15 @@
 
 /* ----------------------- Modbus includes ----------------------------------*/
 
-#ifdef MB_SLAVE
+
 
 #include "mb.h"
 #include "mbport.h"
 #include <stdbool.h>
 #include <stdint.h>
+#include "mbconfig.h"
 
+#ifdef MB_SLAVE
 /* ----------------------- Variables ----------------------------------------*/
 static struct rt_event     xSlaveOsEvent;
 /* ----------------------- Start implementation -----------------------------*/

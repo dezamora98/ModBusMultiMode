@@ -29,6 +29,8 @@
  */
 
 /* ----------------------- System includes ----------------------------------*/
+
+
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
@@ -58,6 +60,8 @@
 #ifndef MB_PORT_HAS_CLOSE
 #define MB_PORT_HAS_CLOSE 0
 #endif
+
+#ifdef SLAVE_MB
 
 /* ----------------------- Static variables ---------------------------------*/
 
@@ -411,3 +415,5 @@ eMBErrorCode eMBPoll( void )
     }
     return MB_ENOERR;
 }
+
+#endif

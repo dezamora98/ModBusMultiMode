@@ -19,10 +19,12 @@
  * File: $Id: user_mb_app.c,v 1.60 2013/11/23 11:49:05 Armink $
  */
 
-#ifdef SLAVE_MB
+
 
 #include "user_mb_app.h"
+#include "mbconfig.h"
 
+#ifdef SLAVE_MB
 /*------------------------Slave mode use these variables----------------------*/
 //Slave mode:DiscreteInputs variables
 uint16_t   usSDiscInStart                               = S_DISCRETE_INPUT_START;

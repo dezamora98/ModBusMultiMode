@@ -29,6 +29,7 @@
  */
 
 /* ----------------------- System includes ----------------------------------*/
+
 #include <stdlib.h>
 #include <string.h>
 #include "assert.h"
@@ -51,6 +52,8 @@
 #define MB_SER_PDU_SIZE_CRC     2       /*!< Size of CRC field in PDU. */
 #define MB_SER_PDU_ADDR_OFF     0       /*!< Offset of slave address in Ser-PDU. */
 #define MB_SER_PDU_PDU_OFF      1       /*!< Offset of Modbus-PDU in Ser-PDU. */
+
+#ifdef SLAVE_MB
 
 /* ----------------------- Type definitions ---------------------------------*/
 typedef enum
@@ -352,3 +355,4 @@ xMBRTUTimerT35Expired( void )
 
     return xNeedPoll;
 }
+#endif

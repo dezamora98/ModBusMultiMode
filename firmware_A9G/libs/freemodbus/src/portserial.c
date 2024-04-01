@@ -18,7 +18,7 @@
  *
  * File: $Id: portserial.c,v 1.60 2013/08/13 15:07:05 Armink $
  */
-#ifdef SLAVE_MB
+
 
 
 #include "port.h"
@@ -28,9 +28,9 @@
 /* ----------------------- Modbus includes ----------------------------------*/
 #include "mb.h"
 #include "mbport.h"
-#include "rtdevice.h"
-#include "board.h"
+#include "mbconfig.h"
 
+#ifdef SLAVE_MB
 /* ----------------------- Static variables ---------------------------------*/
 /* software simulation serial transmit IRQ handler thread stack */
 #ifdef rt_align

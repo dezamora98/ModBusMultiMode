@@ -20,13 +20,16 @@
  */
 
 /* ----------------------- Platform includes --------------------------------*/
-#ifdef SLAVE_MB
+
 #include "port.h"
 #include <stdbool.h>
 #include <stdint.h>
 /* ----------------------- Modbus includes ----------------------------------*/
 #include "mb.h"
 #include "mbport.h"
+#include "mbconfig.h"
+
+#ifdef SLAVE_MB
 
 /* ----------------------- static functions ---------------------------------*/
 static struct rt_timer timer;

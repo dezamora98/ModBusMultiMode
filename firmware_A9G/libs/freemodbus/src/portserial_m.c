@@ -87,7 +87,7 @@ bool xMBMasterPortSerialInit(uint8_t ucPort, uint32_t ulBaudRate, uint8_t ucData
 
 void vMBMasterPortSerialEnable(bool xRxEnable, bool xTxEnable)
 {
-    eMBMasterEventType *event = NULL;
+    static eMBMasterEventType *event = NULL;
 
     if (xRxEnable)
     {
@@ -107,7 +107,6 @@ void vMBMasterPortSerialEnable(bool xRxEnable, bool xTxEnable)
 #endif
         /* disable RX interrupt */
         CONFIG_UART.useEvent = false;
-        UART_Init(MB_UART, CONFIG_UART);
     }
     if (xTxEnable)
     {
@@ -120,7 +119,7 @@ void vMBMasterPortSerialEnable(bool xRxEnable, bool xTxEnable)
             return;
         }
         *event = EVENT_SERIAL_TRANS_START;
-        OS_SendEvent(thread_serial_soft_trans_irq, event, OS_TIME_OUT_WAIT_FOREVER, OS_EVENT_PRI_URGENT);
+        OS_SendEvent(thread_serial_soft_trans_irq, event, OS_TIME_OUT_WAIT_FOREVER, OS_EVENT_PRI_NORMAL);
     }
     else
     {
@@ -128,6 +127,8 @@ void vMBMasterPortSerialEnable(bool xRxEnable, bool xTxEnable)
         OS_WaitEvent(thread_serial_soft_trans_irq, (void **)&event, OS_WAIT_FOREVER);
         free(event);
     }
+
+    UART_Init(MB_UART, CONFIG_UART);
 }
 
 void vMBMasterPortClose(void)
@@ -138,14 +139,12 @@ void vMBMasterPortClose(void)
 
 bool xMBMasterPortSerialPutByte(char ucByte)
 {
-    // serial->parent.write(&(serial->parent), 0, &ucByte, 1);
     UART_Write(MB_UART, &ucByte, 1);
     return true;
 }
 
 bool xMBMasterPortSerialGetByte(char *pucByte)
 {
-    // serial->parent.read(&(serial->parent), 0, pucByte, 1);
     UART_Read(MB_UART, pucByte, 1, 1);
     return true;
 }
@@ -181,9 +180,9 @@ void prvvUARTRxISR(void)
  */
 static void serial_soft_trans_irq(void *parameter)
 {
-    uint32_t *recved_event = NULL;
+    eMBMasterEventType *recved_event = NULL;
     printf("interrupción de transmición por software arrancada");
-    
+
     while (1)
     {
         while (1)
@@ -192,6 +191,7 @@ static void serial_soft_trans_irq(void *parameter)
             if (OS_WaitEvent(thread_serial_soft_trans_irq, (void **)&recved_event, OS_WAIT_FOREVER))
             {
                 /* execute modbus callback */
+                printf("TX-EVENT --> %d",*recved_event);
                 if (*recved_event == EVENT_SERIAL_TRANS_START)
                 {
                     prvvUARTTxReadyISR();

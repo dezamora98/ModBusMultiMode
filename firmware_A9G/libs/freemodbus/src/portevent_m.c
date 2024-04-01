@@ -72,7 +72,7 @@ bool xMBMasterPortEventPost(eMBMasterEventType eEvent)
         return false;
     }
     *event = eEvent;
-    return OS_SendEvent(xMBEventManager_H, event, OS_TIME_OUT_WAIT_FOREVER, OS_EVENT_PRI_URGENT);
+    return OS_SendEvent(xMBEventManager_H, event, OS_WAIT_FOREVER, OS_EVENT_PRI_NORMAL);
 }
 
 bool xMBMasterPortEventGet(eMBMasterEventType *eEvent)
@@ -115,7 +115,7 @@ bool xMBMasterPortEventGet(eMBMasterEventType *eEvent)
  */
 void vMBMasterOsResInit(void)
 {
-    xMasterRunRes = OS_CreateSemaphore(1);
+    xMasterRunRes = OS_CreateSemaphore(0);
 }
 
 /**
