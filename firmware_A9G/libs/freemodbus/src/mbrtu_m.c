@@ -34,6 +34,7 @@
 #include "assert.h"
 #include <stdbool.h>
 #include <stdint.h>
+#include <stdio.h>
 
 /* ----------------------- Platform includes --------------------------------*/
 #include "port.h"
@@ -141,7 +142,10 @@ void eMBMasterRTUStart(void)
      * modbus protocol stack until the bus is free.
      */
     eRcvState = STATE_M_RX_INIT;
+    //printf("MODBUS --> vMBMasterPortSerialEnable");
     vMBMasterPortSerialEnable(true, false);
+    
+    //printf("MODBUS --> vMBMasterPortTimersT35Enable");
     vMBMasterPortTimersT35Enable();
 
     EXIT_CRITICAL_SECTION();

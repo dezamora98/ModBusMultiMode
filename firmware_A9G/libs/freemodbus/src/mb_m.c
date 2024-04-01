@@ -33,6 +33,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include <stdint.h>
+#include <stdio.h>
 
 /* ----------------------- Platform includes --------------------------------*/
 #include "port.h"
@@ -220,6 +221,7 @@ eMBMasterEnable(void)
     if (eMBState == STATE_DISABLED)
     {
         /* Activate the protocol stack. */
+        printf("MODBUS --> MasterFrameStartCur");
         pvMBMasterFrameStartCur();
         eMBState = STATE_ENABLED;
     }
