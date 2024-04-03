@@ -142,11 +142,11 @@ void eMBMasterRTUStart(void)
      * modbus protocol stack until the bus is free.
      */
     eRcvState = STATE_M_RX_INIT;
-    //printf("MODBUS --> vMBMasterPortSerialEnable");
     vMBMasterPortSerialEnable(true, false);
-    
-    //printf("MODBUS --> vMBMasterPortTimersT35Enable");
+    printf("MODBUS --> vMBMasterPortSerialEnable");
+
     vMBMasterPortTimersT35Enable();
+    printf("MODBUS --> vMBMasterPortTimersT35Enable");
 
     EXIT_CRITICAL_SECTION();
 }
@@ -224,6 +224,7 @@ eMBMasterRTUSend(uint8_t ucSlaveAddress, const uint8_t *pucFrame, uint16_t usLen
 
         /* Activate the transmitter. */
         eSndState = STATE_M_TX_XMIT;
+        printf("MODBUS-->SENT-SERIAL_ENABLE");
         vMBMasterPortSerialEnable(false, true);
     }
     else

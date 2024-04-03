@@ -221,7 +221,6 @@ eMBMasterEnable(void)
     if (eMBState == STATE_DISABLED)
     {
         /* Activate the protocol stack. */
-        printf("MODBUS --> MasterFrameStartCur");
         pvMBMasterFrameStartCur();
         eMBState = STATE_ENABLED;
     }
@@ -230,7 +229,7 @@ eMBMasterEnable(void)
         eStatus = MB_EILLSTATE;
     }
 
-    xMBMasterPortEventPost(EV_MASTER_FRAME_RECEIVED);
+    //xMBMasterPortEventPost(EV_MASTER_FRAME_RECEIVED);
 
     return eStatus;
 }
@@ -369,6 +368,7 @@ eMBMasterPoll(void)
 
         case EV_MASTER_FRAME_SENT:
             /* Master is busy now. */
+            printf("MODBUS-->MASTER--SENT");
             vMBMasterGetPDUSndBuf(&ucMBFrame);
             eStatus = peMBMasterFrameSendCur(ucMBMasterGetDestAddress(), ucMBFrame, usMBMasterGetPDUSndLength());
             break;

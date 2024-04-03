@@ -200,9 +200,7 @@ eMBMasterReqWriteMultipleHoldingRegister(uint8_t ucSndAddr,
             *ucMBFrame++ = pusDataBuffer[usRegIndex++];
         }
         vMBMasterSetPDUSndLength(MB_PDU_SIZE_MIN + MB_PDU_REQ_WRITE_MUL_SIZE_MIN + 2 * usNRegs);
-        printf("MODBUS-(mbfuncholding_m.c-199)--> creando evento EV_MASTER_FRAME_SENT");
         (void)xMBMasterPortEventPost(EV_MASTER_FRAME_SENT);
-        printf("MODBUS-(mbfuncholding_m.c-201)--> evento EV_MASTER_FRAME_SENT creado");
         eErrStatus = eMBMasterWaitRequestFinish();
     }
     return eErrStatus;

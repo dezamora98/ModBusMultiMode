@@ -20,13 +20,14 @@
  */
 
 /* ----------------------- Platform includes --------------------------------*/
-#include "port.h"
+#include <stdio.h>
 #include <stdbool.h>
 #include <stdint.h>
 #include <api_inc_os.h>
 #include <api_os.h>
 
 /* ----------------------- Modbus includes ----------------------------------*/
+#include "port.h"
 #include "mb.h"
 #include "mb_m.h"
 #include "mbport.h"
@@ -41,6 +42,7 @@ static void timer_timeout_ind(void *parameter);
 /*------------------------local_implementation-------------------------------*/
 static void vMBTIMERTask(void *vp)
 {
+    printf("MODBUS--> vMBTIMERTask--INIT");
     while (1)
     {
         OS_Sleep(OS_WAIT_FOREVER);
@@ -52,7 +54,7 @@ static void prvvTIMERExpiredISR(void);
 bool xMBMasterPortTimersInit(uint16_t usTimeOut50us)
 {
     /* backup T35 ticks */
-    TimertaskHandle = OS_CreateTask(vMBTIMERTask, NULL, NULL, 2048, 2, 0, 0, "MB-Timer");
+    TimertaskHandle = OS_CreateTask(vMBTIMERTask, NULL, NULL, 2048, MAX_TASK_PR, 0, 0, "MB-Timer");
     usT35TimeOut50us = (uint32_t)(usTimeOut50us);
     return true;
 }
@@ -92,6 +94,7 @@ void prvvTIMERExpiredISR(void)
 
 static void timer_timeout_ind(void *parameter)
 {
+    printf("MODBUS--TIMEOUT");
     prvvTIMERExpiredISR();
 }
 

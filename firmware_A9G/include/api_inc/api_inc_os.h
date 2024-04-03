@@ -20,7 +20,7 @@ typedef uint32_t  HANDLE;
 
 #define OS_TIME_OUT_WAIT_FOREVER 0xFFFFFFFF
 #define OS_TIME_OUT_NO_WAIT      0x0
-
+#define MAX_TASK_PR 1
 
 typedef struct{
     uint32_t usedSize;

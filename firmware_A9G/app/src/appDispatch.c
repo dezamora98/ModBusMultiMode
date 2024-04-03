@@ -8,6 +8,17 @@
 
 #define GPIO_LED1 GPIO_PIN27
 
+static bool SYS_READY = false;
+
+void waitSystemReady(void)
+{
+    while (!SYS_READY)
+    {
+        OS_Sleep(10);
+    }
+    
+}
+
 static void GPIO_SYS_blink(GPIO_PIN pin, uint32_t ms)
 {
     GPIO_config_t S_config;
@@ -34,7 +45,6 @@ void EventDispatch(API_Event_t *pEvent)
 {
     switch (pEvent->id)
     {
-#if false
         // system
     case API_EVENT_ID_POWER_ON: // param1: shows power on cause:
     {
@@ -46,6 +56,7 @@ void EventDispatch(API_Event_t *pEvent)
     {
         printf("EVENT_ID_SYSTEM_READY");
         GPIO_SYS_blink(GPIO_LED1, 50);
+        SYS_READY = true;
         break;
     }
 
@@ -65,7 +76,7 @@ void EventDispatch(API_Event_t *pEvent)
     {
         break; // param1: (PM_Charger_State_t<<16|charge_level(%)) , param2: (PM_Battery_State_t<<16|battery_voltage(mV))
     }
-#endif
+
 
     // keypad
 #ifdef __API_KEY_H

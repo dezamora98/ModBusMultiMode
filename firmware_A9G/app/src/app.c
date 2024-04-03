@@ -16,40 +16,51 @@
 #define MB_SEND_REG_NUM 2
 
 #define MB_POLL_CYCLE_MS 500
+HANDLE tid1 = NULL, tid2 = NULL;
 
 static void send_thread_entry(void *parameter);
 static void mb_master_poll(void *parameter);
-static bool mb_master_sample(void);
 
 void app(void *pData)
 {
+    eMBErrorCode eMBState;
+
+    waitSystemReady();
     printf("INIT APP");
-    while (1)
+    eMBState = eMBMasterInit(MB_RTU, PORT_NUM, PORT_BAUDRATE, PORT_PARITY);
+    printf("MODBUS-->MASTER_INIT--STATE(%d)", (int)eMBState);
+    eMBState = eMBMasterEnable();
+    printf("MODBUS-->MASTER_ENABLE--STATE(%d)", (int)eMBState);
+
+    tid1 = OS_CreateTask(mb_master_poll, NULL, NULL, 2048*2, MAX_TASK_PR+2, 0, 0, "mb_master_pull");
+    if (tid1 == NULL)
     {
+        printf("ERROR->tareas no creadas");
+        return;
+    }
 
-        if (!mb_master_sample())
-            printf("MODBUS_MASTER->ERROR");
-        else
-            printf("MODBUS_FUNCIONANDO");
+    tid2 = OS_CreateTask(send_thread_entry, NULL, NULL, 2048, MAX_TASK_PR+1, 0, 0, "mb_master_pull");
+    if (tid2 == NULL)
+    {
+        printf("ERROR->tareas no creadas");
+        return;
+    }
 
-        OS_Sleep(1000);
+    while (true)
+    {
+        OS_Sleep(OS_WAIT_FOREVER);
     }
 }
-
-#if true
 
 static void send_thread_entry(void *parameter)
 {
     eMBMasterReqErrCode error_code = MB_MRE_NO_ERR;
-    uint16_t error_count = 0;
     uint16_t data[MB_SEND_REG_NUM] = {0};
 
-    OS_Sleep(1000);
-    printf("start->tarea send_thread_entry");
-    OS_Sleep(1000);
+    OS_Sleep(5000);
 
-
-    while (1)
+    printf("MODBUS--START-->  send_thread_entry");
+    while (true)
     {
         /* Test Modbus Master */
         data[0] = (uint16_t)(50);
@@ -70,60 +81,12 @@ static void send_thread_entry(void *parameter)
 
 static void mb_master_poll(void *parameter)
 {
-    OS_Sleep(1000);
-    printf("start->tarea mb_master_poll");
-    OS_Sleep(1000);
-
-    eMBMasterInit(MB_RTU, PORT_NUM, PORT_BAUDRATE, PORT_PARITY);
-
-    OS_Sleep(1000);
-    printf("start->tarea mb_master_poll --> eMBMasterInit(MB_RTU, PORT_NUM, PORT_BAUDRATE, PORT_PARITY);");
-    OS_Sleep(1000);
-
-    eMBMasterEnable();
-
-    OS_Sleep(1000);
-    printf("start->tarea mb_master_poll --> eMBMasterEnable();");
-    OS_Sleep(1000);
-
-    while (1)
+    int eCode = 0;
+    printf("MODBUS--START-->MASTER_POLL");
+    while (true)
     {
-        printf("MODBUS-POLL_eCODE --> %d", (int)eMBMasterPoll());
+        eCode = (int)eMBMasterPoll();
+        printf("MODBUS-POLL_eCODE --> %d", eCode);
         OS_Sleep(MB_POLL_CYCLE_MS);
     }
 }
-
-static bool mb_master_sample(void)
-{
-    static uint8_t is_init = 0;
-    HANDLE tid1 = NULL, tid2 = NULL;
-
-    OS_Sleep(1000);
-    printf("start->función mb_master_sample");
-    OS_Sleep(1000);
-
-    if (is_init > 0)
-    {
-        printf("sample is running\n");
-        return true;
-    }
-
-    tid1 = OS_CreateTask(mb_master_poll, NULL, NULL, 2048, MAX_TASK_PR, 0, 0, "mb_master_pull");
-    if (tid1 == NULL)
-    {
-        printf("ERROR->tareas no creadas");
-        return false;
-    }
-
-    tid2 = OS_CreateTask(send_thread_entry, NULL, NULL, 2048, MAX_TASK_PR, 0, 0, "mb_master_pull");
-    if (tid2 == NULL)
-    {
-        printf("ERROR->tareas no creadas");
-        return false;
-    }
-
-    is_init++;
-    return true;
-}
-
-#endif // !_MB_H

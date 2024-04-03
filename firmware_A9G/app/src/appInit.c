@@ -14,10 +14,20 @@
 #include <api_os.h>
 #include <api_event.h>
 
-HANDLE os_TaskHandle = NULL;
+HANDLE osTaskHandle = NULL;
 HANDLE mainTaskHandle = NULL;
 
-void os_task(void *pv)
+HANDLE getOsTaskHandle(void)
+{
+    return osTaskHandle;
+}
+
+HANDLE getMainTaskHandle(void)
+{
+    return mainTaskHandle;
+}
+
+static void OSTask(void *pv)
 {
     API_Event_t *event = NULL;
 
@@ -25,7 +35,7 @@ void os_task(void *pv)
 
     while (1)
     {
-        if (OS_WaitEvent(os_TaskHandle, (void **)&event, OS_TIME_OUT_WAIT_FOREVER))
+        if (OS_WaitEvent(osTaskHandle, (void **)&event, OS_TIME_OUT_WAIT_FOREVER))
         {
             EventDispatch(event);
             OS_Free(event->pParam1);
@@ -37,6 +47,6 @@ void os_task(void *pv)
 
 void app_Main(void)
 {
-    os_TaskHandle = OS_CreateTask(os_task, NULL, NULL, 2048, 0, 0, 0, "os_task");
-    OS_SetUserMainHandle(&os_TaskHandle);
+    osTaskHandle = OS_CreateTask(OSTask, NULL, NULL, 2048, MAX_TASK_PR - 1, 0, 0, "OSTask");
+    OS_SetUserMainHandle(&osTaskHandle);
 }
