@@ -31,16 +31,16 @@ static void OSTask(void *pv)
 {
     API_Event_t *event = NULL;
 
-    mainTaskHandle = OS_CreateTask(app, NULL, NULL, 2048, MAX_TASK_PR, 0, 0, "MainTask");
+    mainTaskHandle = OS_CreateTask(app, NULL, NULL, 2048, MAX_TASK_PR, 0, 0, "app");
 
-    while (1)
+    while (true)
     {
         if (OS_WaitEvent(osTaskHandle, (void **)&event, OS_TIME_OUT_WAIT_FOREVER))
         {
             EventDispatch(event);
-            OS_Free(event->pParam1);
-            OS_Free(event->pParam2);
-            OS_Free(event);
+            free(event->pParam1);
+            free(event->pParam2);
+            free(event);
         }
     }
 }

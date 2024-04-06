@@ -224,7 +224,6 @@ eMBMasterRTUSend(uint8_t ucSlaveAddress, const uint8_t *pucFrame, uint16_t usLen
 
         /* Activate the transmitter. */
         eSndState = STATE_M_TX_XMIT;
-        printf("MODBUS-->SENT-SERIAL_ENABLE");
         vMBMasterPortSerialEnable(false, true);
     }
     else

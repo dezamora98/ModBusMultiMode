@@ -23,8 +23,10 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdint.h>
+#include <stdlib.h>
 #include <api_inc_os.h>
 #include <api_os.h>
+#include <api_event.h>
 
 /* ----------------------- Modbus includes ----------------------------------*/
 #include "port.h"
@@ -38,19 +40,25 @@ static HANDLE TimertaskHandle;
 static uint32_t usT35TimeOut50us;
 
 /* ----------------------- static functions ---------------------------------*/
-static void prvvTIMERExpiredISR(void);
-static void timer_timeout_ind(void *parameter);
+static void prvvTIMERExpiredISR(void *parameter);
 
 /*------------------------local_implementation-------------------------------*/
 static void vMBTIMERTask(void *vp)
 {
+    API_Event_t *event = NULL;
+
     printf("MODBUS--> vMBTIMERTask--INIT");
+
     while (1)
     {
-        OS_Sleep(OS_WAIT_FOREVER);
+        if (OS_WaitEvent(TimertaskHandle, (void **)&event, OS_TIME_OUT_WAIT_FOREVER))
+        {
+            free(event->pParam1);
+            free(event->pParam2);
+            free(event);
+        }
     }
 }
-
 
 /* ----------------------- Start implementation -----------------------------*/
 bool xMBMasterPortTimersInit(uint16_t usTimeOut50us)
@@ -63,41 +71,34 @@ bool xMBMasterPortTimersInit(uint16_t usTimeOut50us)
 
 void vMBMasterPortTimersT35Enable()
 {
-    uint32_t timer_tick = (uint32_t)((50 * usT35TimeOut50us) / 1000) + 1; // aproximación a 1 ms.
-
+    uint32_t timer_tick = (uint32_t)((50 * usT35TimeOut50us) / 1000) + 1;
     /* Set current timer mode, don't change it.*/
     vMBMasterSetCurTimerMode(MB_TMODE_T35);
-    OS_StartCallbackTimer(TimertaskHandle, timer_tick, timer_timeout_ind, NULL);
+    OS_StartCallbackTimer(TimertaskHandle, timer_tick, prvvTIMERExpiredISR, NULL);
 }
 
 void vMBMasterPortTimersConvertDelayEnable()
 {
     /* Set current timer mode, don't change it.*/
     vMBMasterSetCurTimerMode(MB_TMODE_CONVERT_DELAY);
-    OS_StartCallbackTimer(TimertaskHandle, MB_MASTER_DELAY_MS_CONVERT, timer_timeout_ind, NULL);
+    OS_StartCallbackTimer(TimertaskHandle, MB_MASTER_DELAY_MS_CONVERT, prvvTIMERExpiredISR, NULL);
 }
 
 void vMBMasterPortTimersRespondTimeoutEnable()
 {
     /* Set current timer mode, don't change it.*/
     vMBMasterSetCurTimerMode(MB_TMODE_RESPOND_TIMEOUT);
-    OS_StartCallbackTimer(TimertaskHandle, MB_MASTER_TIMEOUT_MS_RESPOND, timer_timeout_ind, NULL);
+    OS_StartCallbackTimer(TimertaskHandle, MB_MASTER_TIMEOUT_MS_RESPOND, prvvTIMERExpiredISR, NULL);
 }
 
 void vMBMasterPortTimersDisable(void)
 {
-    OS_StopCallbackTimer(TimertaskHandle, timer_timeout_ind, NULL);
+    OS_StopCallbackTimer(TimertaskHandle, prvvTIMERExpiredISR, NULL);
 }
 
-void prvvTIMERExpiredISR(void)
+void prvvTIMERExpiredISR(void *vp)
 {
     (void)pxMBMasterPortCBTimerExpired();
-}
-
-static void timer_timeout_ind(void *parameter)
-{
-    printf("MODBUS--TIMEOUT");
-    prvvTIMERExpiredISR();
 }
 
 #endif

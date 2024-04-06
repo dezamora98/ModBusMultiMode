@@ -32,7 +32,7 @@ void app(void *pData)
     eMBState = eMBMasterEnable();
     printf("MODBUS-->MASTER_ENABLE--STATE(%d)", (int)eMBState);
 
-    tid1 = OS_CreateTask(mb_master_poll, NULL, NULL, 2048*2, MAX_TASK_PR+2, 0, 0, "mb_master_pull");
+    tid1 = OS_CreateTask(mb_master_poll, NULL, NULL, 2048*2, MAX_TASK_PR+1, 0, 0, "mb_master_pull");
     if (tid1 == NULL)
     {
         printf("ERROR->tareas no creadas");
@@ -75,7 +75,7 @@ static void send_thread_entry(void *parameter)
 
         /* Record the number of errors */
         printf("MODBUS-ERROR --> %d", (int)error_code);
-        OS_Sleep(500);
+        OS_Sleep(100);
     }
 }
 
@@ -86,7 +86,7 @@ static void mb_master_poll(void *parameter)
     while (true)
     {
         eCode = (int)eMBMasterPoll();
-        printf("MODBUS-POLL_eCODE --> %d", eCode);
-        OS_Sleep(MB_POLL_CYCLE_MS);
+        //printf("MODBUS-POLL_eCODE --> %d", eCode);
+        OS_Sleep(5);
     }
 }

@@ -76,11 +76,13 @@ bool xMBMasterPortSerialInit(uint8_t ucPort, uint32_t ulBaudRate, uint8_t ucData
     CONFIG_UART.rxCallback = (UART_Callback_t)serial_rx_ind; // ver cual es.
     CONFIG_UART.useEvent = false;                            // ver eso.
 
-    UART_Close(MB_UART);
+    printf("UART_CONFIG = {B:%d, DB:%d, P:%d, SB:%d}", CONFIG_UART.baudRate,
+           CONFIG_UART.dataBits, CONFIG_UART.parity, CONFIG_UART.stopBits);
 
-    // printf("end init serial");
+    //UART_Init(MB_UART, CONFIG_UART);
+
     // printf("creando interrupción de transmición por software");
-    thread_serial_soft_trans_irq = OS_CreateTask(serial_soft_trans_irq, NULL, NULL, 2048, 1, 0, 0, "MMB-TX");
+    thread_serial_soft_trans_irq = OS_CreateTask(serial_soft_trans_irq, NULL, NULL, 2048, MAX_TASK_PR, 0, 0, "MMB-TX");
     // printf("interrupción de transmición por software creada");
     return true;
 }
@@ -111,22 +113,14 @@ void vMBMasterPortSerialEnable(bool xRxEnable, bool xTxEnable)
     if (xTxEnable)
     {
         /* start serial transmit */
-        // rt_event_send(&event_serial, EVENT_SERIAL_TRANS_START);
         event = (eMBMasterEventType *)malloc(sizeof(eMBMasterEventType));
-        if (!event)
-        {
-            printf("ERROR --> MMB no memory");
-            return;
-        }
         *event = EVENT_SERIAL_TRANS_START;
-        printf("MODBUS-->SENT--SERIAL--EVENT_SERIAL_TRANS_START");
         OS_SendEvent(thread_serial_soft_trans_irq, event, OS_TIME_OUT_WAIT_FOREVER, OS_EVENT_PRI_NORMAL);
     }
     else if (OS_IsEventAvailable(thread_serial_soft_trans_irq))
     {
         /* stop serial transmit */
-
-        OS_WaitEvent(thread_serial_soft_trans_irq, (void **)&event, OS_WAIT_FOREVER);
+        //OS_WaitEvent(thread_serial_soft_trans_irq, (void **)&event, OS_WAIT_FOREVER);
         free(event);
     }
 
@@ -135,14 +129,17 @@ void vMBMasterPortSerialEnable(bool xRxEnable, bool xTxEnable)
 
 void vMBMasterPortClose(void)
 {
-    // serial->parent.close(&(serial->parent));
     UART_Close(MB_UART);
+}
+
+void xMBMasterPortSerialClose(void)
+{
+    vMBMasterPortClose();
 }
 
 bool xMBMasterPortSerialPutByte(char ucByte)
 {
     UART_Write(MB_UART, &ucByte, 1);
-    printf("MODBUS--SEND(%d)", (int)ucByte);
     return true;
 }
 
@@ -184,23 +181,17 @@ void prvvUARTRxISR(void)
 static void serial_soft_trans_irq(void *parameter)
 {
     eMBMasterEventType *recved_event = NULL;
-    // printf("interrupción de transmición por software arrancada");
+    printf("MODBUS-->serial_soft_trans_irq");
 
-    while (1)
+    while (true)
     {
-        while (1)
+        /* waiting for serial transmit start */
+        if (OS_WaitEvent(thread_serial_soft_trans_irq, (void **)&recved_event, OS_WAIT_FOREVER))
         {
-            /* waiting for serial transmit start */
-            if (OS_WaitEvent(thread_serial_soft_trans_irq, (void **)&recved_event, OS_WAIT_FOREVER))
-            {
-                /* execute modbus callback */
-                printf("TX-EVENT --> %d", *recved_event);
-                if (*recved_event == EVENT_SERIAL_TRANS_START)
-                {
-                    prvvUARTTxReadyISR();
-                }
-                OS_Free(recved_event);
-            }
+            /* execute modbus callback */
+            if (*recved_event == EVENT_SERIAL_TRANS_START) // --Este es el único evento que tiene thread_serial_soft_trans_irq por lo que no le veo sentido
+                prvvUARTTxReadyISR();
+            OS_Free(recved_event);
         }
     }
 }

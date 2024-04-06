@@ -53,7 +53,7 @@ static void vMBMastertPortEventManager(void *parameter)
 /* ----------------------- Start implementation -----------------------------*/
 bool xMBMasterPortEventInit(void)
 {
-    xMBEventManager_H = OS_CreateTask(vMBMastertPortEventManager, NULL, NULL, 2048, MAX_TASK_PR, 0, 0, "MB_EventManager");
+    xMBEventManager_H = OS_CreateTask(vMBMastertPortEventManager, NULL, NULL, 2048, MAX_TASK_PR + 2, 0, 0, "MB_EventManager");
     if (xMBEventManager_H != NULL)
     {
         printf("MODBUS-EVENT-->EVENT_MANAGER_INIT");
@@ -79,7 +79,6 @@ bool xMBMasterPortEventPost(eMBMasterEventType eEvent)
     }
     *event = eEvent;
     status = OS_SendEvent(xMBEventManager_H, event, OS_WAIT_FOREVER, OS_EVENT_PRI_NORMAL);
-    printf("MODBUS-EVENT-POST--> Status(%s)  Event(%d) ", status ? "true" : "false", (int)eEvent);
     return status;
 }
 
@@ -88,34 +87,9 @@ bool xMBMasterPortEventGet(eMBMasterEventType *eEvent)
     eMBMasterEventType *recvedEvent = NULL;
 
     OS_WaitEvent(xMBEventManager_H, (void **)&recvedEvent, OS_WAIT_FOREVER);
-    if ((*recvedEvent & (EV_MASTER_READY | EV_MASTER_FRAME_RECEIVED | EV_MASTER_EXECUTE |
-                         EV_MASTER_FRAME_SENT | EV_MASTER_ERROR_PROCESS)) == 0)
-    {
-        printf("MODBUS-->NO EVENT");
-        return false;
-    }
-
     /* the enum type couldn't convert to int type */
-    switch (*recvedEvent)
-    {
-    case EV_MASTER_READY:
-        *eEvent = EV_MASTER_READY;
-        break;
-    case EV_MASTER_EXECUTE:
-        *eEvent = EV_MASTER_EXECUTE;
-        break;
-    case EV_MASTER_FRAME_SENT:
-        *eEvent = EV_MASTER_FRAME_SENT;
-        break;
-    case EV_MASTER_ERROR_PROCESS:
-        *eEvent = EV_MASTER_ERROR_PROCESS;
-        break;
-    case EV_MASTER_FRAME_RECEIVED:
-        *eEvent = EV_MASTER_FRAME_RECEIVED;
-    default:
-        break;
-    }
 
+    *eEvent = *recvedEvent;
     free(recvedEvent);
     return true;
 }
@@ -254,7 +228,6 @@ eMBMasterReqErrCode eMBMasterWaitRequestFinish(void)
     eMBMasterReqErrCode eErrStatus = MB_MRE_NO_ERR;
     eMBMasterEventType *recvedEvent = NULL;
 
-    printf("MODBUS --> eMBMasterWaitRequestFinish");
     while (true)
     {
         OS_WaitEvent(xMBEventManager_H, (void **)&recvedEvent, OS_WAIT_FOREVER);
@@ -265,13 +238,13 @@ eMBMasterReqErrCode eMBMasterWaitRequestFinish(void)
         {
             goto __swith_eMBMasterWaitRequestFinish;
         }
-        printf("MODBUS --> eMBMasterWaitRequestFinish --> NO EVENT");
         OS_SendEvent(xMBEventManager_H, recvedEvent, OS_WAIT_FOREVER, OS_EVENT_PRI_NORMAL);
-        OS_Sleep(10);
+        OS_Sleep(1);
     }
 
 /* the enum type couldn't convert to int type */
 __swith_eMBMasterWaitRequestFinish:
+    printf("MODBUS --> eMBMasterWaitRequestFinish");
     switch ((eMBMasterEventType)*recvedEvent)
     {
     case EV_MASTER_ERROR_RESPOND_TIMEOUT:
