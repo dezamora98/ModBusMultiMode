@@ -36,6 +36,8 @@
 /* ----------------------- Variables ----------------------------------------*/
 static HANDLE TimertaskHandle;
 static uint32_t usT35TimeOut50us;
+
+/* ----------------------- static functions ---------------------------------*/
 static void prvvTIMERExpiredISR(void);
 static void timer_timeout_ind(void *parameter);
 
@@ -48,8 +50,8 @@ static void vMBTIMERTask(void *vp)
         OS_Sleep(OS_WAIT_FOREVER);
     }
 }
-/* ----------------------- static functions ---------------------------------*/
-static void prvvTIMERExpiredISR(void);
+
+
 /* ----------------------- Start implementation -----------------------------*/
 bool xMBMasterPortTimersInit(uint16_t usTimeOut50us)
 {

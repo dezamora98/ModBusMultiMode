@@ -24,6 +24,8 @@
 #include "mb.h"
 #include "mbport.h"
 #include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <stdint.h>
 #include "mbconfig.h"
 #include "port.h"
@@ -32,7 +34,6 @@
 #include <api_event.h>
 
 #ifdef MB_SLAVE
-#endif //MB_SLAVE
 #if MB_SLAVE_RTU_ENABLED == 0 || MB_SLAVE_ASCII_ENABLED > 0
 /* ----------------------- Variables ----------------------------------------*/
 static HANDLE xMBEventManager_S = NULL;
@@ -107,3 +108,5 @@ bool xMBPortEventGet(eMBEventType *eEvent)
     return true;
 }
 #endif 
+
+#endif //MB_SLAVE
