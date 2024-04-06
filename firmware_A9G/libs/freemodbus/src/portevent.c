@@ -33,13 +33,13 @@
 #include <api_os.h>
 #include <api_event.h>
 
+#define MB_SLAVE
 #ifdef MB_SLAVE
 #if MB_SLAVE_RTU_ENABLED == 0 || MB_SLAVE_ASCII_ENABLED > 0
 /* ----------------------- Variables ----------------------------------------*/
 static HANDLE xMBEventManager_S = NULL;
 /* ----------------------- local implementation -----------------------------*/
 
-bool xMBPortEventPost(eMBEventType eEvent);
 static void vMBPortEventManager(void *parameter)
 {
     while (true)
@@ -60,7 +60,7 @@ bool xMBPortEventInit( void )
     return false; 
 }
 
-bool xMBMasterPortEventPost(eMBMasterEventType eEvent)
+bool xMPortEventPost(eMBMasterEventType eEvent)
 {
     bool status = false;
     eMBEventType *event = (eMBEventType *)malloc(sizeof(eMBEventType));
