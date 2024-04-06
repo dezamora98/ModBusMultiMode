@@ -21,48 +21,75 @@
 
 /* ----------------------- Modbus includes ----------------------------------*/
 
-
-
 #include "mb.h"
 #include "mbport.h"
 #include <stdbool.h>
 #include <stdint.h>
 #include "mbconfig.h"
+#include "port.h"
+#include <api_inc_os.h> 
+#include <api_os.h>
+#include <api_event.h>
 
 #ifdef MB_SLAVE
+#endif //MB_SLAVE
+#if MB_SLAVE_RTU_ENABLED == 0 || MB_SLAVE_ASCII_ENABLED > 0
 /* ----------------------- Variables ----------------------------------------*/
-static struct rt_event     xSlaveOsEvent;
-/* ----------------------- Start implementation -----------------------------*/
-bool
-xMBPortEventInit( void )
+static HANDLE xMBEventManager_S = NULL;
+/* ----------------------- local implementation -----------------------------*/
+
+bool xMBPortEventPost(eMBEventType eEvent);
+static void vMBPortEventManager(void *parameter)
 {
-    rt_event_init(&xSlaveOsEvent,"slave event",RT_IPC_FLAG_PRIO);
-    return true;
+    while (true)
+    {
+        OS_Sleep(OS_WAIT_FOREVER);
+    }
+}
+/* ----------------------- start implementation -----------------------------*/
+bool xMBPortEventInit( void )
+{
+   xMBEventManager_S = OS_CreateTask(vMBPortEventManager, NULL, NULL, 2048, MAX_TASK_PR, 0, 0, "MB_EventManager");
+    
+    if (xMBEventManager_S != NULL)
+    {
+        printf("MODBUS-EVENT-->EVENT_MANAGER_INIT");
+        return true;
+    }
+    return false; 
 }
 
-bool
-xMBPortEventPost( eMBEventType eEvent )
+bool xMBMasterPortEventPost(eMBMasterEventType eEvent)
 {
-    rt_event_send(&xSlaveOsEvent, eEvent);
-    return true;
+    bool status = false;
+    eMBEventType *event = (eMBEventType *)malloc(sizeof(eMBEventType));
+    if (!event)
+    {
+        printf("MMB no memory");
+        return false;
+    }
+    *event = eEvent;
+    status = OS_SendEvent(xMBEventManager_S, event, OS_WAIT_FOREVER, OS_EVENT_PRI_NORMAL);
+    printf("MODBUS-EVENT-POST--> Status(%s)  Event(%d) ", status ? "true" : "false", (int)eEvent);
+    return status;
 }
 
-bool
-xMBPortEventGet( eMBEventType * eEvent )
+bool xMBPortEventGet(eMBEventType *eEvent)
 {
-    rt_uint32_t recvedEvent;
-    /* waiting forever OS event */
-    rt_event_recv(&xSlaveOsEvent,
-            EV_READY | EV_FRAME_RECEIVED | EV_EXECUTE | EV_FRAME_SENT,
-            RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, RT_WAITING_FOREVER,
-            &recvedEvent);
-    switch (recvedEvent)
+    eMBEventType *recvedEvent = NULL;
+
+    OS_WaitEvent(xMBEventManager_S, (void **)&recvedEvent, OS_WAIT_FOREVER);
+    if ((*recvedEvent & (EV_READY | EV_FRAME_RECEIVED | EV_EXECUTE |
+                         EV_FRAME_SENT)) == 0)
+    {
+        printf("MODBUS-->NO EVENT");
+        return false;
+    }
+    /* the enum type couldn't convert to int type */
+    switch (*recvedEvent)
     {
     case EV_READY:
         *eEvent = EV_READY;
-        break;
-    case EV_FRAME_RECEIVED:
-        *eEvent = EV_FRAME_RECEIVED;
         break;
     case EV_EXECUTE:
         *eEvent = EV_EXECUTE;
@@ -70,8 +97,13 @@ xMBPortEventGet( eMBEventType * eEvent )
     case EV_FRAME_SENT:
         *eEvent = EV_FRAME_SENT;
         break;
+    case EV_FRAME_RECEIVED:
+        *eEvent = EV_FRAME_RECEIVED;
+    default:
+        break;
     }
+
+    free(recvedEvent);
     return true;
 }
-
-#endif //MB_SLAVE
+#endif 
