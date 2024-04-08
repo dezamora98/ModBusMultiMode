@@ -229,7 +229,7 @@ eMBMasterEnable(void)
         eStatus = MB_EILLSTATE;
     }
 
-    //xMBMasterPortEventPost(EV_MASTER_FRAME_RECEIVED);
+    xMBMasterPortEventPost(EV_MASTER_FRAME_RECEIVED);
 
     return eStatus;
 }
@@ -293,7 +293,6 @@ eMBMasterPoll(void)
     
     if (xMBMasterPortEventGet(&eEvent) == true)
     {
-        printf("MODBUS-->eEvent(%d)",eEvent);
         switch (eEvent)
         {
         case EV_MASTER_READY:
@@ -370,7 +369,6 @@ eMBMasterPoll(void)
 
         case EV_MASTER_FRAME_SENT:
             /* Master is busy now. */
-            printf("MODBUS-->MASTER--SENT");
             vMBMasterGetPDUSndBuf(&ucMBFrame);
             eStatus = peMBMasterFrameSendCur(ucMBMasterGetDestAddress(), ucMBFrame, usMBMasterGetPDUSndLength());
             break;

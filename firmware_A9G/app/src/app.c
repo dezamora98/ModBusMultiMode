@@ -32,14 +32,14 @@ void app(void *pData)
     eMBState = eMBMasterEnable();
     printf("MODBUS-->MASTER_ENABLE--STATE(%d)", (int)eMBState);
 
-    tid1 = OS_CreateTask(mb_master_poll, NULL, NULL, 2048*2, MAX_TASK_PR+1, 0, 0, "mb_master_pull");
+    tid1 = OS_CreateTask(mb_master_poll, NULL, NULL, 2048 * 2, MAX_TASK_PR, 0, 0, "mb_master_pull");
     if (tid1 == NULL)
     {
         printf("ERROR->tareas no creadas");
         return;
     }
 
-    tid2 = OS_CreateTask(send_thread_entry, NULL, NULL, 2048, MAX_TASK_PR+1, 0, 0, "mb_master_pull");
+    tid2 = OS_CreateTask(send_thread_entry, NULL, NULL, 2048, MAX_TASK_PR + 1, 0, 0, "mb_master_pull");
     if (tid2 == NULL)
     {
         printf("ERROR->tareas no creadas");
@@ -56,6 +56,8 @@ static void send_thread_entry(void *parameter)
 {
     eMBMasterReqErrCode error_code = MB_MRE_NO_ERR;
     uint16_t data[MB_SEND_REG_NUM] = {0};
+    uint16_t data2[MB_SEND_REG_NUM] = {0};
+    eMBMasterRegHoldingCB((uint8_t *)(&data2[0]), MB_SEND_REG_START, MB_SEND_REG_NUM, MB_REG_WRITE);
 
     OS_Sleep(5000);
 
@@ -72,7 +74,10 @@ static void send_thread_entry(void *parameter)
                                                               MB_SEND_REG_NUM,           /* register total number */
                                                               data,                      /* data to be written */
                                                               OS_TIME_OUT_WAIT_FOREVER); /* timeout */
-
+        printf("MODBUS --> leyendo datos de registros");
+        error_code = eMBMasterReqReadHoldingRegister(SLAVE_ADDR, MB_SEND_REG_START, MB_SEND_REG_NUM, OS_WAIT_FOREVER);
+        eMBMasterRegHoldingCB((uint8_t *)(&data2[0]), MB_SEND_REG_START, MB_SEND_REG_NUM, MB_REG_WRITE);
+        printf("Registros  = %d, %d", data2[0], data2[1]);
         /* Record the number of errors */
         printf("MODBUS-ERROR --> %d", (int)error_code);
         OS_Sleep(100);
@@ -86,7 +91,7 @@ static void mb_master_poll(void *parameter)
     while (true)
     {
         eCode = (int)eMBMasterPoll();
-        //printf("MODBUS-POLL_eCODE --> %d", eCode);
-        OS_Sleep(5);
+        printf("MODBUS-POLL_eCODE --> %d", eCode);
+        OS_Sleep(50);
     }
 }

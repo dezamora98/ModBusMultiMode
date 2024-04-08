@@ -143,10 +143,8 @@ void eMBMasterRTUStart(void)
      */
     eRcvState = STATE_M_RX_INIT;
     vMBMasterPortSerialEnable(true, false);
-    printf("MODBUS --> vMBMasterPortSerialEnable");
 
     vMBMasterPortTimersT35Enable();
-    printf("MODBUS --> vMBMasterPortTimersT35Enable");
 
     EXIT_CRITICAL_SECTION();
 }
@@ -303,7 +301,6 @@ bool xMBMasterRTUReceiveFSM(void)
 bool xMBMasterRTUTransmitFSM(void)
 {
     bool xNeedPoll = false;
-
     assert(eRcvState == STATE_M_RX_IDLE);
 
     switch (eSndState)
@@ -322,6 +319,7 @@ bool xMBMasterRTUTransmitFSM(void)
             xMBMasterPortSerialPutByte((char)*pucMasterSndBufferCur);
             pucMasterSndBufferCur++; /* next byte in sendbuffer. */
             usMasterSndBufferCount--;
+            xNeedPoll = true;   // ----->>>new
         }
         else
         {
@@ -340,6 +338,7 @@ bool xMBMasterRTUTransmitFSM(void)
             {
                 vMBMasterPortTimersRespondTimeoutEnable();
             }
+            xNeedPoll = false; // ----->>>new
         }
         break;
 
