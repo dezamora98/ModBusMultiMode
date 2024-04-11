@@ -49,6 +49,9 @@ PR_BEGIN_EXTERN_C
 /*! \addtogroup modbus_cfg
  *  @{
  */
+
+#define MB_POLL_CYCLE_MS                          100
+
 /*! \brief If Modbus Master ASCII support is enabled. */
 #define MB_MASTER_ASCII_ENABLED                 (  0 )
 /*! \brief If Modbus Master RTU support is enabled. */

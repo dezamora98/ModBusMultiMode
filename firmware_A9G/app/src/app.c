@@ -6,6 +6,7 @@
 #include <api_os.h>
 #include "mb.h"
 #include "mb_m.h"
+#include "portothers.h"
 
 #define SLAVE_ADDR 0x01
 #define PORT_NUM UART1
@@ -15,49 +16,26 @@
 #define MB_SEND_REG_START 2
 #define MB_SEND_REG_NUM 2
 
-#define MB_POLL_CYCLE_MS 500
-HANDLE tid1 = NULL, tid2 = NULL;
-
-static void send_thread_entry(void *parameter);
-static void mb_master_poll(void *parameter);
+void modbus_task(void *vp);
 
 void app(void *pData)
 {
-    eMBErrorCode eMBState;
-
     waitSystemReady();
     printf("INIT APP");
-    eMBState = eMBMasterInit(MB_RTU, PORT_NUM, PORT_BAUDRATE, PORT_PARITY);
-    printf("MODBUS-->MASTER_INIT--STATE(%d)", (int)eMBState);
-    eMBState = eMBMasterEnable();
-    printf("MODBUS-->MASTER_ENABLE--STATE(%d)", (int)eMBState);
 
-    tid1 = OS_CreateTask(mb_master_poll, NULL, NULL, 2048 * 2, MAX_TASK_PR, 0, 0, "mb_master_pull");
-    if (tid1 == NULL)
-    {
-        printf("ERROR->tareas no creadas");
-        return;
-    }
+    xMBMasterStart(MB_RTU, PORT_NUM, PORT_BAUDRATE, PORT_PARITY);
 
-    tid2 = OS_CreateTask(send_thread_entry, NULL, NULL, 2048, MAX_TASK_PR + 1, 0, 0, "mb_master_pull");
-    if (tid2 == NULL)
-    {
-        printf("ERROR->tareas no creadas");
-        return;
-    }
+    OS_CreateTask(modbus_task, NULL, NULL, 2048, MAX_TASK_PR+1, 0, 0, "modbus_task");
 
     while (true)
-    {
         OS_Sleep(OS_WAIT_FOREVER);
-    }
 }
 
-static void send_thread_entry(void *parameter)
+void modbus_task(void *vp)
 {
     eMBMasterReqErrCode error_code = MB_MRE_NO_ERR;
     uint16_t data[MB_SEND_REG_NUM] = {0};
-    uint16_t data2[MB_SEND_REG_NUM] = {0};
-    eMBMasterRegHoldingCB((uint8_t *)(&data2[0]), MB_SEND_REG_START, MB_SEND_REG_NUM, MB_REG_WRITE);
+    eMBMasterRegHoldingCB((uint8_t *)(data), MB_SEND_REG_START, MB_SEND_REG_NUM, MB_REG_WRITE);
 
     OS_Sleep(5000);
 
@@ -69,23 +47,12 @@ static void send_thread_entry(void *parameter)
         data[1] = (uint16_t)(30);
 
         printf("MODBUS --> Enviando datos a registros");
-        error_code = eMBMasterReqWriteMultipleHoldingRegister(SLAVE_ADDR,                /* salve address */
-                                                              MB_SEND_REG_START,         /* register start address */
-                                                              MB_SEND_REG_NUM,           /* register total number */
-                                                              data,                      /* data to be written */
-                                                              10); /* timeout */
+        error_code = eMBMasterReqWriteMultipleHoldingRegister(SLAVE_ADDR,        /* salve address */
+                                                              MB_SEND_REG_START, /* register start address */
+                                                              MB_SEND_REG_NUM,   /* register total number */
+                                                              data,              /* data to be written */
+                                                              OS_WAIT_FOREVER);  /* timeout */
         printf("MODBUS-ERROR --> %d", (int)error_code);
         OS_Sleep(1000);
-    }
-}
-
-static void mb_master_poll(void *parameter)
-{
-    int eCode = 0;
-    printf("MODBUS--START-->MASTER_POLL");
-    while (true)
-    {
-        eCode = (int)eMBMasterPoll();
-        OS_Sleep(1);
     }
 }
