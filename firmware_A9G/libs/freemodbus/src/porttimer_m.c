@@ -78,7 +78,6 @@ void vMBMasterPortTimersT35Enable()
     /* Set current timer mode, don't change it.*/
     vMBMasterSetCurTimerMode(MB_TMODE_T35);
     OS_StartCallbackTimer(TimertaskHandle, TMR_T35, prvvTIMERExpiredISR, &TMR_T35);
-    printf("MODBUS --> vMBMasterPortTimersT35Enable");
 }
 
 void vMBMasterPortTimersConvertDelayEnable()

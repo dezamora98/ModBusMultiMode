@@ -74,7 +74,6 @@ bool xMBMasterPortEventPost(eMBMasterEventType eEvent)
     eMBMasterEventType *event = (eMBMasterEventType *)malloc(sizeof(eMBMasterEventType));
     if (!event)
     {
-        printf("MMB no memory");
         return false;
     }
     *event = eEvent;
@@ -85,11 +84,8 @@ bool xMBMasterPortEventPost(eMBMasterEventType eEvent)
 bool xMBMasterPortEventGet(eMBMasterEventType *eEvent)
 {
     eMBMasterEventType *recvedEvent = NULL;
-    printf("esperando evento");
     OS_WaitEvent(xMBEventManager_H, (void **)&recvedEvent, OS_WAIT_FOREVER);
-    printf("evento = %d",(int)*recvedEvent);
     /* the enum type couldn't convert to int type */
-
     *eEvent = *recvedEvent;
     free(recvedEvent);
     return true;

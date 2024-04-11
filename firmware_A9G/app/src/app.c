@@ -73,14 +73,9 @@ static void send_thread_entry(void *parameter)
                                                               MB_SEND_REG_START,         /* register start address */
                                                               MB_SEND_REG_NUM,           /* register total number */
                                                               data,                      /* data to be written */
-                                                              OS_TIME_OUT_WAIT_FOREVER); /* timeout */
-        printf("MODBUS --> leyendo datos de registros");
-        error_code = eMBMasterReqReadHoldingRegister(SLAVE_ADDR, MB_SEND_REG_START, MB_SEND_REG_NUM, OS_WAIT_FOREVER);
-        eMBMasterRegHoldingCB((uint8_t *)(&data2[0]), MB_SEND_REG_START, MB_SEND_REG_NUM, MB_REG_WRITE);
-        printf("Registros  = %d, %d", data2[0], data2[1]);
-        /* Record the number of errors */
+                                                              10); /* timeout */
         printf("MODBUS-ERROR --> %d", (int)error_code);
-        OS_Sleep(100);
+        OS_Sleep(1000);
     }
 }
 
@@ -91,7 +86,6 @@ static void mb_master_poll(void *parameter)
     while (true)
     {
         eCode = (int)eMBMasterPoll();
-        printf("MODBUS-POLL_eCODE --> %d", eCode);
-        OS_Sleep(50);
+        OS_Sleep(1);
     }
 }

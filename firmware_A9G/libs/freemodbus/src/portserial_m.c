@@ -25,8 +25,6 @@
 
 #if MB_MASTER_RTU_ENABLED > 0 || MB_MASTER_ASCII_ENABLED > 0
 /* ----------------------- Static variables ---------------------------------*/
-/* software simulation serial transmit IRQ handler thread */
-static HANDLE prvvUARTTxReadyISR_H;
 
 // #define MODBUS_MASTER_CONTROL_PIN_INDEX GPIO_PIN10
 // #define MODBUS_MASTER_USE_CONTROL_PIN
@@ -36,11 +34,11 @@ static HANDLE prvvUARTTxReadyISR_H;
 #define EVENT_SERIAL_TRANS_START (1 << 0)
 
 /* ----------------------- static functions ---------------------------------*/
-static void prvvUARTTxReadyISR(void *parameter);
 static void prvvUARTRxISR(UART_Callback_Param_t param);
 
 static UART_Config_t CONFIG_UART;
 static UART_Port_t MB_UART;
+static char *i_RxBuffer;
 
 /* ----------------------- Start implementation -----------------------------*/
 bool xMBMasterPortSerialInit(uint8_t ucPort, uint32_t ulBaudRate, uint8_t ucDataBits, eMBParity eParity)
@@ -69,20 +67,16 @@ bool xMBMasterPortSerialInit(uint8_t ucPort, uint32_t ulBaudRate, uint8_t ucData
 
     UART_Init(MB_UART, CONFIG_UART);
 
-    // printf("creando interrupción de transmición por software");
-    prvvUARTTxReadyISR_H = OS_CreateTask(prvvUARTTxReadyISR, NULL, NULL, 2048, MAX_TASK_PR, 0, 0, "MMB-TX");
-    // printf("interrupción de transmición por software creada");
     return true;
 }
 
 void vMBMasterPortSerialEnable(bool xRxEnable, bool xTxEnable)
 {
-    //static eMBMasterEventType *event = NULL;
+    // static eMBMasterEventType *event = NULL;
 
     if (xRxEnable)
     {
         /* enable RX interrupt */
-        CONFIG_UART.useEvent = true;
         /* switch 485 to receive mode */
 #if defined(MODBUS_MASTER_USE_CONTROL_PIN)
         GPIO_Set(MODBUS_MASTER_CONTROL_PIN_INDEX, GPIO_LEVEL_LOW);
@@ -91,31 +85,19 @@ void vMBMasterPortSerialEnable(bool xRxEnable, bool xTxEnable)
     }
     else
     {
+        /* disable RX interrupt */
         /* switch 485 to transmit mode */
 #if defined(MODBUS_MASTER_USE_CONTROL_PIN)
         GPIO_Set(MODBUS_MASTER_CONTROL_PIN_INDEX, GPIO_LEVEL_HIGH);
 #endif
-        /* disable RX interrupt */
-        CONFIG_UART.useEvent = false;
         UART_Init(MB_UART, CONFIG_UART);
     }
     if (xTxEnable)
     {
         /* start serial transmit */
-        while(pxMBMasterFrameCBTransmitterEmpty());
-        //event = (eMBMasterEventType *)malloc(sizeof(eMBMasterEventType));
-        //*event = EVENT_SERIAL_TRANS_START;
-        //OS_SendEvent(prvvUARTTxReadyISR_H, event, OS_TIME_OUT_WAIT_FOREVER, OS_EVENT_PRI_NORMAL);
+        while (pxMBMasterFrameCBTransmitterEmpty())
+            ;
     }
-   // else
-   // {
-   //     /* stop serial transmit */
-   //     if (OS_IsEventAvailable(prvvUARTTxReadyISR_H))
-   //     {
-   //         OS_WaitEvent(prvvUARTTxReadyISR_H, (void **)&event, OS_WAIT_FOREVER);
-   //     }
-   //     free(event);
-   // }
 }
 
 void vMBMasterPortClose(void)
@@ -136,33 +118,8 @@ bool xMBMasterPortSerialPutByte(char ucByte)
 
 bool xMBMasterPortSerialGetByte(char *pucByte)
 {
-    UART_Read(MB_UART, pucByte, 1, 1);
+    *pucByte = *i_RxBuffer;
     return true;
-}
-
-/*
- * Create an interrupt handler for the transmit buffer empty interrupt
- * (or an equivalent) for your target processor. This function should then
- * call pxMBFrameCBTransmitterEmpty( ) which tells the protocol stack that
- * a new character can be sent. The protocol stack will then call
- * xMBPortSerialPutByte( ) to send the character.
- */
-static void prvvUARTTxReadyISR(void *parameter)
-{
-    eMBMasterEventType *recved_event = NULL;
-    printf("MODBUS-->prvvUARTTxReadyISR");
-
-    while (true)
-    {
-        /* waiting for serial transmit start */
-        if (OS_WaitEvent(prvvUARTTxReadyISR_H, (void **)&recved_event, OS_WAIT_FOREVER))
-        {
-            /* execute modbus callback */
-            if (*recved_event == EVENT_SERIAL_TRANS_START) // --Este es el único evento que tiene prvvUARTTxReadyISR_H por lo que no le veo sentido
-                pxMBMasterFrameCBTransmitterEmpty();
-            free(recved_event);
-        }
-    }
 }
 
 /*
@@ -173,7 +130,18 @@ static void prvvUARTTxReadyISR(void *parameter)
  */
 void prvvUARTRxISR(UART_Callback_Param_t param)
 {
-    pxMBMasterFrameCBByteReceived();
+    uint32_t i = 0;
+    char buffer[param.length + 1];
+    printf("prvvUARTRxISR");
+    memcpy(buffer, param.buf, param.length);
+    if (param.port == MB_UART)
+    {
+        for (i = 0; i != param.length; ++i)
+        {
+            i_RxBuffer = param.buf + i;
+            pxMBMasterFrameCBByteReceived();
+        }
+    }
 }
 
 #endif

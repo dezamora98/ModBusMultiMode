@@ -16,7 +16,6 @@ void waitSystemReady(void)
     {
         OS_Sleep(10);
     }
-    
 }
 
 static void GPIO_SYS_blink(GPIO_PIN pin, uint32_t ms)
@@ -76,7 +75,6 @@ void EventDispatch(API_Event_t *pEvent)
     {
         break; // param1: (PM_Charger_State_t<<16|charge_level(%)) , param2: (PM_Battery_State_t<<16|battery_voltage(mV))
     }
-
 
     // keypad
 #ifdef __API_KEY_H
@@ -208,5 +206,5 @@ void EventDispatch(API_Event_t *pEvent)
 
     default:
         break;
-    }    
+    }
 }
