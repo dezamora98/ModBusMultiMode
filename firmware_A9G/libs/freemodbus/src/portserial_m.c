@@ -131,7 +131,6 @@ bool xMBMasterPortSerialGetByte(char *pucByte)
 void prvvUARTRxISR(UART_Callback_Param_t param)
 {
     uint32_t i = 0;
-    printf("prvvUARTRxISR");
     if (param.port == MB_UART)
     {
         for (i = 0; i != param.length; ++i)

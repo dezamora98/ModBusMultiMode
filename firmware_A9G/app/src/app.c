@@ -6,7 +6,6 @@
 #include <api_os.h>
 #include "mb.h"
 #include "mb_m.h"
-#include "portothers.h"
 
 #define SLAVE_ADDR 0x01
 #define PORT_NUM UART1
@@ -16,23 +15,21 @@
 #define MB_SEND_REG_START 2
 #define MB_SEND_REG_NUM 2
 
-void modbus_task(void *vp);
-
 void app(void *pData)
 {
     waitSystemReady();
     printf("INIT APP");
 
-    xMBMasterStart(MB_RTU, PORT_NUM, PORT_BAUDRATE, PORT_PARITY);
+    eMBErrorCode eMBState = eMBMasterInit(MB_RTU, PORT_NUM, PORT_BAUDRATE, PORT_PARITY);
+    printf("MODBUS-->MASTER_INIT--STATE(%d)", (int)eMBState);
+    if (eMBState != MB_ENOERR)
+        return;
 
-    OS_CreateTask(modbus_task, NULL, NULL, 2048, MAX_TASK_PR+1, 0, 0, "modbus_task");
+    eMBState = eMBMasterEnable();
+    printf("MODBUS-->MASTER_ENABLE--STATE(%d)", (int)eMBState);
+    if (eMBState != MB_ENOERR)
+        return;
 
-    while (true)
-        OS_Sleep(OS_WAIT_FOREVER);
-}
-
-void modbus_task(void *vp)
-{
     eMBMasterReqErrCode error_code = MB_MRE_NO_ERR;
     uint16_t data[MB_SEND_REG_NUM] = {0};
     eMBMasterRegHoldingCB((uint8_t *)(data), MB_SEND_REG_START, MB_SEND_REG_NUM, MB_REG_WRITE);

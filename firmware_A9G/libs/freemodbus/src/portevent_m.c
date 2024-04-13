@@ -38,23 +38,28 @@
 
 /* ----------------------- Defines ------------------------------------------*/
 /* ----------------------- Variables ----------------------------------------*/
-static HANDLE xMBEventManager_H = NULL;
+static eMBMasterReqErrCode eErrStatus = MB_MRE_NO_ERR;
+static HANDLE vMBMasterEventTaskHandle = NULL;
 static HANDLE xMasterRunRes = NULL;
-/* ---------------------------local implementation---------------------------*/
-bool xMBMasterPortEventPost(eMBMasterEventType eEvent);
-static void vMBMastertPortEventManager(void *parameter)
+static HANDLE xRequestFinish = NULL;
+/*-----------------------------static----------------------------------------*/
+
+
+static void vMBMasterEventTask(void *parameter)
 {
     while (true)
     {
-        OS_Sleep(OS_WAIT_FOREVER);
+        eMBMasterPoll();
     }
 }
 
 /* ----------------------- Start implementation -----------------------------*/
 bool xMBMasterPortEventInit(void)
 {
-    xMBEventManager_H = OS_CreateTask(vMBMastertPortEventManager, NULL, NULL, 2048, MAX_TASK_PR + 2, 0, 0, "MB_EventManager");
-    if (xMBEventManager_H != NULL)
+    vMBMasterEventTaskHandle = OS_CreateTask(vMBMasterEventTask, NULL, NULL, 2048, MAX_TASK_PR + 1, 0, 0, "vMBMasterEventTaskHandle");
+
+
+    if (vMBMasterEventTaskHandle != NULL)
     {
         printf("MODBUS-EVENT-->EVENT_MANAGER_INIT");
         return true;
@@ -71,22 +76,24 @@ bool xMBMasterPortEventInit(void)
 bool xMBMasterPortEventPost(eMBMasterEventType eEvent)
 {
     bool status = false;
-    eMBMasterEventType *event = (eMBMasterEventType *)malloc(sizeof(eMBMasterEventType));
+    API_Event_t *event = (API_Event_t *)malloc(sizeof(API_Event_t));
     if (!event)
     {
         return false;
     }
-    *event = eEvent;
-    status = OS_SendEvent(xMBEventManager_H, event, OS_WAIT_FOREVER, OS_EVENT_PRI_NORMAL);
+    event->id = eEvent;
+    status = OS_SendEvent(vMBMasterEventTaskHandle, event, OS_WAIT_FOREVER, OS_EVENT_PRI_NORMAL);
     return status;
 }
 
 bool xMBMasterPortEventGet(eMBMasterEventType *eEvent)
 {
-    eMBMasterEventType *recvedEvent = NULL;
-    OS_WaitEvent(xMBEventManager_H, (void **)&recvedEvent, OS_WAIT_FOREVER);
+    API_Event_t *recvedEvent = NULL;
+    OS_WaitEvent(vMBMasterEventTaskHandle, (void **)&recvedEvent, OS_WAIT_FOREVER);
     /* the enum type couldn't convert to int type */
-    *eEvent = *recvedEvent;
+    *eEvent = (eMBMasterEventType)recvedEvent->id;
+    free(recvedEvent->pParam2);
+    free(recvedEvent->pParam1);
     free(recvedEvent);
     return true;
 }
@@ -98,7 +105,9 @@ bool xMBMasterPortEventGet(eMBMasterEventType *eEvent)
  */
 void vMBMasterOsResInit(void)
 {
+    // OS_StartCallbackTimer(OS_GetUserMainHandle(), MB_POLL_CYCLE_MS, tMBMasterPoll, NULL);
     xMasterRunRes = OS_CreateSemaphore(1);
+    xRequestFinish = OS_CreateSemaphore(0);
 }
 
 /**
@@ -125,7 +134,6 @@ void vMBMasterRunResRelease(void)
     /* release resource */
     OS_ReleaseSemaphore(xMasterRunRes);
 }
-
 /**
  * This is modbus master respond timeout error process callback function.
  * @note There functions will block modbus master poll while execute OS waiting.
@@ -143,9 +151,8 @@ void vMBMasterErrorCBRespondTimeout(uint8_t ucDestAddress, const uint8_t *pucPDU
      * @note This code is use OS's event mechanism for modbus master protocol stack.
      * If you don't use OS, you can change it.
      */
-
-    xMBMasterPortEventPost(EV_MASTER_ERROR_RESPOND_TIMEOUT);
-
+    eErrStatus = MB_MRE_TIMEDOUT;
+    OS_ReleaseSemaphore(xRequestFinish);
     /* You can add your code under here. */
     printf("MB_MASTER -> EV_MASTER_ERROR_RESPOND_TIMEOUT:\n");
 }
@@ -167,7 +174,8 @@ void vMBMasterErrorCBReceiveData(uint8_t ucDestAddress, const uint8_t *pucPDUDat
      * @note This code is use OS's event mechanism for modbus master protocol stack.
      * If you don't use OS, you can change it.
      */
-    xMBMasterPortEventPost(EV_MASTER_ERROR_RECEIVE_DATA);
+    eErrStatus = MB_MRE_REV_DATA;
+    OS_ReleaseSemaphore(xRequestFinish);
     /* You can add your code under here. */
     printf("MB_MASTER -> EV_MASTER_ERROR_RECEIVE_DATA:\n");
 }
@@ -189,7 +197,8 @@ void vMBMasterErrorCBExecuteFunction(uint8_t ucDestAddress, const uint8_t *pucPD
      * @note This code is use OS's event mechanism for modbus master protocol stack.
      * If you don't use OS, you can change it.
      */
-    xMBMasterPortEventPost(EV_MASTER_ERROR_EXECUTE_FUNCTION);
+    eErrStatus = MB_MRE_EXE_FUN;
+    OS_ReleaseSemaphore(xRequestFinish);
     /* You can add your code under here. */
     printf("MB_MASTER -> EV_MASTER_ERROR_EXECUTE_FUNCTION:\n");
 }
@@ -206,7 +215,8 @@ void vMBMasterCBRequestScuuess(void)
      * @note This code is use OS's event mechanism for modbus master protocol stack.
      * If you don't use OS, you can change it.
      */
-    xMBMasterPortEventPost(EV_MASTER_PROCESS_SUCESS);
+    eErrStatus = MB_MRE_NO_ERR;
+    OS_ReleaseSemaphore(xRequestFinish);
     /* You can add your code under here. */
     printf("MB_MASTER -> EV_MASTER_PROCESS_SUCESS:\n");
 }
@@ -222,28 +232,7 @@ void vMBMasterCBRequestScuuess(void)
  */
 eMBMasterReqErrCode eMBMasterWaitRequestFinish(void)
 {
-    eMBMasterReqErrCode eErrStatus = MB_MRE_NO_ERR;
-    eMBMasterEventType *recvedEvent = NULL;
-
-    OS_WaitEvent(xMBEventManager_H, (void **)&recvedEvent, OS_WAIT_FOREVER);
-
-    switch ((eMBMasterEventType)*recvedEvent)
-    {
-    case EV_MASTER_ERROR_RESPOND_TIMEOUT:
-        eErrStatus = MB_MRE_TIMEDOUT;
-        break;
-    case EV_MASTER_ERROR_RECEIVE_DATA:
-        eErrStatus = MB_MRE_REV_DATA;
-        break;
-    case EV_MASTER_ERROR_EXECUTE_FUNCTION:
-        eErrStatus = MB_MRE_EXE_FUN;
-        break;
-    case EV_MASTER_PROCESS_SUCESS:
-    default:
-        break;
-    }
-
-    free(recvedEvent);
+    OS_WaitForSemaphore(xRequestFinish, OS_WAIT_FOREVER);
     return eErrStatus;
 }
 

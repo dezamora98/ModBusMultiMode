@@ -92,12 +92,12 @@ static pvMBFrameClose pvMBMasterFrameCloseCur;
  * or transmission of a character.
  * Using for Modbus Master,Add by Armink 20130813
  */
-bool(*pxMBMasterFrameCBByteReceived) (void);
-bool(*pxMBMasterFrameCBTransmitterEmpty) (void);
-bool(*pxMBMasterPortCBTimerExpired) (void);
+bool (*pxMBMasterFrameCBByteReceived)(void);
+bool (*pxMBMasterFrameCBTransmitterEmpty)(void);
+bool (*pxMBMasterPortCBTimerExpired)(void);
 
-bool(*pxMBMasterFrameCBReceiveFSMCur) (void);
-bool(*pxMBMasterFrameCBTransmitFSMCur) (void);
+bool (*pxMBMasterFrameCBReceiveFSMCur)(void);
+bool (*pxMBMasterFrameCBTransmitFSMCur)(void);
 
 /* An array of Modbus functions handlers which associates Modbus function
  * codes with implementing functions.
@@ -290,7 +290,7 @@ eMBMasterPoll(void)
 
     /* Check if there is a event available. If not return control to caller.
      * Otherwise we will handle the event. */
-    
+
     if (xMBMasterPortEventGet(&eEvent) == true)
     {
         switch (eEvent)
@@ -351,7 +351,7 @@ eMBMasterPoll(void)
                         }
                         vMBMasterSetCBRunInMasterMode(false);
                         break;
-                    }    
+                    }
                 }
             }
             /* If master has exception ,Master will send error process.Otherwise the Master is idle.*/

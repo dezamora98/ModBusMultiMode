@@ -201,7 +201,7 @@ eMBMasterReqWriteMultipleHoldingRegister(uint8_t ucSndAddr,
         }
         vMBMasterSetPDUSndLength(MB_PDU_SIZE_MIN + MB_PDU_REQ_WRITE_MUL_SIZE_MIN + 2 * usNRegs);
         (void)xMBMasterPortEventPost(EV_MASTER_FRAME_SENT);
-        eErrStatus = eMBMasterWaitRequestFinish();
+        eErrStatus = eMBMasterWaitRequestFinish( );
     }
     return eErrStatus;
 }
