@@ -38,28 +38,32 @@
 
 /* ----------------------- Defines ------------------------------------------*/
 /* ----------------------- Variables ----------------------------------------*/
-static HANDLE xMBEventManager_H = NULL;
-static HANDLE xMasterRunRes = NULL;
-/* ---------------------------local implementation---------------------------*/
-bool xMBMasterPortEventPost(eMBMasterEventType eEvent);
-static void vMBMastertPortEventManager(void *parameter)
+
+// #define mb_Bussy false
+// #define mb_Free true
+//
+// static bool mb_state = mb_Free;
+
+#define SIZE_MasterEventQueue 20
+
+typedef struct
 {
-    while (true)
-    {
-        OS_Sleep(OS_WAIT_FOREVER);
-    }
-}
+    HANDLE mutex;
+    eMBMasterEventType items[SIZE_MasterEventQueue];
+    uint32_t front;
+    uint32_t rear;
+} MasterEventQueue_t;
+
+static HANDLE xMasterRunRes = NULL;
+volatile MasterEventQueue_t xMasterEventQueue;
 
 /* ----------------------- Start implementation -----------------------------*/
 bool xMBMasterPortEventInit(void)
 {
-    xMBEventManager_H = OS_CreateTask(vMBMastertPortEventManager, NULL, NULL, 2048, MAX_TASK_PR + 2, 0, 0, "MB_EventManager");
-    if (xMBEventManager_H != NULL)
-    {
-        printf("MODBUS-EVENT-->EVENT_MANAGER_INIT");
-        return true;
-    }
-    return false;
+    xMasterEventQueue.mutex = OS_CreateMutex(); // Asume que OS_CreateSemaphore crea un semáforo
+    xMasterEventQueue.front = 0;
+    xMasterEventQueue.rear = 0;
+    return (xMasterEventQueue.mutex != NULL);
 }
 
 /**
@@ -70,24 +74,35 @@ bool xMBMasterPortEventInit(void)
  */
 bool xMBMasterPortEventPost(eMBMasterEventType eEvent)
 {
-    bool status = false;
-    eMBMasterEventType *event = (eMBMasterEventType *)malloc(sizeof(eMBMasterEventType));
-    if (!event)
+    OS_LockMutex(xMasterEventQueue.mutex);
+    if ((xMasterEventQueue.rear + 1) % SIZE_MasterEventQueue == xMasterEventQueue.front)
     {
+        OS_UnlockMutex(xMasterEventQueue.mutex);
         return false;
     }
-    *event = eEvent;
-    status = OS_SendEvent(xMBEventManager_H, event, OS_WAIT_FOREVER, OS_EVENT_PRI_NORMAL);
-    return status;
+
+    xMasterEventQueue.rear = (xMasterEventQueue.rear + 1) % SIZE_MasterEventQueue;
+    xMasterEventQueue.items[xMasterEventQueue.rear] = eEvent;
+    //printf("xMasterEventQueue.items[xMasterEventQueue.rear] = %d", xMasterEventQueue.items[xMasterEventQueue.rear]);
+    OS_UnlockMutex(xMasterEventQueue.mutex);
+    return true;
 }
 
 bool xMBMasterPortEventGet(eMBMasterEventType *eEvent)
 {
-    eMBMasterEventType *recvedEvent = NULL;
-    OS_WaitEvent(xMBEventManager_H, (void **)&recvedEvent, OS_WAIT_FOREVER);
-    /* the enum type couldn't convert to int type */
-    *eEvent = *recvedEvent;
-    free(recvedEvent);
+    OS_LockMutex(xMasterEventQueue.mutex);
+
+    if (xMasterEventQueue.front == xMasterEventQueue.rear)
+    {
+        OS_UnlockMutex(xMasterEventQueue.mutex);
+        printf("no hay eventos");
+        return false;
+    }
+
+    xMasterEventQueue.front = (xMasterEventQueue.front + 1) % SIZE_MasterEventQueue;
+    *eEvent = xMasterEventQueue.items[xMasterEventQueue.front];
+    printf("xMBMasterPortEventGet-->eEvent = %d", *eEvent);
+    OS_UnlockMutex(xMasterEventQueue.mutex);
     return true;
 }
 
@@ -112,6 +127,7 @@ void vMBMasterOsResInit(void)
 bool xMBMasterRunResTake(uint32_t lTimeOut)
 {
     /*If waiting time is -1 .It will wait forever */
+    printf("walit RES");
     return OS_WaitForSemaphore(xMasterRunRes, lTimeOut);
 }
 
@@ -223,11 +239,11 @@ void vMBMasterCBRequestScuuess(void)
 eMBMasterReqErrCode eMBMasterWaitRequestFinish(void)
 {
     eMBMasterReqErrCode eErrStatus = MB_MRE_NO_ERR;
-    eMBMasterEventType *recvedEvent = NULL;
+    eMBMasterEventType recvedEvent;
 
-    OS_WaitEvent(xMBEventManager_H, (void **)&recvedEvent, OS_WAIT_FOREVER);
+    xMBMasterPortEventGet(&recvedEvent);
 
-    switch ((eMBMasterEventType)*recvedEvent)
+    switch (recvedEvent)
     {
     case EV_MASTER_ERROR_RESPOND_TIMEOUT:
         eErrStatus = MB_MRE_TIMEDOUT;
@@ -243,7 +259,6 @@ eMBMasterReqErrCode eMBMasterWaitRequestFinish(void)
         break;
     }
 
-    free(recvedEvent);
     return eErrStatus;
 }
 

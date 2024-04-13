@@ -36,7 +36,7 @@
 
 #if MB_MASTER_RTU_ENABLED > 0 || MB_MASTER_ASCII_ENABLED > 0
 /* ----------------------- Variables ----------------------------------------*/
-static HANDLE TimertaskHandle;
+// static HANDLE OS_GetUserMainHandle()Handle;
 static uint32_t usT35TimeOut50us;
 
 static uint32_t TMR_T35;
@@ -45,29 +45,10 @@ static uint32_t TMR_TIMEOUT;
 /* ----------------------- static functions ---------------------------------*/
 static void prvvTIMERExpiredISR(void *parameter);
 
-/*------------------------local_implementation-------------------------------*/
-static void vMBTIMERTask(void *vp)
-{
-    API_Event_t *event = NULL;
-
-    printf("MODBUS--> vMBTIMERTask--INIT");
-
-    while (1)
-    {
-        if (OS_WaitEvent(TimertaskHandle, (void **)&event, OS_TIME_OUT_WAIT_FOREVER))
-        {
-            free(event->pParam1);
-            free(event->pParam2);
-            free(event);
-        }
-    }
-}
-
 /* ----------------------- Start implementation -----------------------------*/
 bool xMBMasterPortTimersInit(uint16_t usTimeOut50us)
 {
     /* backup T35 ticks */
-    TimertaskHandle = OS_CreateTask(vMBTIMERTask, NULL, NULL, 2048, MAX_TASK_PR, 0, 0, "MB-Timer");
     usT35TimeOut50us = (uint32_t)(usTimeOut50us);
     return true;
 }
@@ -77,7 +58,7 @@ void vMBMasterPortTimersT35Enable()
     TMR_T35 = (uint32_t)((50 * usT35TimeOut50us) / 1000) + 1;
     /* Set current timer mode, don't change it.*/
     vMBMasterSetCurTimerMode(MB_TMODE_T35);
-    OS_StartCallbackTimer(TimertaskHandle, TMR_T35, prvvTIMERExpiredISR, &TMR_T35);
+    OS_StartCallbackTimer(OS_GetUserMainHandle(), TMR_T35, prvvTIMERExpiredISR, &TMR_T35);
 }
 
 void vMBMasterPortTimersConvertDelayEnable()
@@ -85,7 +66,7 @@ void vMBMasterPortTimersConvertDelayEnable()
     TMR_DELAY = MB_MASTER_DELAY_MS_CONVERT;
     /* Set current timer mode, don't change it.*/
     vMBMasterSetCurTimerMode(MB_TMODE_CONVERT_DELAY);
-    OS_StartCallbackTimer(TimertaskHandle, MB_MASTER_DELAY_MS_CONVERT, prvvTIMERExpiredISR, &TMR_DELAY);
+    OS_StartCallbackTimer(OS_GetUserMainHandle(), MB_MASTER_DELAY_MS_CONVERT, prvvTIMERExpiredISR, &TMR_DELAY);
 }
 
 void vMBMasterPortTimersRespondTimeoutEnable()
@@ -93,19 +74,18 @@ void vMBMasterPortTimersRespondTimeoutEnable()
     TMR_TIMEOUT = MB_TMODE_RESPOND_TIMEOUT;
     /* Set current timer mode, don't change it.*/
     vMBMasterSetCurTimerMode(MB_TMODE_RESPOND_TIMEOUT);
-    OS_StartCallbackTimer(TimertaskHandle, MB_MASTER_TIMEOUT_MS_RESPOND, prvvTIMERExpiredISR, &TMR_TIMEOUT);
+    OS_StartCallbackTimer(OS_GetUserMainHandle(), MB_MASTER_TIMEOUT_MS_RESPOND, prvvTIMERExpiredISR, &TMR_TIMEOUT);
 }
 
 void vMBMasterPortTimersDisable(void)
 {
-    OS_StopCallbackTimer(TimertaskHandle, prvvTIMERExpiredISR, NULL);
+    OS_StopCallbackTimer(OS_GetUserMainHandle(), prvvTIMERExpiredISR, NULL);
 }
 
 void prvvTIMERExpiredISR(void *vp)
 {
     (void)pxMBMasterPortCBTimerExpired();
-    //OS_StartCallbackTimer(TimertaskHandle, *((uint32_t *)vp), prvvTIMERExpiredISR, vp);
-    //printf("TMR reload");
+    // printf("TMR reload");
 }
 
 #endif

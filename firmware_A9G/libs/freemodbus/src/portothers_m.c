@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <api_inc_os.h>
 #include <api_os.h>
+#include <api_event.h>
 
 #include "mb_m.h"
 #include "mb.h"
@@ -10,19 +11,12 @@
 #include "portothers.h"
 #include "user_mb_app.h"
 
-static HANDLE MBMasterPortPollTask_H = NULL;
-
 static void vMBMasterPortPollTask(void *parameter)
 {
-    eMBErrorCode eCode = 0;
-    printf("MODBUS--START-->MASTER_POLL");
-    while (true)
-    {
-        eCode = eMBMasterPoll();
-        if (eCode != MB_ENOERR)
-            printf("MODBUS-->eMBErrorCode(%d)", (int)eCode);
-        OS_Sleep(MB_POLL_CYCLE_MS);
-    }
+    eMBErrorCode eCode = eMBMasterPoll();
+    if (eCode != MB_ENOERR)
+        printf("MODBUS-->eMBErrorCode(%d)", (int)eCode);
+    OS_StartCallbackTimer(OS_GetUserMainHandle(), MB_POLL_CYCLE_MS, vMBMasterPortPollTask, NULL);
 }
 
 bool xMBMasterStart(eMBMode eMode, uint8_t ucPort, uint32_t ulBaudRate, eMBParity eParity)
@@ -33,15 +27,12 @@ bool xMBMasterStart(eMBMode eMode, uint8_t ucPort, uint32_t ulBaudRate, eMBParit
     if (eMBState != MB_ENOERR)
         return false;
 
-
     eMBState = eMBMasterEnable();
     printf("MODBUS-->MASTER_ENABLE--STATE(%d)", (int)eMBState);
     if (eMBState != MB_ENOERR)
         return false;
 
-
-    MBMasterPortPollTask_H = OS_CreateTask(vMBMasterPortPollTask, NULL, NULL, 2048, MAX_TASK_PR, 0, 0, "MB_MasterPollTask");
-    if (MBMasterPortPollTask_H == NULL)
+    if (!OS_StartCallbackTimer(OS_GetUserMainHandle(), MB_POLL_CYCLE_MS, vMBMasterPortPollTask, NULL))
     {
         printf("MODBUS-->POLL ERROR");
         eMBMasterDisable();
@@ -49,5 +40,6 @@ bool xMBMasterStart(eMBMode eMode, uint8_t ucPort, uint32_t ulBaudRate, eMBParit
         return false;
     }
 
+    printf("MODBUS-->POLL START");
     return true;
 }

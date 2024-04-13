@@ -13,10 +13,8 @@
 #define PORT_BAUDRATE UART_BAUD_RATE_9600
 #define PORT_PARITY UART_PARITY_NONE
 
-#define MB_SEND_REG_START 2
-#define MB_SEND_REG_NUM 2
-
-void modbus_task(void *vp);
+#define MB_SEND_REG_START 0
+#define MB_SEND_REG_NUM 4
 
 void app(void *pData)
 {
@@ -25,34 +23,41 @@ void app(void *pData)
 
     xMBMasterStart(MB_RTU, PORT_NUM, PORT_BAUDRATE, PORT_PARITY);
 
-    OS_CreateTask(modbus_task, NULL, NULL, 2048, MAX_TASK_PR+1, 0, 0, "modbus_task");
-
-    while (true)
-        OS_Sleep(OS_WAIT_FOREVER);
-}
-
-void modbus_task(void *vp)
-{
     eMBMasterReqErrCode error_code = MB_MRE_NO_ERR;
     uint16_t data[MB_SEND_REG_NUM] = {0};
-    eMBMasterRegHoldingCB((uint8_t *)(data), MB_SEND_REG_START, MB_SEND_REG_NUM, MB_REG_WRITE);
+    eMBMasterRegHoldingCB((uint8_t *)(data), MB_SEND_REG_START, 2, MB_REG_WRITE);
 
     OS_Sleep(5000);
 
-    printf("MODBUS--START-->  send_thread_entry");
+    printf("MODBUS--START MODBUS_TASK");
+
     while (true)
     {
         /* Test Modbus Master */
-        data[0] = (uint16_t)(50);
-        data[1] = (uint16_t)(30);
 
-        printf("MODBUS --> Enviando datos a registros");
+        data[0]++;
+        data[1]--;
+        printf("evniando registros");
         error_code = eMBMasterReqWriteMultipleHoldingRegister(SLAVE_ADDR,        /* salve address */
                                                               MB_SEND_REG_START, /* register start address */
-                                                              MB_SEND_REG_NUM,   /* register total number */
+                                                              2,                 /* register total number */
                                                               data,              /* data to be written */
-                                                              OS_WAIT_FOREVER);  /* timeout */
-        printf("MODBUS-ERROR --> %d", (int)error_code);
+                                                              20);               /* timeout */
+
+        if (error_code != MB_MRE_NO_ERR)
+            printf("MODBUS-ERROR_WRITE --> %d", (int)error_code);
+
+        // error_code = eMBMasterReqReadHoldingRegister(SLAVE_ADDR, MB_SEND_REG_START + 2, 2, OS_WAIT_FOREVER);
+
+        /*
+        OS_Sleep(100);
+
+        if (error_code != MB_MRE_NO_ERR)
+            printf("MODBUS-ERROR_READ --> %d", (int)error_code);
+
+        //printf("REG2 = %d , REG3 = %d", data[2], data[3]);
+        */
+
         OS_Sleep(1000);
     }
 }

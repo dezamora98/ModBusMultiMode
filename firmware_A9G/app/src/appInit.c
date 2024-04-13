@@ -14,7 +14,7 @@
 #include <api_os.h>
 #include <api_event.h>
 
-HANDLE osTaskHandle = NULL;
+volatile HANDLE osTaskHandle = NULL;
 HANDLE mainTaskHandle = NULL;
 
 HANDLE getOsTaskHandle(void)
@@ -31,7 +31,7 @@ static void OSTask(void *pv)
 {
     API_Event_t *event = NULL;
 
-    mainTaskHandle = OS_CreateTask(app, NULL, NULL, 2048, MAX_TASK_PR, 0, 0, "app");
+    mainTaskHandle = OS_CreateTask(app, NULL, NULL, 2048, MAX_TASK_PR - 1, 0, 0, "app");
 
     while (true)
     {

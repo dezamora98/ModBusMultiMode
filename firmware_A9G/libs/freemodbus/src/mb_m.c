@@ -293,6 +293,7 @@ eMBMasterPoll(void)
     
     if (xMBMasterPortEventGet(&eEvent) == true)
     {
+        printf("eEvent = %d",eEvent);
         switch (eEvent)
         {
         case EV_MASTER_READY:
