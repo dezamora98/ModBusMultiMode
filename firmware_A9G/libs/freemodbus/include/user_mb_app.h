@@ -7,8 +7,6 @@
 #include "mbframe.h"
 #include "mbutils.h"
 
-#if true
-
 /* -----------------------Slave Defines -------------------------------------*/
 #define S_DISCRETE_INPUT_START                    0
 #define S_DISCRETE_INPUT_NDISCRETES               2
@@ -35,7 +33,7 @@
 #define M_REG_INPUT_START                         0
 #define M_REG_INPUT_NREGS                         2
 #define M_REG_HOLDING_START                       0
-#define M_REG_HOLDING_NREGS                       2
+#define M_REG_HOLDING_NREGS                       10
 /* master mode: holding register's all address */
 #define          M_HD_RESERVE                     1
 /* master mode: input register's all address */
@@ -44,8 +42,5 @@
 #define          M_CO_RESERVE                     1
 /* master mode: discrete's all address */
 #define          M_DI_RESERVE                     1
-
-
-#endif
 
 #endif

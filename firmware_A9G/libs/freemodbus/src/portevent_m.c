@@ -232,8 +232,10 @@ void vMBMasterCBRequestScuuess(void)
  */
 eMBMasterReqErrCode eMBMasterWaitRequestFinish(void)
 {
+    eMBMasterReqErrCode t_eErrStatus = eErrStatus;
     OS_WaitForSemaphore(xRequestFinish, OS_WAIT_FOREVER);
-    return eErrStatus;
+    eErrStatus = MB_MRE_NO_ERR;
+    return t_eErrStatus;
 }
 
 #endif

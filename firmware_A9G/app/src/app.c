@@ -7,7 +7,7 @@
 #include "mb.h"
 #include "mb_m.h"
 
-#define SLAVE_ADDR 0x01
+#define SLAVE_ADDR 0x02
 #define PORT_NUM UART1
 #define PORT_BAUDRATE UART_BAUD_RATE_9600
 #define PORT_PARITY UART_PARITY_NONE
@@ -32,11 +32,9 @@ void app(void *pData)
 
     eMBMasterReqErrCode error_code = MB_MRE_NO_ERR;
     uint16_t data[MB_SEND_REG_NUM] = {0};
-    eMBMasterRegHoldingCB((uint8_t *)(data), MB_SEND_REG_START, MB_SEND_REG_NUM, MB_REG_WRITE);
 
     OS_Sleep(5000);
 
-    printf("MODBUS--START-->  send_thread_entry");
     while (true)
     {
         /* Test Modbus Master */

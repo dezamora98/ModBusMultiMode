@@ -94,7 +94,7 @@ PR_BEGIN_EXTERN_C
  * the sum of all enabled functions in this file and custom function
  * handlers. If set to small adding more functions will fail.
  */
-#define MB_FUNC_HANDLERS_MAX                    ( 16 )
+#define MB_FUNC_HANDLERS_MAX                    ( 10 )
 /*! \brief Number of bytes which should be allocated for the <em>Report Slave ID
  *    </em>command.
  *
@@ -139,7 +139,7 @@ PR_BEGIN_EXTERN_C
 #define MB_MASTER_TIMEOUT_MS_RESPOND            (100 )
 /*! \brief The total slaves in Modbus Master system. Default 16.
  * \note : The slave ID must be continuous from 1.*/
-#define MB_MASTER_TOTAL_SLAVE_NUM               ( 1 )
+#define MB_MASTER_TOTAL_SLAVE_NUM               ( 16 )
 #endif
 
 #endif
