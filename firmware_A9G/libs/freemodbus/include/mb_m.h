@@ -413,6 +413,7 @@ void vMBMasterSetErrorType(eMBMasterErrorEventType errorType);
 eMBMasterReqErrCode eMBMasterWaitRequestFinish(void);
 
 /* ----------------------- Callback -----------------------------------------*/
+const uint16_t* xMBMasterGetRegHoldBuf(uint16_t slave);
 
 #ifdef __cplusplus
 PR_END_EXTERN_C

@@ -13,6 +13,7 @@
 #include <stdio.h>
 #include <api_os.h>
 #include <api_event.h>
+#include <api_hal_watchdog.h>
 
 HANDLE osTaskHandle = NULL;
 HANDLE mainTaskHandle = NULL;
@@ -27,11 +28,20 @@ HANDLE getMainTaskHandle(void)
     return mainTaskHandle;
 }
 
+static void tWatchdogKeepAlive(void *vp)
+{
+    WatchDog_KeepAlive();
+    OS_StartCallbackTimer(getOsTaskHandle(), 100, tWatchdogKeepAlive, NULL);
+}
+
 static void OSTask(void *pv)
 {
     API_Event_t *event = NULL;
 
     mainTaskHandle = OS_CreateTask(app, NULL, NULL, 2048, MAX_TASK_PR, 0, 0, "app");
+
+    WatchDog_Open(WATCHDOG_SECOND_TO_TICK(1));
+    OS_StartCallbackTimer(getOsTaskHandle(), 100, tWatchdogKeepAlive, NULL);
 
     while (true)
     {

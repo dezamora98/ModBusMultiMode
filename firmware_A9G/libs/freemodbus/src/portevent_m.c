@@ -61,7 +61,7 @@ bool xMBMasterPortEventInit(void)
 
     if (vMBMasterEventTaskHandle != NULL)
     {
-        printf("MODBUS-EVENT-->EVENT_MANAGER_INIT");
+        printf("MB -> MASTER_EVENT_MANAGER_INIT");
         return true;
     }
     return false;
@@ -105,7 +105,6 @@ bool xMBMasterPortEventGet(eMBMasterEventType *eEvent)
  */
 void vMBMasterOsResInit(void)
 {
-    // OS_StartCallbackTimer(OS_GetUserMainHandle(), MB_POLL_CYCLE_MS, tMBMasterPoll, NULL);
     xMasterRunRes = OS_CreateSemaphore(1);
     xRequestFinish = OS_CreateSemaphore(0);
 }
@@ -154,7 +153,7 @@ void vMBMasterErrorCBRespondTimeout(uint8_t ucDestAddress, const uint8_t *pucPDU
     eErrStatus = MB_MRE_TIMEDOUT;
     OS_ReleaseSemaphore(xRequestFinish);
     /* You can add your code under here. */
-    printf("MB_MASTER -> EV_MASTER_ERROR_RESPOND_TIMEOUT:\n");
+    printf("MB -> EV_MASTER_ERROR_RESPOND_TIMEOUT:\n");
 }
 
 /**
@@ -177,7 +176,7 @@ void vMBMasterErrorCBReceiveData(uint8_t ucDestAddress, const uint8_t *pucPDUDat
     eErrStatus = MB_MRE_REV_DATA;
     OS_ReleaseSemaphore(xRequestFinish);
     /* You can add your code under here. */
-    printf("MB_MASTER -> EV_MASTER_ERROR_RECEIVE_DATA:\n");
+    printf("MB -> EV_MASTER_ERROR_RECEIVE_DATA:\n");
 }
 
 /**
@@ -200,7 +199,7 @@ void vMBMasterErrorCBExecuteFunction(uint8_t ucDestAddress, const uint8_t *pucPD
     eErrStatus = MB_MRE_EXE_FUN;
     OS_ReleaseSemaphore(xRequestFinish);
     /* You can add your code under here. */
-    printf("MB_MASTER -> EV_MASTER_ERROR_EXECUTE_FUNCTION:\n");
+    printf("MB -> EV_MASTER_ERROR_EXECUTE_FUNCTION:\n");
 }
 
 /**
@@ -218,7 +217,6 @@ void vMBMasterCBRequestScuuess(void)
     eErrStatus = MB_MRE_NO_ERR;
     OS_ReleaseSemaphore(xRequestFinish);
     /* You can add your code under here. */
-    printf("MB_MASTER -> EV_MASTER_PROCESS_SUCESS:\n");
 }
 
 /**

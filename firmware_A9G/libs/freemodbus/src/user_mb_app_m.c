@@ -45,6 +45,11 @@ uint16_t usMRegInBuf[MB_MASTER_TOTAL_SLAVE_NUM][M_REG_INPUT_NREGS];
 uint16_t usMRegHoldStart = M_REG_HOLDING_START;
 uint16_t usMRegHoldBuf[MB_MASTER_TOTAL_SLAVE_NUM][M_REG_HOLDING_NREGS];
 
+const uint16_t* xMBMasterGetRegHoldBuf(uint16_t slave)
+{
+    return usMRegHoldBuf[slave]; 
+}
+
 /**
  * Modbus master input register callback function.
  *
@@ -120,7 +125,7 @@ eMBErrorCode eMBMasterRegHoldingCB(uint8_t *pucRegBuffer, uint16_t usAddress,
     /* it already plus one in modbus function method. */
     usAddress--;
 
-    if ((usAddress >= REG_HOLDING_START) && (usAddress + usNRegs <= REG_HOLDING_START + REG_HOLDING_NREGS))
+    if ((usAddress >= REG_HOLDING_START) && ((usAddress + usNRegs) <= (REG_HOLDING_START + REG_HOLDING_NREGS)))
     {
         iRegIndex = usAddress - usRegHoldStart;
         switch (eMode)

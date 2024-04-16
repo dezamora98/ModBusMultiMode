@@ -1,9 +1,13 @@
 
-#include "assert.h"
+#include <assert.h>
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
 
-void Assert(bool valid,const char* fmt)
+char outBuffer[256];
+
+void Assert(bool valid, const char *fmt)
 {
-    if(!valid)
+    if (!valid)
         __assert(fmt);
 }
-
