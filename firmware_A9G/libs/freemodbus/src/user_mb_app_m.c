@@ -45,9 +45,23 @@ uint16_t usMRegInBuf[MB_MASTER_TOTAL_SLAVE_NUM][M_REG_INPUT_NREGS];
 uint16_t usMRegHoldStart = M_REG_HOLDING_START;
 uint16_t usMRegHoldBuf[MB_MASTER_TOTAL_SLAVE_NUM][M_REG_HOLDING_NREGS];
 
-const uint16_t* xMBMasterGetRegHoldBuf(uint16_t slave)
+uint16_t *xMBMasterGetRegHoldBuf(uint8_t slave)
 {
-    return usMRegHoldBuf[slave]; 
+    return usMRegHoldBuf[slave - 1];
+}
+
+uint16_t *xMBMasterGetRegInBuf(uint8_t slave)
+{
+    return usMRegInBuf[slave - 1];
+}
+
+uint8_t* xMBMasterGetCoilBuf(uint8_t slave)
+{
+    return ucMCoilBuf[slave - 1];
+}
+uint8_t* xMBMasterGetDiscInBuf(uint8_t slave)
+{
+    return ucMDiscInBuf[slave - 1];
 }
 
 /**
