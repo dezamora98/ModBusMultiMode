@@ -33,24 +33,23 @@
 #include <api_os.h>
 #include <api_event.h>
 
-#define MB_SLAVE
-#ifdef MB_SLAVE
+
 #if MB_SLAVE_RTU_ENABLED == 0 || MB_SLAVE_ASCII_ENABLED > 0
 /* ----------------------- Variables ----------------------------------------*/
 static HANDLE xMBEventManager_S = NULL;
 /* ----------------------- local implementation -----------------------------*/
 
-static void vMBPortEventManager(void *parameter)
+static void vMBPortEventTask(void *parameter)
 {
     while (true)
     {
-        OS_Sleep(OS_WAIT_FOREVER);
+        eMBPoll();
     }
 }
 /* ----------------------- start implementation -----------------------------*/
-bool xMBPortEventInit( void )
+bool xMBPortEventInit(void)
 {
-   xMBEventManager_S = OS_CreateTask(vMBPortEventManager, NULL, NULL, 2048, MAX_TASK_PR, 0, 0, "MB_EventManager");
+   xMBEventManager_S = OS_CreateTask(vMBPortEventTask, NULL, NULL, 2048, MAX_TASK_PR, 0, 0, "MB_EventManager");
     
     if (xMBEventManager_S != NULL)
     {
@@ -60,16 +59,16 @@ bool xMBPortEventInit( void )
     return false; 
 }
 
-bool xMPortEventPost(eMBMasterEventType eEvent)
+bool xMBPortEventPost(eMBEventType eEvent)
 {
     bool status = false;
-    eMBEventType *event = (eMBEventType *)malloc(sizeof(eMBEventType));
+    API_Event_t *event = (API_Event_t *)malloc(sizeof(API_Event_t));
     if (!event)
     {
         printf("MMB no memory");
         return false;
     }
-    *event = eEvent;
+    event->id = eEvent;
     status = OS_SendEvent(xMBEventManager_S, event, OS_WAIT_FOREVER, OS_EVENT_PRI_NORMAL);
     printf("MODBUS-EVENT-POST--> Status(%s)  Event(%d) ", status ? "true" : "false", (int)eEvent);
     return status;
@@ -77,36 +76,14 @@ bool xMPortEventPost(eMBMasterEventType eEvent)
 
 bool xMBPortEventGet(eMBEventType *eEvent)
 {
-    eMBEventType *recvedEvent = NULL;
-
+    API_Event_t *recvedEvent = NULL;
     OS_WaitEvent(xMBEventManager_S, (void **)&recvedEvent, OS_WAIT_FOREVER);
-    if ((*recvedEvent & (EV_READY | EV_FRAME_RECEIVED | EV_EXECUTE |
-                         EV_FRAME_SENT)) == 0)
-    {
-        printf("MODBUS-->NO EVENT");
-        return false;
-    }
     /* the enum type couldn't convert to int type */
-    switch (*recvedEvent)
-    {
-    case EV_READY:
-        *eEvent = EV_READY;
-        break;
-    case EV_EXECUTE:
-        *eEvent = EV_EXECUTE;
-        break;
-    case EV_FRAME_SENT:
-        *eEvent = EV_FRAME_SENT;
-        break;
-    case EV_FRAME_RECEIVED:
-        *eEvent = EV_FRAME_RECEIVED;
-    default:
-        break;
-    }
-
+    *eEvent = (eMBEventType)recvedEvent->id;
+    free(recvedEvent->pParam2);
+    free(recvedEvent->pParam1);
     free(recvedEvent);
     return true;
 }
 #endif 
 
-#endif //MB_SLAVE

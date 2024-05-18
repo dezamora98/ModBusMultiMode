@@ -21,49 +21,65 @@
 
 /* ----------------------- Platform includes --------------------------------*/
 
-#include "port.h"
+#include <stdio.h>
 #include <stdbool.h>
 #include <stdint.h>
+#include <stdlib.h>
+#include <api_inc_os.h>
+#include <api_os.h>
+#include <api_event.h>
 /* ----------------------- Modbus includes ----------------------------------*/
+#include "port.h"
 #include "mb.h"
+#include "mb_m.h"
 #include "mbport.h"
-#include "mbconfig.h"
 
-#ifdef SLAVE_MB
+/* ----------------------- Variables ----------------------------------------*/
+static HANDLE vMBTimerTaskHandle = NULL;
+static uint32_t usT35TimeOut50us;
+static uint32_t TMR_T35;
 
 /* ----------------------- static functions ---------------------------------*/
-static struct rt_timer timer;
-static void prvvTIMERExpiredISR(void);
-static void timer_timeout_ind(void* parameter);
+static void vMBTimerTask(void *parameter)
+{
+    API_Event_t *event = NULL;
+
+    while (true)
+    {
+        OS_WaitEvent(vMBTimerTaskHandle, (void **)&event, OS_WAIT_FOREVER);
+        free(event->pParam1);
+        free(event->pParam2);
+        free(event);
+    }
+}
+
+static void prvvTIMERExpiredISR(void *vp)
+{
+    (void)pxMBPortCBTimerExpired();
+}
 
 /* ----------------------- Start implementation -----------------------------*/
-bool xMBPortTimersInit(uint16_t usTim1Timerout50us)
+bool xMBPortTimersInit(uint16_t usTimeOut50us)
 {
-    rt_timer_init(&timer, "slave timer",
-                   timer_timeout_ind, /* bind timeout callback function */
-                   RT_NULL,
-                   (50 * usTim1Timerout50us) / (1000 * 1000 / RT_TICK_PER_SECOND) + 1,
-                   RT_TIMER_FLAG_ONE_SHOT); /* one shot */
+    /* backup T35 ticks */
+    vMBTimerTaskHandle = OS_CreateTask(vMBTimerTask, NULL, NULL, 2048, MAX_TASK_PR + 1, 0, 0, "vMBTimerTask");
+    if (vMBTimerTaskHandle == NULL)
+    {
+        return false;
+    }
+    usT35TimeOut50us = (uint32_t)(usTimeOut50us);
     return true;
 }
 
-void vMBPortTimersEnable()
+void vMBPortTimersEnable(void)
 {
-    rt_timer_start(&timer);
+    TMR_T35 = (uint32_t)((50 * usT35TimeOut50us) / 1000) + 1;
+    OS_StartCallbackTimer(vMBTimerTaskHandle, TMR_T35, prvvTIMERExpiredISR, NULL);
 }
 
-void vMBPortTimersDisable()
+void vMBPortTimersDisable(void)
 {
-    rt_timer_stop(&timer);
+    OS_StopCallbackTimer(vMBTimerTaskHandle, prvvTIMERExpiredISR, NULL);
 }
 
-void prvvTIMERExpiredISR(void)
-{
-    (void) pxMBPortCBTimerExpired();
-}
 
-static void timer_timeout_ind(void* parameter)
-{
-    prvvTIMERExpiredISR();
-}
-#endif //MB_SLAVE
