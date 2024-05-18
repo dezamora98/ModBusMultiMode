@@ -38,7 +38,7 @@
 /* ----------------------- Variables ----------------------------------------*/
 static HANDLE xMBEventManager_S = NULL;
 /* ----------------------- local implementation -----------------------------*/
-
+bool xMBPortEventPost(eMBEventType eEvent);
 static void vMBPortEventTask(void *parameter)
 {
     while (true)
@@ -49,7 +49,7 @@ static void vMBPortEventTask(void *parameter)
 /* ----------------------- start implementation -----------------------------*/
 bool xMBPortEventInit(void)
 {
-   xMBEventManager_S = OS_CreateTask(vMBPortEventTask, NULL, NULL, 2048, MAX_TASK_PR, 0, 0, "MB_EventManager");
+   xMBEventManager_S = OS_CreateTask(vMBPortEventTask, NULL, NULL, 2048, MAX_TASK_PR + 1, 0, 0, "MB_EventManager");
     
     if (xMBEventManager_S != NULL)
     {

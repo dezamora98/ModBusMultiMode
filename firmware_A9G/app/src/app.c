@@ -14,7 +14,7 @@
 #define PORT_PARITY UART_PARITY_NONE
 
 #define MB_POLL_CYCLE_MS 500
-HANDLE tid1 = NULL, tid2 = NULL;
+HANDLE tid1 = NULL
 
 static void mb_poll(void *parameter);
 
