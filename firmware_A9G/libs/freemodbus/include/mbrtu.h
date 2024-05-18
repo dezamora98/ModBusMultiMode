@@ -42,7 +42,7 @@
 PR_BEGIN_EXTERN_C
 #endif
 
-#ifdef SLAVE_MB
+
 
 eMBErrorCode    eMBRTUInit( uint8_t slaveAddress, uint8_t ucPort, uint32_t ulBaudRate,
                             eMBParity eParity );
@@ -71,4 +71,4 @@ bool            xMBMasterRTUTimerExpired( void );
 #ifdef __cplusplus
 PR_END_EXTERN_C
 #endif
-#endif
+

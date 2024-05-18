@@ -66,7 +66,7 @@
 #define MB_PDU_FUNC_READWRITE_WRITE_VALUES_OFF  ( MB_PDU_DATA_OFF + 9 )
 #define MB_PDU_FUNC_READWRITE_SIZE_MIN          ( 9 )
 
-#ifdef SLAVE_MB
+
 /* ----------------------- Static functions ---------------------------------*/
 eMBException    prveMBError2Exception( eMBErrorCode eErrorCode );
 
@@ -306,5 +306,4 @@ eMBFuncReadWriteMultipleHoldingRegister( uint8_t * pucFrame, uint16_t * usLen )
     return eStatus;
 }
 
-#endif
 #endif

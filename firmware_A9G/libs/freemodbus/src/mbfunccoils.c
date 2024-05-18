@@ -41,7 +41,7 @@
 #include "mbproto.h"
 #include "mbconfig.h"
 
-#ifdef SLAVE_MB
+
 
 /* ----------------------- Defines ------------------------------------------*/
 #define MB_PDU_FUNC_READ_ADDR_OFF           ( MB_PDU_DATA_OFF )
@@ -270,4 +270,3 @@ eMBFuncWriteMultipleCoils( uint8_t * pucFrame, uint16_t * usLen )
 
 #endif
 
-#endif

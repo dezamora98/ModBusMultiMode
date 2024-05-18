@@ -53,7 +53,7 @@
 #define MB_SER_PDU_ADDR_OFF     0       /*!< Offset of slave address in Ser-PDU. */
 #define MB_SER_PDU_PDU_OFF      1       /*!< Offset of Modbus-PDU in Ser-PDU. */
 
-#ifdef SLAVE_MB
+
 
 /* ----------------------- Type definitions ---------------------------------*/
 typedef enum
@@ -355,4 +355,4 @@ xMBRTUTimerT35Expired( void )
 
     return xNeedPoll;
 }
-#endif
+

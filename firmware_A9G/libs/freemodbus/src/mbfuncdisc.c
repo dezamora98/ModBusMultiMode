@@ -46,7 +46,6 @@
 #define MB_PDU_FUNC_READ_SIZE               ( 4 )
 #define MB_PDU_FUNC_READ_DISCCNT_MAX        ( 0x07D0 )
 
-#ifdef SLAVE_MB
 
 /* ----------------------- Static functions ---------------------------------*/
 eMBException    prveMBError2Exception( eMBErrorCode eErrorCode );
@@ -134,4 +133,3 @@ eMBFuncReadDiscreteInputs( uint8_t * pucFrame, uint16_t * usLen )
 
 #endif
 
-#endif

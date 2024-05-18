@@ -47,7 +47,7 @@
 #include "mbfunc.h"
 
 #include "mbport.h"
-#if MB_SLAVE_RTU_ENABLED == 1
+#if MB_SLAVE_RTU_ENABLED == 0
 #include "mbrtu.h"
 #endif
 #if MB_SLAVE_ASCII_ENABLED == 1
@@ -61,7 +61,7 @@
 #define MB_PORT_HAS_CLOSE 0
 #endif
 
-#ifdef SLAVE_MB
+
 
 /* ----------------------- Static variables ---------------------------------*/
 
@@ -151,7 +151,7 @@ eMBInit( eMBMode eMode, uint8_t ucSlaveAddress, uint8_t ucPort, uint32_t ulBaudR
 
         switch ( eMode )
         {
-#if MB_SLAVE_RTU_ENABLED > 0
+#if MB_SLAVE_RTU_ENABLED == 0
         case MB_RTU:
             pvMBFrameStartCur = eMBRTUStart;
             pvMBFrameStopCur = eMBRTUStop;
@@ -186,7 +186,7 @@ eMBInit( eMBMode eMode, uint8_t ucSlaveAddress, uint8_t ucPort, uint32_t ulBaudR
 
         if( eStatus == MB_ENOERR )
         {
-            if( !xMBPortEventInit(  ) )
+            if( !xMBPortEventInit( ) )
             {
                 /* port dependent event module initalization failed. */
                 eStatus = MB_EPORTERR;
@@ -416,4 +416,3 @@ eMBErrorCode eMBPoll( void )
     return MB_ENOERR;
 }
 
-#endif

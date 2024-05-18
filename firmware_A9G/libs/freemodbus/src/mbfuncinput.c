@@ -49,7 +49,7 @@
 
 #define MB_PDU_FUNC_READ_RSP_BYTECNT_OFF    ( MB_PDU_DATA_OFF )
 
-#ifdef SLAVE_MB
+
 
 /* ----------------------- Static functions ---------------------------------*/
 eMBException    prveMBError2Exception( eMBErrorCode eErrorCode );
@@ -121,5 +121,4 @@ eMBFuncReadInputRegister( uint8_t * pucFrame, uint16_t * usLen )
     return eStatus;
 }
 
-#endif
 #endif

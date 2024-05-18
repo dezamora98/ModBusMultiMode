@@ -24,7 +24,7 @@
 #include "user_mb_app.h"
 #include "mbconfig.h"
 
-#ifdef SLAVE_MB
+
 /*------------------------Slave mode use these variables----------------------*/
 //Slave mode:DiscreteInputs variables
 uint16_t   usSDiscInStart                               = S_DISCRETE_INPUT_START;
@@ -289,4 +289,3 @@ eMBErrorCode eMBRegDiscreteCB( uint8_t * pucRegBuffer, uint16_t usAddress, uint1
     return eStatus;
 }
 
-#endif //MB_SLAVE
