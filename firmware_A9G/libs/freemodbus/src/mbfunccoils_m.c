@@ -42,6 +42,8 @@
 #include "mbproto.h"
 #include "mbconfig.h"
 
+#ifdef MASTER
+
 /* ----------------------- Defines ------------------------------------------*/
 #define MB_PDU_REQ_READ_ADDR_OFF            ( MB_PDU_DATA_OFF + 0 )
 #define MB_PDU_REQ_READ_COILCNT_OFF         ( MB_PDU_DATA_OFF + 2 )
@@ -386,5 +388,6 @@ eMBMasterFuncWriteMultipleCoils( uint8_t * pucFrame, uint16_t * usLen )
     return eStatus;
 }
 
+#endif
 #endif
 #endif

@@ -32,6 +32,7 @@
 #include "mb_m.h"
 #include "mbport.h"
 #include "port.h"
+#ifdef MASTER
 
 #if MB_MASTER_RTU_ENABLED > 0 || MB_MASTER_ASCII_ENABLED > 0
 #define M_MODBUS API_EVENT_ID_MAX + 1
@@ -236,4 +237,5 @@ eMBMasterReqErrCode eMBMasterWaitRequestFinish(void)
     return t_eErrStatus;
 }
 
+#endif
 #endif

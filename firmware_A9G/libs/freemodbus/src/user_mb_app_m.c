@@ -21,6 +21,7 @@
 #include "user_mb_app.h"
 
 #if true
+#ifdef MASTER
 
 /*-----------------------Master mode use these variables----------------------*/
 #if MB_MASTER_RTU_ENABLED > 0 || MB_MASTER_ASCII_ENABLED > 0
@@ -294,5 +295,6 @@ eMBErrorCode eMBMasterRegDiscreteCB(uint8_t *pucRegBuffer, uint16_t usAddress, u
 
     return eStatus;
 }
+#endif
 #endif
 #endif

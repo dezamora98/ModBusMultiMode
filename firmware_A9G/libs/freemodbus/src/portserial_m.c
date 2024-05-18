@@ -22,6 +22,7 @@
 #include "port.h"
 #include "mb.h"
 #include "mbport.h"
+#ifdef MASTER
 
 #if MB_MASTER_RTU_ENABLED > 0 || MB_MASTER_ASCII_ENABLED > 0
 /* ----------------------- Static variables ---------------------------------*/
@@ -141,4 +142,5 @@ void prvvUARTRxISR(UART_Callback_Param_t param)
     }
 }
 
+#endif
 #endif

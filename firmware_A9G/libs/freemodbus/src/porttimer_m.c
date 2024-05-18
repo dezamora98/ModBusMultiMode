@@ -34,6 +34,8 @@
 #include "mb_m.h"
 #include "mbport.h"
 
+#ifdef MASTER
+
 #if MB_MASTER_RTU_ENABLED > 0 || MB_MASTER_ASCII_ENABLED > 0
 /* ----------------------- Variables ----------------------------------------*/
 static HANDLE vMBMasterTimerTaskHandle = NULL;
@@ -103,4 +105,5 @@ void vMBMasterPortTimersDisable(void)
     OS_StopCallbackTimer(vMBMasterTimerTaskHandle, prvvTIMERExpiredISR, NULL);
 }
 
+#endif
 #endif

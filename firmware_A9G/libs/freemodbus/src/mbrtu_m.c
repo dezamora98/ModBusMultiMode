@@ -48,6 +48,8 @@
 #include "mbcrc.h"
 #include "mbport.h"
 
+#ifdef MASTER
+
 #if MB_MASTER_RTU_ENABLED > 0
 /* ----------------------- Defines ------------------------------------------*/
 #define MB_SER_PDU_SIZE_MIN 4   /*!< Minimum size of a Modbus RTU frame. */
@@ -446,4 +448,5 @@ bool xMBMasterRequestIsBroadcast(void)
 {
     return xFrameIsBroadcast;
 }
+#endif
 #endif

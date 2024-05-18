@@ -38,6 +38,8 @@
 /* ----------------------- Platform includes --------------------------------*/
 #include "port.h"
 
+#ifdef MASTER
+
 /* ----------------------- Modbus includes ----------------------------------*/
 
 #include "mb.h"
@@ -433,4 +435,5 @@ void vMBMasterSetErrorType(eMBMasterErrorEventType errorType)
     eMBMasterCurErrorType = errorType;
 }
 
+#endif
 #endif
