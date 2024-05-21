@@ -35,6 +35,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include <stdint.h>
+#include <stdio.h>
 /* ----------------------- Platform includes --------------------------------*/
 #include "port.h"
 
@@ -163,6 +164,7 @@ eMBInit( eMBMode eMode, uint8_t ucSlaveAddress, uint8_t ucPort, uint32_t ulBaudR
             pxMBPortCBTimerExpired = xMBRTUTimerT35Expired;
 
             eStatus = eMBRTUInit( ucMBAddress, ucPort, ulBaudRate, eParity );
+            printf("CASO RTU");
             break;
 #endif
 #if MB_SLAVE_ASCII_ENABLED > 0
@@ -350,6 +352,7 @@ eMBErrorCode eMBPoll( void )
     eMBErrorCode    eStatus = MB_ENOERR;
     eMBEventType    eEvent;
 
+    printf("REVISANDO EL eMBPool");
     /* Check if the protocol stack is ready. */
     if( eMBState != STATE_ENABLED )
     {

@@ -107,6 +107,7 @@ void vMBPortSerialEnable(bool xRxEnable, bool xTxEnable)
     if (xTxEnable)
     {
         /* start serial transmit */
+        printf("Tx event");
         while (pxMBFrameCBTransmitterEmpty());
         
     }
@@ -150,6 +151,7 @@ void prvvUARTRxISR(UART_Callback_Param_t param)
         {
             i_RxBuffer = param.buf + i;
             pxMBFrameCBByteReceived();
+            printf("%s", i_RxBuffer);
         }
     }
 }
