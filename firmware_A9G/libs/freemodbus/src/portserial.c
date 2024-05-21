@@ -145,6 +145,7 @@ bool xMBPortSerialGetByte(char * pucByte)
 void prvvUARTRxISR(UART_Callback_Param_t param)
 {
     uint32_t i = 0;
+    printf("IT -> Rx");
     if (param.port == MB_UART)
     {
         for (i = 0; i != param.length; ++i)
@@ -153,6 +154,7 @@ void prvvUARTRxISR(UART_Callback_Param_t param)
             pxMBFrameCBByteReceived();
             printf("%s", i_RxBuffer);
         }
+        printf("%s\n", i_RxBuffer);
     }
 }
 
